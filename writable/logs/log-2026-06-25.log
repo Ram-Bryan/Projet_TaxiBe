@@ -146,3 +146,951 @@ in SYSTEMPATH\Database\BaseConnection.php on line 606.
  8 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
  9 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
 10 SYSTEMPATH\rewrite.php(44): require_once('E:\\Dossier_Bryan\\ITU\\S4\\SIG\\PROJET\\Projet_TaxiBe\\public\\index.php')
+ERROR - 2026-06-25 19:27:16 --> pg_query(): Query failed: ERROR:  column a_dep.latitude does not exist
+LINE 5:                 a_dep.latitude AS lat_depart,
+                        ^
+in SYSTEMPATH\Database\Postgre\Connection.php on line 200.
+ 1 SYSTEMPATH\Database\BaseConnection.php(910): CodeIgniter\Database\Postgre\Connection->execute('
+            SELECT 
+                a_dep.id AS id_depart,
+                a_dep.nom AS nom_depart,
+                a_dep.latitude AS lat_depart,
+                a_dep.longitude AS lng_depart,
+                ST_Distance(a_dep.geom::geography, ST_SetSRID(ST_MakePoint(47.540245056152, -18.919115620722), 4326)::geography) AS distance_dep_metres,
+                
+                a_dest.id AS id_arrivee,
+                a_dest.nom AS nom_arrivee,
+                a_dest.latitude AS lat_arrivee,
+                a_dest.longitude AS lng_arrivee,
+                ST_Distance(a_dest.geom::geography, ST_SetSRID(ST_MakePoint(47.533893585205, -18.873478437863), 4326)::geography) AS distance_arr_metres
+            FROM trajet_arret ta_dep
+            JOIN trajet_arret ta_dest ON ta_dep.id_trajet = ta_dest.id_trajet
+            JOIN arret a_dep ON a_dep.id = ta_dep.id_arret
+            JOIN arret a_dest ON a_dest.id = ta_dest.id_arret
+            WHERE ta_dep.ordre < ta_dest.ordre
+            ORDER BY (
+                ST_Distance(a_dep.geom::geography, ST_SetSRID(ST_MakePoint(47.540245056152, -18.919115620722), 4326)::geography) + 
+                ST_Distance(a_dest.geom::geography, ST_SetSRID(ST_MakePoint(47.533893585205, -18.873478437863), 4326)::geography)
+            ) ASC
+            LIMIT 1
+        ')
+ 2 SYSTEMPATH\Database\BaseConnection.php(827): CodeIgniter\Database\BaseConnection->simpleQuery('
+            SELECT 
+                a_dep.id AS id_depart,
+                a_dep.nom AS nom_depart,
+                a_dep.latitude AS lat_depart,
+                a_dep.longitude AS lng_depart,
+                ST_Distance(a_dep.geom::geography, ST_SetSRID(ST_MakePoint(47.540245056152, -18.919115620722), 4326)::geography) AS distance_dep_metres,
+                
+                a_dest.id AS id_arrivee,
+                a_dest.nom AS nom_arrivee,
+                a_dest.latitude AS lat_arrivee,
+                a_dest.longitude AS lng_arrivee,
+                ST_Distance(a_dest.geom::geography, ST_SetSRID(ST_MakePoint(47.533893585205, -18.873478437863), 4326)::geography) AS distance_arr_metres
+            FROM trajet_arret ta_dep
+            JOIN trajet_arret ta_dest ON ta_dep.id_trajet = ta_dest.id_trajet
+            JOIN arret a_dep ON a_dep.id = ta_dep.id_arret
+            JOIN arret a_dest ON a_dest.id = ta_dest.id_arret
+            WHERE ta_dep.ordre < ta_dest.ordre
+            ORDER BY (
+                ST_Distance(a_dep.geom::geography, ST_SetSRID(ST_MakePoint(47.540245056152, -18.919115620722), 4326)::geography) + 
+                ST_Distance(a_dest.geom::geography, ST_SetSRID(ST_MakePoint(47.533893585205, -18.873478437863), 4326)::geography)
+            ) ASC
+            LIMIT 1
+        ')
+ 3 APPPATH\Models\TrajetModel.php(161): CodeIgniter\Database\BaseConnection->query('
+            SELECT 
+                a_dep.id AS id_depart,
+                a_dep.nom AS nom_depart,
+                a_dep.latitude AS lat_depart,
+                a_dep.longitude AS lng_depart,
+                ST_Distance(a_dep.geom::geography, ST_SetSRID(ST_MakePoint(:lngDep:, :latDep:), 4326)::geography) AS distance_dep_metres,
+                
+                a_dest.id AS id_arrivee,
+                a_dest.nom AS nom_arrivee,
+                a_dest.latitude AS lat_arrivee,
+                a_dest.longitude AS lng_arrivee,
+                ST_Distance(a_dest.geom::geography, ST_SetSRID(ST_MakePoint(:lngArr:, :latArr:), 4326)::geography) AS distance_arr_metres
+            FROM trajet_arret ta_dep
+            JOIN trajet_arret ta_dest ON ta_dep.id_trajet = ta_dest.id_trajet
+            JOIN arret a_dep ON a_dep.id = ta_dep.id_arret
+            JOIN arret a_dest ON a_dest.id = ta_dest.id_arret
+            WHERE ta_dep.ordre < ta_dest.ordre
+            ORDER BY (
+                ST_Distance(a_dep.geom::geography, ST_SetSRID(ST_MakePoint(:lngDep:, :latDep:), 4326)::geography) + 
+                ST_Distance(a_dest.geom::geography, ST_SetSRID(ST_MakePoint(:lngArr:, :latArr:), 4326)::geography)
+            ) ASC
+            LIMIT 1
+        ', [...])
+ 4 APPPATH\Controllers\Api\SearchController.php(26): App\Models\TrajetModel->findBestItineraryStops(-18.9191156207216, 47.54024505615235, -18.873478437862648, 47.53389358520508)
+ 5 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\Api\SearchController->search()
+ 6 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Api\SearchController))
+ 7 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 8 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+ 9 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+10 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+11 SYSTEMPATH\rewrite.php(44): require_once('E:\\Dossier_Bryan\\ITU\\S4\\SIG\\PROJET\\Projet_TaxiBe\\public\\index.php')
+CRITICAL - 2026-06-25 19:27:16 --> CodeIgniter\Database\Exceptions\DatabaseException: pg_query(): Query failed: ERROR:  column a_dep.latitude does not exist
+LINE 5:                 a_dep.latitude AS lat_depart,
+                        ^
+[Method: POST, Route: api/search]
+in SYSTEMPATH\Database\BaseConnection.php on line 865.
+ 1 APPPATH\Models\TrajetModel.php(161): CodeIgniter\Database\BaseConnection->query('
+            SELECT 
+                a_dep.id AS id_depart,
+                a_dep.nom AS nom_depart,
+                a_dep.latitude AS lat_depart,
+                a_dep.longitude AS lng_depart,
+                ST_Distance(a_dep.geom::geography, ST_SetSRID(ST_MakePoint(:lngDep:, :latDep:), 4326)::geography) AS distance_dep_metres,
+                
+                a_dest.id AS id_arrivee,
+                a_dest.nom AS nom_arrivee,
+                a_dest.latitude AS lat_arrivee,
+                a_dest.longitude AS lng_arrivee,
+                ST_Distance(a_dest.geom::geography, ST_SetSRID(ST_MakePoint(:lngArr:, :latArr:), 4326)::geography) AS distance_arr_metres
+            FROM trajet_arret ta_dep
+            JOIN trajet_arret ta_dest ON ta_dep.id_trajet = ta_dest.id_trajet
+            JOIN arret a_dep ON a_dep.id = ta_dep.id_arret
+            JOIN arret a_dest ON a_dest.id = ta_dest.id_arret
+            WHERE ta_dep.ordre < ta_dest.ordre
+            ORDER BY (
+                ST_Distance(a_dep.geom::geography, ST_SetSRID(ST_MakePoint(:lngDep:, :latDep:), 4326)::geography) + 
+                ST_Distance(a_dest.geom::geography, ST_SetSRID(ST_MakePoint(:lngArr:, :latArr:), 4326)::geography)
+            ) ASC
+            LIMIT 1
+        ', [...])
+ 2 APPPATH\Controllers\Api\SearchController.php(26): App\Models\TrajetModel->findBestItineraryStops(-18.9191156207216, 47.54024505615235, -18.873478437862648, 47.53389358520508)
+ 3 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\Api\SearchController->search()
+ 4 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Api\SearchController))
+ 5 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 6 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+ 7 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 8 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+ 9 SYSTEMPATH\rewrite.php(44): require_once('E:\\Dossier_Bryan\\ITU\\S4\\SIG\\PROJET\\Projet_TaxiBe\\public\\index.php')
+CRITICAL - 2026-06-25 19:27:16 --> [Caused by] CodeIgniter\Database\Exceptions\DatabaseException: pg_query(): Query failed: ERROR:  column a_dep.latitude does not exist
+LINE 5:                 a_dep.latitude AS lat_depart,
+                        ^
+in SYSTEMPATH\Database\Postgre\Connection.php on line 212.
+ 1 SYSTEMPATH\Database\BaseConnection.php(910): CodeIgniter\Database\Postgre\Connection->execute('
+            SELECT 
+                a_dep.id AS id_depart,
+                a_dep.nom AS nom_depart,
+                a_dep.latitude AS lat_depart,
+                a_dep.longitude AS lng_depart,
+                ST_Distance(a_dep.geom::geography, ST_SetSRID(ST_MakePoint(47.540245056152, -18.919115620722), 4326)::geography) AS distance_dep_metres,
+                
+                a_dest.id AS id_arrivee,
+                a_dest.nom AS nom_arrivee,
+                a_dest.latitude AS lat_arrivee,
+                a_dest.longitude AS lng_arrivee,
+                ST_Distance(a_dest.geom::geography, ST_SetSRID(ST_MakePoint(47.533893585205, -18.873478437863), 4326)::geography) AS distance_arr_metres
+            FROM trajet_arret ta_dep
+            JOIN trajet_arret ta_dest ON ta_dep.id_trajet = ta_dest.id_trajet
+            JOIN arret a_dep ON a_dep.id = ta_dep.id_arret
+            JOIN arret a_dest ON a_dest.id = ta_dest.id_arret
+            WHERE ta_dep.ordre < ta_dest.ordre
+            ORDER BY (
+                ST_Distance(a_dep.geom::geography, ST_SetSRID(ST_MakePoint(47.540245056152, -18.919115620722), 4326)::geography) + 
+                ST_Distance(a_dest.geom::geography, ST_SetSRID(ST_MakePoint(47.533893585205, -18.873478437863), 4326)::geography)
+            ) ASC
+            LIMIT 1
+        ')
+ 2 SYSTEMPATH\Database\BaseConnection.php(827): CodeIgniter\Database\BaseConnection->simpleQuery('
+            SELECT 
+                a_dep.id AS id_depart,
+                a_dep.nom AS nom_depart,
+                a_dep.latitude AS lat_depart,
+                a_dep.longitude AS lng_depart,
+                ST_Distance(a_dep.geom::geography, ST_SetSRID(ST_MakePoint(47.540245056152, -18.919115620722), 4326)::geography) AS distance_dep_metres,
+                
+                a_dest.id AS id_arrivee,
+                a_dest.nom AS nom_arrivee,
+                a_dest.latitude AS lat_arrivee,
+                a_dest.longitude AS lng_arrivee,
+                ST_Distance(a_dest.geom::geography, ST_SetSRID(ST_MakePoint(47.533893585205, -18.873478437863), 4326)::geography) AS distance_arr_metres
+            FROM trajet_arret ta_dep
+            JOIN trajet_arret ta_dest ON ta_dep.id_trajet = ta_dest.id_trajet
+            JOIN arret a_dep ON a_dep.id = ta_dep.id_arret
+            JOIN arret a_dest ON a_dest.id = ta_dest.id_arret
+            WHERE ta_dep.ordre < ta_dest.ordre
+            ORDER BY (
+                ST_Distance(a_dep.geom::geography, ST_SetSRID(ST_MakePoint(47.540245056152, -18.919115620722), 4326)::geography) + 
+                ST_Distance(a_dest.geom::geography, ST_SetSRID(ST_MakePoint(47.533893585205, -18.873478437863), 4326)::geography)
+            ) ASC
+            LIMIT 1
+        ')
+ 3 APPPATH\Models\TrajetModel.php(161): CodeIgniter\Database\BaseConnection->query('
+            SELECT 
+                a_dep.id AS id_depart,
+                a_dep.nom AS nom_depart,
+                a_dep.latitude AS lat_depart,
+                a_dep.longitude AS lng_depart,
+                ST_Distance(a_dep.geom::geography, ST_SetSRID(ST_MakePoint(:lngDep:, :latDep:), 4326)::geography) AS distance_dep_metres,
+                
+                a_dest.id AS id_arrivee,
+                a_dest.nom AS nom_arrivee,
+                a_dest.latitude AS lat_arrivee,
+                a_dest.longitude AS lng_arrivee,
+                ST_Distance(a_dest.geom::geography, ST_SetSRID(ST_MakePoint(:lngArr:, :latArr:), 4326)::geography) AS distance_arr_metres
+            FROM trajet_arret ta_dep
+            JOIN trajet_arret ta_dest ON ta_dep.id_trajet = ta_dest.id_trajet
+            JOIN arret a_dep ON a_dep.id = ta_dep.id_arret
+            JOIN arret a_dest ON a_dest.id = ta_dest.id_arret
+            WHERE ta_dep.ordre < ta_dest.ordre
+            ORDER BY (
+                ST_Distance(a_dep.geom::geography, ST_SetSRID(ST_MakePoint(:lngDep:, :latDep:), 4326)::geography) + 
+                ST_Distance(a_dest.geom::geography, ST_SetSRID(ST_MakePoint(:lngArr:, :latArr:), 4326)::geography)
+            ) ASC
+            LIMIT 1
+        ', [...])
+ 4 APPPATH\Controllers\Api\SearchController.php(26): App\Models\TrajetModel->findBestItineraryStops(-18.9191156207216, 47.54024505615235, -18.873478437862648, 47.53389358520508)
+ 5 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\Api\SearchController->search()
+ 6 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Api\SearchController))
+ 7 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 8 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+ 9 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+10 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+11 SYSTEMPATH\rewrite.php(44): require_once('E:\\Dossier_Bryan\\ITU\\S4\\SIG\\PROJET\\Projet_TaxiBe\\public\\index.php')
+CRITICAL - 2026-06-25 19:27:16 --> [Caused by] ErrorException: pg_query(): Query failed: ERROR:  column a_dep.latitude does not exist
+LINE 5:                 a_dep.latitude AS lat_depart,
+                        ^
+in SYSTEMPATH\Database\Postgre\Connection.php on line 200.
+ 1 [internal function]: CodeIgniter\Debug\Exceptions->errorHandler(2, 'pg_query(): Query failed: ERROR:  column a_dep.latitude does not exist
+LINE 5:                 a_dep.latitude AS lat_depart,
+                        ^', 'E:\\Dossier_Bryan\\ITU\\S4\\SIG\\PROJET\\Projet_TaxiBe\\system\\Database\\Postgre\\Connection.php', 200)
+ 2 SYSTEMPATH\Database\Postgre\Connection.php(200): pg_query(Object(PgSql\Connection), '
+            SELECT 
+                a_dep.id AS id_depart,
+                a_dep.nom AS nom_depart,
+                a_dep.latitude AS lat_depart,
+                a_dep.longitude AS lng_depart,
+                ST_Distance(a_dep.geom::geography, ST_SetSRID(ST_MakePoint(47.540245056152, -18.919115620722), 4326)::geography) AS distance_dep_metres,
+                
+                a_dest.id AS id_arrivee,
+                a_dest.nom AS nom_arrivee,
+                a_dest.latitude AS lat_arrivee,
+                a_dest.longitude AS lng_arrivee,
+                ST_Distance(a_dest.geom::geography, ST_SetSRID(ST_MakePoint(47.533893585205, -18.873478437863), 4326)::geography) AS distance_arr_metres
+            FROM trajet_arret ta_dep
+            JOIN trajet_arret ta_dest ON ta_dep.id_trajet = ta_dest.id_trajet
+            JOIN arret a_dep ON a_dep.id = ta_dep.id_arret
+            JOIN arret a_dest ON a_dest.id = ta_dest.id_arret
+            WHERE ta_dep.ordre < ta_dest.ordre
+            ORDER BY (
+                ST_Distance(a_dep.geom::geography, ST_SetSRID(ST_MakePoint(47.540245056152, -18.919115620722), 4326)::geography) + 
+                ST_Distance(a_dest.geom::geography, ST_SetSRID(ST_MakePoint(47.533893585205, -18.873478437863), 4326)::geography)
+            ) ASC
+            LIMIT 1
+        ')
+ 3 SYSTEMPATH\Database\BaseConnection.php(910): CodeIgniter\Database\Postgre\Connection->execute('
+            SELECT 
+                a_dep.id AS id_depart,
+                a_dep.nom AS nom_depart,
+                a_dep.latitude AS lat_depart,
+                a_dep.longitude AS lng_depart,
+                ST_Distance(a_dep.geom::geography, ST_SetSRID(ST_MakePoint(47.540245056152, -18.919115620722), 4326)::geography) AS distance_dep_metres,
+                
+                a_dest.id AS id_arrivee,
+                a_dest.nom AS nom_arrivee,
+                a_dest.latitude AS lat_arrivee,
+                a_dest.longitude AS lng_arrivee,
+                ST_Distance(a_dest.geom::geography, ST_SetSRID(ST_MakePoint(47.533893585205, -18.873478437863), 4326)::geography) AS distance_arr_metres
+            FROM trajet_arret ta_dep
+            JOIN trajet_arret ta_dest ON ta_dep.id_trajet = ta_dest.id_trajet
+            JOIN arret a_dep ON a_dep.id = ta_dep.id_arret
+            JOIN arret a_dest ON a_dest.id = ta_dest.id_arret
+            WHERE ta_dep.ordre < ta_dest.ordre
+            ORDER BY (
+                ST_Distance(a_dep.geom::geography, ST_SetSRID(ST_MakePoint(47.540245056152, -18.919115620722), 4326)::geography) + 
+                ST_Distance(a_dest.geom::geography, ST_SetSRID(ST_MakePoint(47.533893585205, -18.873478437863), 4326)::geography)
+            ) ASC
+            LIMIT 1
+        ')
+ 4 SYSTEMPATH\Database\BaseConnection.php(827): CodeIgniter\Database\BaseConnection->simpleQuery('
+            SELECT 
+                a_dep.id AS id_depart,
+                a_dep.nom AS nom_depart,
+                a_dep.latitude AS lat_depart,
+                a_dep.longitude AS lng_depart,
+                ST_Distance(a_dep.geom::geography, ST_SetSRID(ST_MakePoint(47.540245056152, -18.919115620722), 4326)::geography) AS distance_dep_metres,
+                
+                a_dest.id AS id_arrivee,
+                a_dest.nom AS nom_arrivee,
+                a_dest.latitude AS lat_arrivee,
+                a_dest.longitude AS lng_arrivee,
+                ST_Distance(a_dest.geom::geography, ST_SetSRID(ST_MakePoint(47.533893585205, -18.873478437863), 4326)::geography) AS distance_arr_metres
+            FROM trajet_arret ta_dep
+            JOIN trajet_arret ta_dest ON ta_dep.id_trajet = ta_dest.id_trajet
+            JOIN arret a_dep ON a_dep.id = ta_dep.id_arret
+            JOIN arret a_dest ON a_dest.id = ta_dest.id_arret
+            WHERE ta_dep.ordre < ta_dest.ordre
+            ORDER BY (
+                ST_Distance(a_dep.geom::geography, ST_SetSRID(ST_MakePoint(47.540245056152, -18.919115620722), 4326)::geography) + 
+                ST_Distance(a_dest.geom::geography, ST_SetSRID(ST_MakePoint(47.533893585205, -18.873478437863), 4326)::geography)
+            ) ASC
+            LIMIT 1
+        ')
+ 5 APPPATH\Models\TrajetModel.php(161): CodeIgniter\Database\BaseConnection->query('
+            SELECT 
+                a_dep.id AS id_depart,
+                a_dep.nom AS nom_depart,
+                a_dep.latitude AS lat_depart,
+                a_dep.longitude AS lng_depart,
+                ST_Distance(a_dep.geom::geography, ST_SetSRID(ST_MakePoint(:lngDep:, :latDep:), 4326)::geography) AS distance_dep_metres,
+                
+                a_dest.id AS id_arrivee,
+                a_dest.nom AS nom_arrivee,
+                a_dest.latitude AS lat_arrivee,
+                a_dest.longitude AS lng_arrivee,
+                ST_Distance(a_dest.geom::geography, ST_SetSRID(ST_MakePoint(:lngArr:, :latArr:), 4326)::geography) AS distance_arr_metres
+            FROM trajet_arret ta_dep
+            JOIN trajet_arret ta_dest ON ta_dep.id_trajet = ta_dest.id_trajet
+            JOIN arret a_dep ON a_dep.id = ta_dep.id_arret
+            JOIN arret a_dest ON a_dest.id = ta_dest.id_arret
+            WHERE ta_dep.ordre < ta_dest.ordre
+            ORDER BY (
+                ST_Distance(a_dep.geom::geography, ST_SetSRID(ST_MakePoint(:lngDep:, :latDep:), 4326)::geography) + 
+                ST_Distance(a_dest.geom::geography, ST_SetSRID(ST_MakePoint(:lngArr:, :latArr:), 4326)::geography)
+            ) ASC
+            LIMIT 1
+        ', [...])
+ 6 APPPATH\Controllers\Api\SearchController.php(26): App\Models\TrajetModel->findBestItineraryStops(-18.9191156207216, 47.54024505615235, -18.873478437862648, 47.53389358520508)
+ 7 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\Api\SearchController->search()
+ 8 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Api\SearchController))
+ 9 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+10 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+11 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+12 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+13 SYSTEMPATH\rewrite.php(44): require_once('E:\\Dossier_Bryan\\ITU\\S4\\SIG\\PROJET\\Projet_TaxiBe\\public\\index.php')
+ERROR - 2026-06-25 19:27:23 --> pg_query(): Query failed: ERROR:  column a_dep.latitude does not exist
+LINE 5:                 a_dep.latitude AS lat_depart,
+                        ^
+in SYSTEMPATH\Database\Postgre\Connection.php on line 200.
+ 1 SYSTEMPATH\Database\BaseConnection.php(910): CodeIgniter\Database\Postgre\Connection->execute('
+            SELECT 
+                a_dep.id AS id_depart,
+                a_dep.nom AS nom_depart,
+                a_dep.latitude AS lat_depart,
+                a_dep.longitude AS lng_depart,
+                ST_Distance(a_dep.geom::geography, ST_SetSRID(ST_MakePoint(47.540245056152, -18.919115620722), 4326)::geography) AS distance_dep_metres,
+                
+                a_dest.id AS id_arrivee,
+                a_dest.nom AS nom_arrivee,
+                a_dest.latitude AS lat_arrivee,
+                a_dest.longitude AS lng_arrivee,
+                ST_Distance(a_dest.geom::geography, ST_SetSRID(ST_MakePoint(47.48462677002, -18.910833640085), 4326)::geography) AS distance_arr_metres
+            FROM trajet_arret ta_dep
+            JOIN trajet_arret ta_dest ON ta_dep.id_trajet = ta_dest.id_trajet
+            JOIN arret a_dep ON a_dep.id = ta_dep.id_arret
+            JOIN arret a_dest ON a_dest.id = ta_dest.id_arret
+            WHERE ta_dep.ordre < ta_dest.ordre
+            ORDER BY (
+                ST_Distance(a_dep.geom::geography, ST_SetSRID(ST_MakePoint(47.540245056152, -18.919115620722), 4326)::geography) + 
+                ST_Distance(a_dest.geom::geography, ST_SetSRID(ST_MakePoint(47.48462677002, -18.910833640085), 4326)::geography)
+            ) ASC
+            LIMIT 1
+        ')
+ 2 SYSTEMPATH\Database\BaseConnection.php(827): CodeIgniter\Database\BaseConnection->simpleQuery('
+            SELECT 
+                a_dep.id AS id_depart,
+                a_dep.nom AS nom_depart,
+                a_dep.latitude AS lat_depart,
+                a_dep.longitude AS lng_depart,
+                ST_Distance(a_dep.geom::geography, ST_SetSRID(ST_MakePoint(47.540245056152, -18.919115620722), 4326)::geography) AS distance_dep_metres,
+                
+                a_dest.id AS id_arrivee,
+                a_dest.nom AS nom_arrivee,
+                a_dest.latitude AS lat_arrivee,
+                a_dest.longitude AS lng_arrivee,
+                ST_Distance(a_dest.geom::geography, ST_SetSRID(ST_MakePoint(47.48462677002, -18.910833640085), 4326)::geography) AS distance_arr_metres
+            FROM trajet_arret ta_dep
+            JOIN trajet_arret ta_dest ON ta_dep.id_trajet = ta_dest.id_trajet
+            JOIN arret a_dep ON a_dep.id = ta_dep.id_arret
+            JOIN arret a_dest ON a_dest.id = ta_dest.id_arret
+            WHERE ta_dep.ordre < ta_dest.ordre
+            ORDER BY (
+                ST_Distance(a_dep.geom::geography, ST_SetSRID(ST_MakePoint(47.540245056152, -18.919115620722), 4326)::geography) + 
+                ST_Distance(a_dest.geom::geography, ST_SetSRID(ST_MakePoint(47.48462677002, -18.910833640085), 4326)::geography)
+            ) ASC
+            LIMIT 1
+        ')
+ 3 APPPATH\Models\TrajetModel.php(161): CodeIgniter\Database\BaseConnection->query('
+            SELECT 
+                a_dep.id AS id_depart,
+                a_dep.nom AS nom_depart,
+                a_dep.latitude AS lat_depart,
+                a_dep.longitude AS lng_depart,
+                ST_Distance(a_dep.geom::geography, ST_SetSRID(ST_MakePoint(:lngDep:, :latDep:), 4326)::geography) AS distance_dep_metres,
+                
+                a_dest.id AS id_arrivee,
+                a_dest.nom AS nom_arrivee,
+                a_dest.latitude AS lat_arrivee,
+                a_dest.longitude AS lng_arrivee,
+                ST_Distance(a_dest.geom::geography, ST_SetSRID(ST_MakePoint(:lngArr:, :latArr:), 4326)::geography) AS distance_arr_metres
+            FROM trajet_arret ta_dep
+            JOIN trajet_arret ta_dest ON ta_dep.id_trajet = ta_dest.id_trajet
+            JOIN arret a_dep ON a_dep.id = ta_dep.id_arret
+            JOIN arret a_dest ON a_dest.id = ta_dest.id_arret
+            WHERE ta_dep.ordre < ta_dest.ordre
+            ORDER BY (
+                ST_Distance(a_dep.geom::geography, ST_SetSRID(ST_MakePoint(:lngDep:, :latDep:), 4326)::geography) + 
+                ST_Distance(a_dest.geom::geography, ST_SetSRID(ST_MakePoint(:lngArr:, :latArr:), 4326)::geography)
+            ) ASC
+            LIMIT 1
+        ', [...])
+ 4 APPPATH\Controllers\Api\SearchController.php(26): App\Models\TrajetModel->findBestItineraryStops(-18.9191156207216, 47.54024505615235, -18.91083364008497, 47.48462677001954)
+ 5 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\Api\SearchController->search()
+ 6 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Api\SearchController))
+ 7 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 8 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+ 9 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+10 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+11 SYSTEMPATH\rewrite.php(44): require_once('E:\\Dossier_Bryan\\ITU\\S4\\SIG\\PROJET\\Projet_TaxiBe\\public\\index.php')
+CRITICAL - 2026-06-25 19:27:23 --> CodeIgniter\Database\Exceptions\DatabaseException: pg_query(): Query failed: ERROR:  column a_dep.latitude does not exist
+LINE 5:                 a_dep.latitude AS lat_depart,
+                        ^
+[Method: POST, Route: api/search]
+in SYSTEMPATH\Database\BaseConnection.php on line 865.
+ 1 APPPATH\Models\TrajetModel.php(161): CodeIgniter\Database\BaseConnection->query('
+            SELECT 
+                a_dep.id AS id_depart,
+                a_dep.nom AS nom_depart,
+                a_dep.latitude AS lat_depart,
+                a_dep.longitude AS lng_depart,
+                ST_Distance(a_dep.geom::geography, ST_SetSRID(ST_MakePoint(:lngDep:, :latDep:), 4326)::geography) AS distance_dep_metres,
+                
+                a_dest.id AS id_arrivee,
+                a_dest.nom AS nom_arrivee,
+                a_dest.latitude AS lat_arrivee,
+                a_dest.longitude AS lng_arrivee,
+                ST_Distance(a_dest.geom::geography, ST_SetSRID(ST_MakePoint(:lngArr:, :latArr:), 4326)::geography) AS distance_arr_metres
+            FROM trajet_arret ta_dep
+            JOIN trajet_arret ta_dest ON ta_dep.id_trajet = ta_dest.id_trajet
+            JOIN arret a_dep ON a_dep.id = ta_dep.id_arret
+            JOIN arret a_dest ON a_dest.id = ta_dest.id_arret
+            WHERE ta_dep.ordre < ta_dest.ordre
+            ORDER BY (
+                ST_Distance(a_dep.geom::geography, ST_SetSRID(ST_MakePoint(:lngDep:, :latDep:), 4326)::geography) + 
+                ST_Distance(a_dest.geom::geography, ST_SetSRID(ST_MakePoint(:lngArr:, :latArr:), 4326)::geography)
+            ) ASC
+            LIMIT 1
+        ', [...])
+ 2 APPPATH\Controllers\Api\SearchController.php(26): App\Models\TrajetModel->findBestItineraryStops(-18.9191156207216, 47.54024505615235, -18.91083364008497, 47.48462677001954)
+ 3 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\Api\SearchController->search()
+ 4 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Api\SearchController))
+ 5 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 6 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+ 7 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 8 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+ 9 SYSTEMPATH\rewrite.php(44): require_once('E:\\Dossier_Bryan\\ITU\\S4\\SIG\\PROJET\\Projet_TaxiBe\\public\\index.php')
+CRITICAL - 2026-06-25 19:27:23 --> [Caused by] CodeIgniter\Database\Exceptions\DatabaseException: pg_query(): Query failed: ERROR:  column a_dep.latitude does not exist
+LINE 5:                 a_dep.latitude AS lat_depart,
+                        ^
+in SYSTEMPATH\Database\Postgre\Connection.php on line 212.
+ 1 SYSTEMPATH\Database\BaseConnection.php(910): CodeIgniter\Database\Postgre\Connection->execute('
+            SELECT 
+                a_dep.id AS id_depart,
+                a_dep.nom AS nom_depart,
+                a_dep.latitude AS lat_depart,
+                a_dep.longitude AS lng_depart,
+                ST_Distance(a_dep.geom::geography, ST_SetSRID(ST_MakePoint(47.540245056152, -18.919115620722), 4326)::geography) AS distance_dep_metres,
+                
+                a_dest.id AS id_arrivee,
+                a_dest.nom AS nom_arrivee,
+                a_dest.latitude AS lat_arrivee,
+                a_dest.longitude AS lng_arrivee,
+                ST_Distance(a_dest.geom::geography, ST_SetSRID(ST_MakePoint(47.48462677002, -18.910833640085), 4326)::geography) AS distance_arr_metres
+            FROM trajet_arret ta_dep
+            JOIN trajet_arret ta_dest ON ta_dep.id_trajet = ta_dest.id_trajet
+            JOIN arret a_dep ON a_dep.id = ta_dep.id_arret
+            JOIN arret a_dest ON a_dest.id = ta_dest.id_arret
+            WHERE ta_dep.ordre < ta_dest.ordre
+            ORDER BY (
+                ST_Distance(a_dep.geom::geography, ST_SetSRID(ST_MakePoint(47.540245056152, -18.919115620722), 4326)::geography) + 
+                ST_Distance(a_dest.geom::geography, ST_SetSRID(ST_MakePoint(47.48462677002, -18.910833640085), 4326)::geography)
+            ) ASC
+            LIMIT 1
+        ')
+ 2 SYSTEMPATH\Database\BaseConnection.php(827): CodeIgniter\Database\BaseConnection->simpleQuery('
+            SELECT 
+                a_dep.id AS id_depart,
+                a_dep.nom AS nom_depart,
+                a_dep.latitude AS lat_depart,
+                a_dep.longitude AS lng_depart,
+                ST_Distance(a_dep.geom::geography, ST_SetSRID(ST_MakePoint(47.540245056152, -18.919115620722), 4326)::geography) AS distance_dep_metres,
+                
+                a_dest.id AS id_arrivee,
+                a_dest.nom AS nom_arrivee,
+                a_dest.latitude AS lat_arrivee,
+                a_dest.longitude AS lng_arrivee,
+                ST_Distance(a_dest.geom::geography, ST_SetSRID(ST_MakePoint(47.48462677002, -18.910833640085), 4326)::geography) AS distance_arr_metres
+            FROM trajet_arret ta_dep
+            JOIN trajet_arret ta_dest ON ta_dep.id_trajet = ta_dest.id_trajet
+            JOIN arret a_dep ON a_dep.id = ta_dep.id_arret
+            JOIN arret a_dest ON a_dest.id = ta_dest.id_arret
+            WHERE ta_dep.ordre < ta_dest.ordre
+            ORDER BY (
+                ST_Distance(a_dep.geom::geography, ST_SetSRID(ST_MakePoint(47.540245056152, -18.919115620722), 4326)::geography) + 
+                ST_Distance(a_dest.geom::geography, ST_SetSRID(ST_MakePoint(47.48462677002, -18.910833640085), 4326)::geography)
+            ) ASC
+            LIMIT 1
+        ')
+ 3 APPPATH\Models\TrajetModel.php(161): CodeIgniter\Database\BaseConnection->query('
+            SELECT 
+                a_dep.id AS id_depart,
+                a_dep.nom AS nom_depart,
+                a_dep.latitude AS lat_depart,
+                a_dep.longitude AS lng_depart,
+                ST_Distance(a_dep.geom::geography, ST_SetSRID(ST_MakePoint(:lngDep:, :latDep:), 4326)::geography) AS distance_dep_metres,
+                
+                a_dest.id AS id_arrivee,
+                a_dest.nom AS nom_arrivee,
+                a_dest.latitude AS lat_arrivee,
+                a_dest.longitude AS lng_arrivee,
+                ST_Distance(a_dest.geom::geography, ST_SetSRID(ST_MakePoint(:lngArr:, :latArr:), 4326)::geography) AS distance_arr_metres
+            FROM trajet_arret ta_dep
+            JOIN trajet_arret ta_dest ON ta_dep.id_trajet = ta_dest.id_trajet
+            JOIN arret a_dep ON a_dep.id = ta_dep.id_arret
+            JOIN arret a_dest ON a_dest.id = ta_dest.id_arret
+            WHERE ta_dep.ordre < ta_dest.ordre
+            ORDER BY (
+                ST_Distance(a_dep.geom::geography, ST_SetSRID(ST_MakePoint(:lngDep:, :latDep:), 4326)::geography) + 
+                ST_Distance(a_dest.geom::geography, ST_SetSRID(ST_MakePoint(:lngArr:, :latArr:), 4326)::geography)
+            ) ASC
+            LIMIT 1
+        ', [...])
+ 4 APPPATH\Controllers\Api\SearchController.php(26): App\Models\TrajetModel->findBestItineraryStops(-18.9191156207216, 47.54024505615235, -18.91083364008497, 47.48462677001954)
+ 5 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\Api\SearchController->search()
+ 6 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Api\SearchController))
+ 7 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 8 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+ 9 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+10 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+11 SYSTEMPATH\rewrite.php(44): require_once('E:\\Dossier_Bryan\\ITU\\S4\\SIG\\PROJET\\Projet_TaxiBe\\public\\index.php')
+CRITICAL - 2026-06-25 19:27:23 --> [Caused by] ErrorException: pg_query(): Query failed: ERROR:  column a_dep.latitude does not exist
+LINE 5:                 a_dep.latitude AS lat_depart,
+                        ^
+in SYSTEMPATH\Database\Postgre\Connection.php on line 200.
+ 1 [internal function]: CodeIgniter\Debug\Exceptions->errorHandler(2, 'pg_query(): Query failed: ERROR:  column a_dep.latitude does not exist
+LINE 5:                 a_dep.latitude AS lat_depart,
+                        ^', 'E:\\Dossier_Bryan\\ITU\\S4\\SIG\\PROJET\\Projet_TaxiBe\\system\\Database\\Postgre\\Connection.php', 200)
+ 2 SYSTEMPATH\Database\Postgre\Connection.php(200): pg_query(Object(PgSql\Connection), '
+            SELECT 
+                a_dep.id AS id_depart,
+                a_dep.nom AS nom_depart,
+                a_dep.latitude AS lat_depart,
+                a_dep.longitude AS lng_depart,
+                ST_Distance(a_dep.geom::geography, ST_SetSRID(ST_MakePoint(47.540245056152, -18.919115620722), 4326)::geography) AS distance_dep_metres,
+                
+                a_dest.id AS id_arrivee,
+                a_dest.nom AS nom_arrivee,
+                a_dest.latitude AS lat_arrivee,
+                a_dest.longitude AS lng_arrivee,
+                ST_Distance(a_dest.geom::geography, ST_SetSRID(ST_MakePoint(47.48462677002, -18.910833640085), 4326)::geography) AS distance_arr_metres
+            FROM trajet_arret ta_dep
+            JOIN trajet_arret ta_dest ON ta_dep.id_trajet = ta_dest.id_trajet
+            JOIN arret a_dep ON a_dep.id = ta_dep.id_arret
+            JOIN arret a_dest ON a_dest.id = ta_dest.id_arret
+            WHERE ta_dep.ordre < ta_dest.ordre
+            ORDER BY (
+                ST_Distance(a_dep.geom::geography, ST_SetSRID(ST_MakePoint(47.540245056152, -18.919115620722), 4326)::geography) + 
+                ST_Distance(a_dest.geom::geography, ST_SetSRID(ST_MakePoint(47.48462677002, -18.910833640085), 4326)::geography)
+            ) ASC
+            LIMIT 1
+        ')
+ 3 SYSTEMPATH\Database\BaseConnection.php(910): CodeIgniter\Database\Postgre\Connection->execute('
+            SELECT 
+                a_dep.id AS id_depart,
+                a_dep.nom AS nom_depart,
+                a_dep.latitude AS lat_depart,
+                a_dep.longitude AS lng_depart,
+                ST_Distance(a_dep.geom::geography, ST_SetSRID(ST_MakePoint(47.540245056152, -18.919115620722), 4326)::geography) AS distance_dep_metres,
+                
+                a_dest.id AS id_arrivee,
+                a_dest.nom AS nom_arrivee,
+                a_dest.latitude AS lat_arrivee,
+                a_dest.longitude AS lng_arrivee,
+                ST_Distance(a_dest.geom::geography, ST_SetSRID(ST_MakePoint(47.48462677002, -18.910833640085), 4326)::geography) AS distance_arr_metres
+            FROM trajet_arret ta_dep
+            JOIN trajet_arret ta_dest ON ta_dep.id_trajet = ta_dest.id_trajet
+            JOIN arret a_dep ON a_dep.id = ta_dep.id_arret
+            JOIN arret a_dest ON a_dest.id = ta_dest.id_arret
+            WHERE ta_dep.ordre < ta_dest.ordre
+            ORDER BY (
+                ST_Distance(a_dep.geom::geography, ST_SetSRID(ST_MakePoint(47.540245056152, -18.919115620722), 4326)::geography) + 
+                ST_Distance(a_dest.geom::geography, ST_SetSRID(ST_MakePoint(47.48462677002, -18.910833640085), 4326)::geography)
+            ) ASC
+            LIMIT 1
+        ')
+ 4 SYSTEMPATH\Database\BaseConnection.php(827): CodeIgniter\Database\BaseConnection->simpleQuery('
+            SELECT 
+                a_dep.id AS id_depart,
+                a_dep.nom AS nom_depart,
+                a_dep.latitude AS lat_depart,
+                a_dep.longitude AS lng_depart,
+                ST_Distance(a_dep.geom::geography, ST_SetSRID(ST_MakePoint(47.540245056152, -18.919115620722), 4326)::geography) AS distance_dep_metres,
+                
+                a_dest.id AS id_arrivee,
+                a_dest.nom AS nom_arrivee,
+                a_dest.latitude AS lat_arrivee,
+                a_dest.longitude AS lng_arrivee,
+                ST_Distance(a_dest.geom::geography, ST_SetSRID(ST_MakePoint(47.48462677002, -18.910833640085), 4326)::geography) AS distance_arr_metres
+            FROM trajet_arret ta_dep
+            JOIN trajet_arret ta_dest ON ta_dep.id_trajet = ta_dest.id_trajet
+            JOIN arret a_dep ON a_dep.id = ta_dep.id_arret
+            JOIN arret a_dest ON a_dest.id = ta_dest.id_arret
+            WHERE ta_dep.ordre < ta_dest.ordre
+            ORDER BY (
+                ST_Distance(a_dep.geom::geography, ST_SetSRID(ST_MakePoint(47.540245056152, -18.919115620722), 4326)::geography) + 
+                ST_Distance(a_dest.geom::geography, ST_SetSRID(ST_MakePoint(47.48462677002, -18.910833640085), 4326)::geography)
+            ) ASC
+            LIMIT 1
+        ')
+ 5 APPPATH\Models\TrajetModel.php(161): CodeIgniter\Database\BaseConnection->query('
+            SELECT 
+                a_dep.id AS id_depart,
+                a_dep.nom AS nom_depart,
+                a_dep.latitude AS lat_depart,
+                a_dep.longitude AS lng_depart,
+                ST_Distance(a_dep.geom::geography, ST_SetSRID(ST_MakePoint(:lngDep:, :latDep:), 4326)::geography) AS distance_dep_metres,
+                
+                a_dest.id AS id_arrivee,
+                a_dest.nom AS nom_arrivee,
+                a_dest.latitude AS lat_arrivee,
+                a_dest.longitude AS lng_arrivee,
+                ST_Distance(a_dest.geom::geography, ST_SetSRID(ST_MakePoint(:lngArr:, :latArr:), 4326)::geography) AS distance_arr_metres
+            FROM trajet_arret ta_dep
+            JOIN trajet_arret ta_dest ON ta_dep.id_trajet = ta_dest.id_trajet
+            JOIN arret a_dep ON a_dep.id = ta_dep.id_arret
+            JOIN arret a_dest ON a_dest.id = ta_dest.id_arret
+            WHERE ta_dep.ordre < ta_dest.ordre
+            ORDER BY (
+                ST_Distance(a_dep.geom::geography, ST_SetSRID(ST_MakePoint(:lngDep:, :latDep:), 4326)::geography) + 
+                ST_Distance(a_dest.geom::geography, ST_SetSRID(ST_MakePoint(:lngArr:, :latArr:), 4326)::geography)
+            ) ASC
+            LIMIT 1
+        ', [...])
+ 6 APPPATH\Controllers\Api\SearchController.php(26): App\Models\TrajetModel->findBestItineraryStops(-18.9191156207216, 47.54024505615235, -18.91083364008497, 47.48462677001954)
+ 7 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\Api\SearchController->search()
+ 8 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Api\SearchController))
+ 9 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+10 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+11 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+12 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+13 SYSTEMPATH\rewrite.php(44): require_once('E:\\Dossier_Bryan\\ITU\\S4\\SIG\\PROJET\\Projet_TaxiBe\\public\\index.php')
+ERROR - 2026-06-25 19:27:31 --> pg_query(): Query failed: ERROR:  column a_dep.latitude does not exist
+LINE 5:                 a_dep.latitude AS lat_depart,
+                        ^
+in SYSTEMPATH\Database\Postgre\Connection.php on line 200.
+ 1 SYSTEMPATH\Database\BaseConnection.php(910): CodeIgniter\Database\Postgre\Connection->execute('
+            SELECT 
+                a_dep.id AS id_depart,
+                a_dep.nom AS nom_depart,
+                a_dep.latitude AS lat_depart,
+                a_dep.longitude AS lng_depart,
+                ST_Distance(a_dep.geom::geography, ST_SetSRID(ST_MakePoint(47.540245056152, -18.919115620722), 4326)::geography) AS distance_dep_metres,
+                
+                a_dest.id AS id_arrivee,
+                a_dest.nom AS nom_arrivee,
+                a_dest.latitude AS lat_arrivee,
+                a_dest.longitude AS lng_arrivee,
+                ST_Distance(a_dest.geom::geography, ST_SetSRID(ST_MakePoint(47.48462677002, -18.910833640085), 4326)::geography) AS distance_arr_metres
+            FROM trajet_arret ta_dep
+            JOIN trajet_arret ta_dest ON ta_dep.id_trajet = ta_dest.id_trajet
+            JOIN arret a_dep ON a_dep.id = ta_dep.id_arret
+            JOIN arret a_dest ON a_dest.id = ta_dest.id_arret
+            WHERE ta_dep.ordre < ta_dest.ordre
+            ORDER BY (
+                ST_Distance(a_dep.geom::geography, ST_SetSRID(ST_MakePoint(47.540245056152, -18.919115620722), 4326)::geography) + 
+                ST_Distance(a_dest.geom::geography, ST_SetSRID(ST_MakePoint(47.48462677002, -18.910833640085), 4326)::geography)
+            ) ASC
+            LIMIT 1
+        ')
+ 2 SYSTEMPATH\Database\BaseConnection.php(827): CodeIgniter\Database\BaseConnection->simpleQuery('
+            SELECT 
+                a_dep.id AS id_depart,
+                a_dep.nom AS nom_depart,
+                a_dep.latitude AS lat_depart,
+                a_dep.longitude AS lng_depart,
+                ST_Distance(a_dep.geom::geography, ST_SetSRID(ST_MakePoint(47.540245056152, -18.919115620722), 4326)::geography) AS distance_dep_metres,
+                
+                a_dest.id AS id_arrivee,
+                a_dest.nom AS nom_arrivee,
+                a_dest.latitude AS lat_arrivee,
+                a_dest.longitude AS lng_arrivee,
+                ST_Distance(a_dest.geom::geography, ST_SetSRID(ST_MakePoint(47.48462677002, -18.910833640085), 4326)::geography) AS distance_arr_metres
+            FROM trajet_arret ta_dep
+            JOIN trajet_arret ta_dest ON ta_dep.id_trajet = ta_dest.id_trajet
+            JOIN arret a_dep ON a_dep.id = ta_dep.id_arret
+            JOIN arret a_dest ON a_dest.id = ta_dest.id_arret
+            WHERE ta_dep.ordre < ta_dest.ordre
+            ORDER BY (
+                ST_Distance(a_dep.geom::geography, ST_SetSRID(ST_MakePoint(47.540245056152, -18.919115620722), 4326)::geography) + 
+                ST_Distance(a_dest.geom::geography, ST_SetSRID(ST_MakePoint(47.48462677002, -18.910833640085), 4326)::geography)
+            ) ASC
+            LIMIT 1
+        ')
+ 3 APPPATH\Models\TrajetModel.php(161): CodeIgniter\Database\BaseConnection->query('
+            SELECT 
+                a_dep.id AS id_depart,
+                a_dep.nom AS nom_depart,
+                a_dep.latitude AS lat_depart,
+                a_dep.longitude AS lng_depart,
+                ST_Distance(a_dep.geom::geography, ST_SetSRID(ST_MakePoint(:lngDep:, :latDep:), 4326)::geography) AS distance_dep_metres,
+                
+                a_dest.id AS id_arrivee,
+                a_dest.nom AS nom_arrivee,
+                a_dest.latitude AS lat_arrivee,
+                a_dest.longitude AS lng_arrivee,
+                ST_Distance(a_dest.geom::geography, ST_SetSRID(ST_MakePoint(:lngArr:, :latArr:), 4326)::geography) AS distance_arr_metres
+            FROM trajet_arret ta_dep
+            JOIN trajet_arret ta_dest ON ta_dep.id_trajet = ta_dest.id_trajet
+            JOIN arret a_dep ON a_dep.id = ta_dep.id_arret
+            JOIN arret a_dest ON a_dest.id = ta_dest.id_arret
+            WHERE ta_dep.ordre < ta_dest.ordre
+            ORDER BY (
+                ST_Distance(a_dep.geom::geography, ST_SetSRID(ST_MakePoint(:lngDep:, :latDep:), 4326)::geography) + 
+                ST_Distance(a_dest.geom::geography, ST_SetSRID(ST_MakePoint(:lngArr:, :latArr:), 4326)::geography)
+            ) ASC
+            LIMIT 1
+        ', [...])
+ 4 APPPATH\Controllers\Api\SearchController.php(26): App\Models\TrajetModel->findBestItineraryStops(-18.9191156207216, 47.54024505615235, -18.91083364008497, 47.48462677001954)
+ 5 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\Api\SearchController->search()
+ 6 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Api\SearchController))
+ 7 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 8 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+ 9 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+10 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+11 SYSTEMPATH\rewrite.php(44): require_once('E:\\Dossier_Bryan\\ITU\\S4\\SIG\\PROJET\\Projet_TaxiBe\\public\\index.php')
+CRITICAL - 2026-06-25 19:27:31 --> CodeIgniter\Database\Exceptions\DatabaseException: pg_query(): Query failed: ERROR:  column a_dep.latitude does not exist
+LINE 5:                 a_dep.latitude AS lat_depart,
+                        ^
+[Method: POST, Route: api/search]
+in SYSTEMPATH\Database\BaseConnection.php on line 865.
+ 1 APPPATH\Models\TrajetModel.php(161): CodeIgniter\Database\BaseConnection->query('
+            SELECT 
+                a_dep.id AS id_depart,
+                a_dep.nom AS nom_depart,
+                a_dep.latitude AS lat_depart,
+                a_dep.longitude AS lng_depart,
+                ST_Distance(a_dep.geom::geography, ST_SetSRID(ST_MakePoint(:lngDep:, :latDep:), 4326)::geography) AS distance_dep_metres,
+                
+                a_dest.id AS id_arrivee,
+                a_dest.nom AS nom_arrivee,
+                a_dest.latitude AS lat_arrivee,
+                a_dest.longitude AS lng_arrivee,
+                ST_Distance(a_dest.geom::geography, ST_SetSRID(ST_MakePoint(:lngArr:, :latArr:), 4326)::geography) AS distance_arr_metres
+            FROM trajet_arret ta_dep
+            JOIN trajet_arret ta_dest ON ta_dep.id_trajet = ta_dest.id_trajet
+            JOIN arret a_dep ON a_dep.id = ta_dep.id_arret
+            JOIN arret a_dest ON a_dest.id = ta_dest.id_arret
+            WHERE ta_dep.ordre < ta_dest.ordre
+            ORDER BY (
+                ST_Distance(a_dep.geom::geography, ST_SetSRID(ST_MakePoint(:lngDep:, :latDep:), 4326)::geography) + 
+                ST_Distance(a_dest.geom::geography, ST_SetSRID(ST_MakePoint(:lngArr:, :latArr:), 4326)::geography)
+            ) ASC
+            LIMIT 1
+        ', [...])
+ 2 APPPATH\Controllers\Api\SearchController.php(26): App\Models\TrajetModel->findBestItineraryStops(-18.9191156207216, 47.54024505615235, -18.91083364008497, 47.48462677001954)
+ 3 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\Api\SearchController->search()
+ 4 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Api\SearchController))
+ 5 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 6 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+ 7 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 8 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+ 9 SYSTEMPATH\rewrite.php(44): require_once('E:\\Dossier_Bryan\\ITU\\S4\\SIG\\PROJET\\Projet_TaxiBe\\public\\index.php')
+CRITICAL - 2026-06-25 19:27:31 --> [Caused by] CodeIgniter\Database\Exceptions\DatabaseException: pg_query(): Query failed: ERROR:  column a_dep.latitude does not exist
+LINE 5:                 a_dep.latitude AS lat_depart,
+                        ^
+in SYSTEMPATH\Database\Postgre\Connection.php on line 212.
+ 1 SYSTEMPATH\Database\BaseConnection.php(910): CodeIgniter\Database\Postgre\Connection->execute('
+            SELECT 
+                a_dep.id AS id_depart,
+                a_dep.nom AS nom_depart,
+                a_dep.latitude AS lat_depart,
+                a_dep.longitude AS lng_depart,
+                ST_Distance(a_dep.geom::geography, ST_SetSRID(ST_MakePoint(47.540245056152, -18.919115620722), 4326)::geography) AS distance_dep_metres,
+                
+                a_dest.id AS id_arrivee,
+                a_dest.nom AS nom_arrivee,
+                a_dest.latitude AS lat_arrivee,
+                a_dest.longitude AS lng_arrivee,
+                ST_Distance(a_dest.geom::geography, ST_SetSRID(ST_MakePoint(47.48462677002, -18.910833640085), 4326)::geography) AS distance_arr_metres
+            FROM trajet_arret ta_dep
+            JOIN trajet_arret ta_dest ON ta_dep.id_trajet = ta_dest.id_trajet
+            JOIN arret a_dep ON a_dep.id = ta_dep.id_arret
+            JOIN arret a_dest ON a_dest.id = ta_dest.id_arret
+            WHERE ta_dep.ordre < ta_dest.ordre
+            ORDER BY (
+                ST_Distance(a_dep.geom::geography, ST_SetSRID(ST_MakePoint(47.540245056152, -18.919115620722), 4326)::geography) + 
+                ST_Distance(a_dest.geom::geography, ST_SetSRID(ST_MakePoint(47.48462677002, -18.910833640085), 4326)::geography)
+            ) ASC
+            LIMIT 1
+        ')
+ 2 SYSTEMPATH\Database\BaseConnection.php(827): CodeIgniter\Database\BaseConnection->simpleQuery('
+            SELECT 
+                a_dep.id AS id_depart,
+                a_dep.nom AS nom_depart,
+                a_dep.latitude AS lat_depart,
+                a_dep.longitude AS lng_depart,
+                ST_Distance(a_dep.geom::geography, ST_SetSRID(ST_MakePoint(47.540245056152, -18.919115620722), 4326)::geography) AS distance_dep_metres,
+                
+                a_dest.id AS id_arrivee,
+                a_dest.nom AS nom_arrivee,
+                a_dest.latitude AS lat_arrivee,
+                a_dest.longitude AS lng_arrivee,
+                ST_Distance(a_dest.geom::geography, ST_SetSRID(ST_MakePoint(47.48462677002, -18.910833640085), 4326)::geography) AS distance_arr_metres
+            FROM trajet_arret ta_dep
+            JOIN trajet_arret ta_dest ON ta_dep.id_trajet = ta_dest.id_trajet
+            JOIN arret a_dep ON a_dep.id = ta_dep.id_arret
+            JOIN arret a_dest ON a_dest.id = ta_dest.id_arret
+            WHERE ta_dep.ordre < ta_dest.ordre
+            ORDER BY (
+                ST_Distance(a_dep.geom::geography, ST_SetSRID(ST_MakePoint(47.540245056152, -18.919115620722), 4326)::geography) + 
+                ST_Distance(a_dest.geom::geography, ST_SetSRID(ST_MakePoint(47.48462677002, -18.910833640085), 4326)::geography)
+            ) ASC
+            LIMIT 1
+        ')
+ 3 APPPATH\Models\TrajetModel.php(161): CodeIgniter\Database\BaseConnection->query('
+            SELECT 
+                a_dep.id AS id_depart,
+                a_dep.nom AS nom_depart,
+                a_dep.latitude AS lat_depart,
+                a_dep.longitude AS lng_depart,
+                ST_Distance(a_dep.geom::geography, ST_SetSRID(ST_MakePoint(:lngDep:, :latDep:), 4326)::geography) AS distance_dep_metres,
+                
+                a_dest.id AS id_arrivee,
+                a_dest.nom AS nom_arrivee,
+                a_dest.latitude AS lat_arrivee,
+                a_dest.longitude AS lng_arrivee,
+                ST_Distance(a_dest.geom::geography, ST_SetSRID(ST_MakePoint(:lngArr:, :latArr:), 4326)::geography) AS distance_arr_metres
+            FROM trajet_arret ta_dep
+            JOIN trajet_arret ta_dest ON ta_dep.id_trajet = ta_dest.id_trajet
+            JOIN arret a_dep ON a_dep.id = ta_dep.id_arret
+            JOIN arret a_dest ON a_dest.id = ta_dest.id_arret
+            WHERE ta_dep.ordre < ta_dest.ordre
+            ORDER BY (
+                ST_Distance(a_dep.geom::geography, ST_SetSRID(ST_MakePoint(:lngDep:, :latDep:), 4326)::geography) + 
+                ST_Distance(a_dest.geom::geography, ST_SetSRID(ST_MakePoint(:lngArr:, :latArr:), 4326)::geography)
+            ) ASC
+            LIMIT 1
+        ', [...])
+ 4 APPPATH\Controllers\Api\SearchController.php(26): App\Models\TrajetModel->findBestItineraryStops(-18.9191156207216, 47.54024505615235, -18.91083364008497, 47.48462677001954)
+ 5 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\Api\SearchController->search()
+ 6 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Api\SearchController))
+ 7 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 8 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+ 9 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+10 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+11 SYSTEMPATH\rewrite.php(44): require_once('E:\\Dossier_Bryan\\ITU\\S4\\SIG\\PROJET\\Projet_TaxiBe\\public\\index.php')
+CRITICAL - 2026-06-25 19:27:31 --> [Caused by] ErrorException: pg_query(): Query failed: ERROR:  column a_dep.latitude does not exist
+LINE 5:                 a_dep.latitude AS lat_depart,
+                        ^
+in SYSTEMPATH\Database\Postgre\Connection.php on line 200.
+ 1 [internal function]: CodeIgniter\Debug\Exceptions->errorHandler(2, 'pg_query(): Query failed: ERROR:  column a_dep.latitude does not exist
+LINE 5:                 a_dep.latitude AS lat_depart,
+                        ^', 'E:\\Dossier_Bryan\\ITU\\S4\\SIG\\PROJET\\Projet_TaxiBe\\system\\Database\\Postgre\\Connection.php', 200)
+ 2 SYSTEMPATH\Database\Postgre\Connection.php(200): pg_query(Object(PgSql\Connection), '
+            SELECT 
+                a_dep.id AS id_depart,
+                a_dep.nom AS nom_depart,
+                a_dep.latitude AS lat_depart,
+                a_dep.longitude AS lng_depart,
+                ST_Distance(a_dep.geom::geography, ST_SetSRID(ST_MakePoint(47.540245056152, -18.919115620722), 4326)::geography) AS distance_dep_metres,
+                
+                a_dest.id AS id_arrivee,
+                a_dest.nom AS nom_arrivee,
+                a_dest.latitude AS lat_arrivee,
+                a_dest.longitude AS lng_arrivee,
+                ST_Distance(a_dest.geom::geography, ST_SetSRID(ST_MakePoint(47.48462677002, -18.910833640085), 4326)::geography) AS distance_arr_metres
+            FROM trajet_arret ta_dep
+            JOIN trajet_arret ta_dest ON ta_dep.id_trajet = ta_dest.id_trajet
+            JOIN arret a_dep ON a_dep.id = ta_dep.id_arret
+            JOIN arret a_dest ON a_dest.id = ta_dest.id_arret
+            WHERE ta_dep.ordre < ta_dest.ordre
+            ORDER BY (
+                ST_Distance(a_dep.geom::geography, ST_SetSRID(ST_MakePoint(47.540245056152, -18.919115620722), 4326)::geography) + 
+                ST_Distance(a_dest.geom::geography, ST_SetSRID(ST_MakePoint(47.48462677002, -18.910833640085), 4326)::geography)
+            ) ASC
+            LIMIT 1
+        ')
+ 3 SYSTEMPATH\Database\BaseConnection.php(910): CodeIgniter\Database\Postgre\Connection->execute('
+            SELECT 
+                a_dep.id AS id_depart,
+                a_dep.nom AS nom_depart,
+                a_dep.latitude AS lat_depart,
+                a_dep.longitude AS lng_depart,
+                ST_Distance(a_dep.geom::geography, ST_SetSRID(ST_MakePoint(47.540245056152, -18.919115620722), 4326)::geography) AS distance_dep_metres,
+                
+                a_dest.id AS id_arrivee,
+                a_dest.nom AS nom_arrivee,
+                a_dest.latitude AS lat_arrivee,
+                a_dest.longitude AS lng_arrivee,
+                ST_Distance(a_dest.geom::geography, ST_SetSRID(ST_MakePoint(47.48462677002, -18.910833640085), 4326)::geography) AS distance_arr_metres
+            FROM trajet_arret ta_dep
+            JOIN trajet_arret ta_dest ON ta_dep.id_trajet = ta_dest.id_trajet
+            JOIN arret a_dep ON a_dep.id = ta_dep.id_arret
+            JOIN arret a_dest ON a_dest.id = ta_dest.id_arret
+            WHERE ta_dep.ordre < ta_dest.ordre
+            ORDER BY (
+                ST_Distance(a_dep.geom::geography, ST_SetSRID(ST_MakePoint(47.540245056152, -18.919115620722), 4326)::geography) + 
+                ST_Distance(a_dest.geom::geography, ST_SetSRID(ST_MakePoint(47.48462677002, -18.910833640085), 4326)::geography)
+            ) ASC
+            LIMIT 1
+        ')
+ 4 SYSTEMPATH\Database\BaseConnection.php(827): CodeIgniter\Database\BaseConnection->simpleQuery('
+            SELECT 
+                a_dep.id AS id_depart,
+                a_dep.nom AS nom_depart,
+                a_dep.latitude AS lat_depart,
+                a_dep.longitude AS lng_depart,
+                ST_Distance(a_dep.geom::geography, ST_SetSRID(ST_MakePoint(47.540245056152, -18.919115620722), 4326)::geography) AS distance_dep_metres,
+                
+                a_dest.id AS id_arrivee,
+                a_dest.nom AS nom_arrivee,
+                a_dest.latitude AS lat_arrivee,
+                a_dest.longitude AS lng_arrivee,
+                ST_Distance(a_dest.geom::geography, ST_SetSRID(ST_MakePoint(47.48462677002, -18.910833640085), 4326)::geography) AS distance_arr_metres
+            FROM trajet_arret ta_dep
+            JOIN trajet_arret ta_dest ON ta_dep.id_trajet = ta_dest.id_trajet
+            JOIN arret a_dep ON a_dep.id = ta_dep.id_arret
+            JOIN arret a_dest ON a_dest.id = ta_dest.id_arret
+            WHERE ta_dep.ordre < ta_dest.ordre
+            ORDER BY (
+                ST_Distance(a_dep.geom::geography, ST_SetSRID(ST_MakePoint(47.540245056152, -18.919115620722), 4326)::geography) + 
+                ST_Distance(a_dest.geom::geography, ST_SetSRID(ST_MakePoint(47.48462677002, -18.910833640085), 4326)::geography)
+            ) ASC
+            LIMIT 1
+        ')
+ 5 APPPATH\Models\TrajetModel.php(161): CodeIgniter\Database\BaseConnection->query('
+            SELECT 
+                a_dep.id AS id_depart,
+                a_dep.nom AS nom_depart,
+                a_dep.latitude AS lat_depart,
+                a_dep.longitude AS lng_depart,
+                ST_Distance(a_dep.geom::geography, ST_SetSRID(ST_MakePoint(:lngDep:, :latDep:), 4326)::geography) AS distance_dep_metres,
+                
+                a_dest.id AS id_arrivee,
+                a_dest.nom AS nom_arrivee,
+                a_dest.latitude AS lat_arrivee,
+                a_dest.longitude AS lng_arrivee,
+                ST_Distance(a_dest.geom::geography, ST_SetSRID(ST_MakePoint(:lngArr:, :latArr:), 4326)::geography) AS distance_arr_metres
+            FROM trajet_arret ta_dep
+            JOIN trajet_arret ta_dest ON ta_dep.id_trajet = ta_dest.id_trajet
+            JOIN arret a_dep ON a_dep.id = ta_dep.id_arret
+            JOIN arret a_dest ON a_dest.id = ta_dest.id_arret
+            WHERE ta_dep.ordre < ta_dest.ordre
+            ORDER BY (
+                ST_Distance(a_dep.geom::geography, ST_SetSRID(ST_MakePoint(:lngDep:, :latDep:), 4326)::geography) + 
+                ST_Distance(a_dest.geom::geography, ST_SetSRID(ST_MakePoint(:lngArr:, :latArr:), 4326)::geography)
+            ) ASC
+            LIMIT 1
+        ', [...])
+ 6 APPPATH\Controllers\Api\SearchController.php(26): App\Models\TrajetModel->findBestItineraryStops(-18.9191156207216, 47.54024505615235, -18.91083364008497, 47.48462677001954)
+ 7 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\Api\SearchController->search()
+ 8 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Api\SearchController))
+ 9 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+10 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+11 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+12 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+13 SYSTEMPATH\rewrite.php(44): require_once('E:\\Dossier_Bryan\\ITU\\S4\\SIG\\PROJET\\Projet_TaxiBe\\public\\index.php')

@@ -108,4 +108,62 @@ class TrajetModel extends Model
             [$idArret]
         )->getResultArray();
     }
+
+    /**
+     * Trouve les trajets passant par un départ et une destination, dans le bon ordre.
+     */
+    public function findTrajetsBetween(int $idDepart, int $idDest): array
+    {
+        return $this->db->query(
+            "SELECT DISTINCT t.id, t.description, b.nom AS nom_bus
+             FROM trajet t
+             JOIN bus b ON b.id = t.id_bus
+             JOIN trajet_arret ta_dep  ON ta_dep.id_trajet  = t.id
+             JOIN trajet_arret ta_dest ON ta_dest.id_trajet = t.id
+             WHERE ta_dep.id_arret   = ?
+               AND ta_dest.id_arret  = ?
+               AND ta_dep.ordre < ta_dest.ordre
+             ORDER BY b.nom ASC",
+            [$idDepart, $idDest]
+        )->getResultArray();
+    }
+
+    /**
+     * Retourne les IDs des arrêts d'un trajet situés AVANT un ordre donné.
+     *
+     * Utilisé pour trouver les arrêts candidats "départ" dans un trajet :
+     * on ne garde que ceux qui viennent avant l'arrêt destination.
+     *
+     * @param int $idTrajet   ID du trajet
+     * @param int $ordreMax   Ordre de l'arrêt destination (exclu)
+     * @return array          Liste de ['id' => ...]
+     */
+    public function getArretsBefore(int $idTrajet, int $ordreMax): array
+    {
+        return $this->db->query(
+            "SELECT ta.id_arret AS id, ta.ordre
+             FROM trajet_arret ta
+             WHERE ta.id_trajet = ?
+               AND ta.ordre < ?
+             ORDER BY ta.ordre ASC",
+            [$idTrajet, $ordreMax]
+        )->getResultArray();
+    }
+
+    /**
+     * Retourne tous les IDs des arrêts d'un trajet (sans filtre d'ordre).
+     *
+     * @param int $idTrajet
+     * @return array  Liste de ['id' => ...]
+     */
+    public function getArretIds(int $idTrajet): array
+    {
+        return $this->db->query(
+            "SELECT ta.id_arret AS id
+             FROM trajet_arret ta
+             WHERE ta.id_trajet = ?
+             ORDER BY ta.ordre ASC",
+            [$idTrajet]
+        )->getResultArray();
+    }
 }

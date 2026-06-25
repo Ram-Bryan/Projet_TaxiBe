@@ -151,6 +151,46 @@ class ArretModel extends Model
     }
 
     /**
+     * Trouve l'arrêt le plus proche d'une position parmi une liste d'IDs donnée.
+     *
+     * Utile pour trouver l'arrêt de départ optimal parmi les arrêts
+     * qui appartiennent réellement au trajet voulu.
+     *
+     * @param float $lat   Latitude de l'utilisateur
+     * @param float $lng   Longitude de l'utilisateur
+     * @param array $ids   Liste d'IDs d'arrêts candidats
+     * @return array|null  L'arrêt le plus proche, ou null si $ids est vide
+     */
+    public function findNearestAmong(float $lat, float $lng, array $ids): ?array
+    {
+        if (empty($ids)) {
+            return null;
+        }
+
+        // Construction de la liste de placeholders : ?, ?, ?...
+        $placeholders = implode(',', array_fill(0, count($ids), '?'));
+
+        $results = $this->db->query(
+            "SELECT
+                a.id,
+                a.nom,
+                ST_X(a.point) AS longitude,
+                ST_Y(a.point) AS latitude,
+                ST_Distance(
+                    a.point::geography,
+                    ST_SetSRID(ST_MakePoint(?, ?), 4326)::geography
+                ) AS distance_metres
+             FROM arret a
+             WHERE a.id IN ($placeholders)
+             ORDER BY a.point::geography <-> ST_SetSRID(ST_MakePoint(?, ?), 4326)::geography
+             LIMIT 1",
+            array_merge([$lng, $lat], $ids, [$lng, $lat])
+        )->getRowArray();
+
+        return $results ?: null;
+    }
+
+    /**
      * Retourne tous les arrêts avec leurs coordonnées pour l'affichage Leaflet.
      *
      * @return array Arrêts avec longitude, latitude, et GeoJSON
