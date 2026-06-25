@@ -246,6 +246,15 @@
                     return;
                 }
 
+                // --- RESET DES ANCIENS MAPPINGS DE RECHERCHE ---
+                if (routingFull)    { map.removeControl(routingFull);    routingFull    = null; }
+                if (routingSegment) { map.removeControl(routingSegment); routingSegment = null; }
+                if (circleDep)      { map.removeLayer(circleDep);        circleDep      = null; }
+                if (circleArr)      { map.removeLayer(circleArr);        circleArr      = null; }
+                lastFoundDepId = null;
+                lastFoundArrId = null;
+                // -----------------------------------------------
+
                 resDiv.innerHTML = '<i>Recherche en cours...</i>';
                 const payload = {
                     lat_dep: markerDep.getLatLng().lat, lng_dep: markerDep.getLatLng().lng,
@@ -268,11 +277,6 @@
                     // Sauvegarder pour le sub-routing (seulement si le départ est trouvé)
                     lastFoundDepId = dep ? dep.id : null;
                     lastFoundArrId = arr ? arr.id : null;
-
-                    // Nettoyer les anciens cercles
-                    if (circleDep) map.removeLayer(circleDep);
-                    if (circleArr) map.removeLayer(circleArr);
-                    circleDep = null; circleArr = null;
 
                     let html = '';
 
