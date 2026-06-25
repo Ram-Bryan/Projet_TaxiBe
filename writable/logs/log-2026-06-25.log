@@ -1,0 +1,148 @@
+ERROR - 2026-06-25 14:25:43 --> Error connecting to the database: ErrorException: pg_connect(): Unable to connect to PostgreSQL server: FATAL:  password authentication failed for user &quot;postgres&quot; in E:\Dossier_Bryan\ITU\S4\SIG\PROJET\Projet_TaxiBe\system\Database\Postgre\Connection.php:78
+Stack trace:
+#0 [internal function]: CodeIgniter\Debug\Exceptions->errorHandler(2, 'pg_connect(): U...', 'E:\\Dossier_Brya...', 78)
+#1 E:\Dossier_Bryan\ITU\S4\SIG\PROJET\Projet_TaxiBe\system\Database\Postgre\Connection.php(78): pg_connect('host=localhost ...')
+#2 E:\Dossier_Bryan\ITU\S4\SIG\PROJET\Projet_TaxiBe\system\Database\BaseConnection.php(555): CodeIgniter\Database\Postgre\Connection->connect(false)
+#3 E:\Dossier_Bryan\ITU\S4\SIG\PROJET\Projet_TaxiBe\system\Database\BaseConnection.php(795): CodeIgniter\Database\BaseConnection->initialize()
+#4 E:\Dossier_Bryan\ITU\S4\SIG\PROJET\Projet_TaxiBe\app\Models\ArretModel.php(160): CodeIgniter\Database\BaseConnection->query('SELECT\r\n       ...')
+#5 E:\Dossier_Bryan\ITU\S4\SIG\PROJET\Projet_TaxiBe\app\Controllers\Api\ArretController.php(14): App\Models\ArretModel->getAllWithCoords()
+#6 E:\Dossier_Bryan\ITU\S4\SIG\PROJET\Projet_TaxiBe\system\CodeIgniter.php(951): App\Controllers\Api\ArretController->getAll()
+#7 E:\Dossier_Bryan\ITU\S4\SIG\PROJET\Projet_TaxiBe\system\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Api\ArretController))
+#8 E:\Dossier_Bryan\ITU\S4\SIG\PROJET\Projet_TaxiBe\system\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(NULL, Object(Config\Cache), false)
+#9 E:\Dossier_Bryan\ITU\S4\SIG\PROJET\Projet_TaxiBe\system\Boot.php(417): CodeIgniter\CodeIgniter->run()
+#10 E:\Dossier_Bryan\ITU\S4\SIG\PROJET\Projet_TaxiBe\system\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+#11 E:\Dossier_Bryan\ITU\S4\SIG\PROJET\Projet_TaxiBe\public\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+#12 E:\Dossier_Bryan\ITU\S4\SIG\PROJET\Projet_TaxiBe\system\rewrite.php(44): require_once('E:\\Dossier_Brya...')
+#13 {main}
+CRITICAL - 2026-06-25 14:25:43 --> CodeIgniter\Database\Exceptions\DatabaseException: Unable to connect to the database.
+Main connection [Postgre]: pg_connect(): Unable to connect to PostgreSQL server: FATAL:  password authentication failed for user &quot;postgres&quot;
+[Method: GET, Route: api/arrets]
+in SYSTEMPATH\Database\BaseConnection.php on line 606.
+ 1 SYSTEMPATH\Database\BaseConnection.php(795): CodeIgniter\Database\BaseConnection->initialize()
+ 2 APPPATH\Models\ArretModel.php(160): CodeIgniter\Database\BaseConnection->query('SELECT
+                id,
+                nom,
+                ST_X(point) AS longitude,
+                ST_Y(point) AS latitude,
+                ST_AsGeoJSON(point) AS geojson
+             FROM arret
+             ORDER BY nom ASC')
+ 3 APPPATH\Controllers\Api\ArretController.php(14): App\Models\ArretModel->getAllWithCoords()
+ 4 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\Api\ArretController->getAll()
+ 5 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Api\ArretController))
+ 6 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 7 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+ 8 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 9 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+10 SYSTEMPATH\rewrite.php(44): require_once('E:\\Dossier_Bryan\\ITU\\S4\\SIG\\PROJET\\Projet_TaxiBe\\public\\index.php')
+ERROR - 2026-06-25 14:27:21 --> Error connecting to the database: ErrorException: pg_connect(): Unable to connect to PostgreSQL server: FATAL:  password authentication failed for user &quot;postgres&quot; in E:\Dossier_Bryan\ITU\S4\SIG\PROJET\Projet_TaxiBe\system\Database\Postgre\Connection.php:78
+Stack trace:
+#0 [internal function]: CodeIgniter\Debug\Exceptions->errorHandler(2, 'pg_connect(): U...', 'E:\\Dossier_Brya...', 78)
+#1 E:\Dossier_Bryan\ITU\S4\SIG\PROJET\Projet_TaxiBe\system\Database\Postgre\Connection.php(78): pg_connect('host=localhost ...')
+#2 E:\Dossier_Bryan\ITU\S4\SIG\PROJET\Projet_TaxiBe\system\Database\BaseConnection.php(555): CodeIgniter\Database\Postgre\Connection->connect(false)
+#3 E:\Dossier_Bryan\ITU\S4\SIG\PROJET\Projet_TaxiBe\system\Database\BaseConnection.php(795): CodeIgniter\Database\BaseConnection->initialize()
+#4 E:\Dossier_Bryan\ITU\S4\SIG\PROJET\Projet_TaxiBe\app\Models\ArretModel.php(160): CodeIgniter\Database\BaseConnection->query('SELECT\r\n       ...')
+#5 E:\Dossier_Bryan\ITU\S4\SIG\PROJET\Projet_TaxiBe\app\Controllers\Api\ArretController.php(14): App\Models\ArretModel->getAllWithCoords()
+#6 E:\Dossier_Bryan\ITU\S4\SIG\PROJET\Projet_TaxiBe\system\CodeIgniter.php(951): App\Controllers\Api\ArretController->getAll()
+#7 E:\Dossier_Bryan\ITU\S4\SIG\PROJET\Projet_TaxiBe\system\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Api\ArretController))
+#8 E:\Dossier_Bryan\ITU\S4\SIG\PROJET\Projet_TaxiBe\system\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(NULL, Object(Config\Cache), false)
+#9 E:\Dossier_Bryan\ITU\S4\SIG\PROJET\Projet_TaxiBe\system\Boot.php(417): CodeIgniter\CodeIgniter->run()
+#10 E:\Dossier_Bryan\ITU\S4\SIG\PROJET\Projet_TaxiBe\system\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+#11 E:\Dossier_Bryan\ITU\S4\SIG\PROJET\Projet_TaxiBe\public\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+#12 E:\Dossier_Bryan\ITU\S4\SIG\PROJET\Projet_TaxiBe\system\rewrite.php(44): require_once('E:\\Dossier_Brya...')
+#13 {main}
+CRITICAL - 2026-06-25 14:27:21 --> CodeIgniter\Database\Exceptions\DatabaseException: Unable to connect to the database.
+Main connection [Postgre]: pg_connect(): Unable to connect to PostgreSQL server: FATAL:  password authentication failed for user &quot;postgres&quot;
+[Method: GET, Route: api/arrets]
+in SYSTEMPATH\Database\BaseConnection.php on line 606.
+ 1 SYSTEMPATH\Database\BaseConnection.php(795): CodeIgniter\Database\BaseConnection->initialize()
+ 2 APPPATH\Models\ArretModel.php(160): CodeIgniter\Database\BaseConnection->query('SELECT
+                id,
+                nom,
+                ST_X(point) AS longitude,
+                ST_Y(point) AS latitude,
+                ST_AsGeoJSON(point) AS geojson
+             FROM arret
+             ORDER BY nom ASC')
+ 3 APPPATH\Controllers\Api\ArretController.php(14): App\Models\ArretModel->getAllWithCoords()
+ 4 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\Api\ArretController->getAll()
+ 5 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Api\ArretController))
+ 6 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 7 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+ 8 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 9 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+10 SYSTEMPATH\rewrite.php(44): require_once('E:\\Dossier_Bryan\\ITU\\S4\\SIG\\PROJET\\Projet_TaxiBe\\public\\index.php')
+ERROR - 2026-06-25 14:28:14 --> Error connecting to the database: ErrorException: pg_connect(): Unable to connect to PostgreSQL server: FATAL:  password authentication failed for user &quot;postgres&quot; in E:\Dossier_Bryan\ITU\S4\SIG\PROJET\Projet_TaxiBe\system\Database\Postgre\Connection.php:78
+Stack trace:
+#0 [internal function]: CodeIgniter\Debug\Exceptions->errorHandler(2, 'pg_connect(): U...', 'E:\\Dossier_Brya...', 78)
+#1 E:\Dossier_Bryan\ITU\S4\SIG\PROJET\Projet_TaxiBe\system\Database\Postgre\Connection.php(78): pg_connect('host=localhost ...')
+#2 E:\Dossier_Bryan\ITU\S4\SIG\PROJET\Projet_TaxiBe\system\Database\BaseConnection.php(555): CodeIgniter\Database\Postgre\Connection->connect(false)
+#3 E:\Dossier_Bryan\ITU\S4\SIG\PROJET\Projet_TaxiBe\system\Database\BaseConnection.php(795): CodeIgniter\Database\BaseConnection->initialize()
+#4 E:\Dossier_Bryan\ITU\S4\SIG\PROJET\Projet_TaxiBe\app\Models\ArretModel.php(160): CodeIgniter\Database\BaseConnection->query('SELECT\r\n       ...')
+#5 E:\Dossier_Bryan\ITU\S4\SIG\PROJET\Projet_TaxiBe\app\Controllers\Api\ArretController.php(14): App\Models\ArretModel->getAllWithCoords()
+#6 E:\Dossier_Bryan\ITU\S4\SIG\PROJET\Projet_TaxiBe\system\CodeIgniter.php(951): App\Controllers\Api\ArretController->getAll()
+#7 E:\Dossier_Bryan\ITU\S4\SIG\PROJET\Projet_TaxiBe\system\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Api\ArretController))
+#8 E:\Dossier_Bryan\ITU\S4\SIG\PROJET\Projet_TaxiBe\system\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(NULL, Object(Config\Cache), false)
+#9 E:\Dossier_Bryan\ITU\S4\SIG\PROJET\Projet_TaxiBe\system\Boot.php(417): CodeIgniter\CodeIgniter->run()
+#10 E:\Dossier_Bryan\ITU\S4\SIG\PROJET\Projet_TaxiBe\system\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+#11 E:\Dossier_Bryan\ITU\S4\SIG\PROJET\Projet_TaxiBe\public\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+#12 E:\Dossier_Bryan\ITU\S4\SIG\PROJET\Projet_TaxiBe\system\rewrite.php(44): require_once('E:\\Dossier_Brya...')
+#13 {main}
+CRITICAL - 2026-06-25 14:28:14 --> CodeIgniter\Database\Exceptions\DatabaseException: Unable to connect to the database.
+Main connection [Postgre]: pg_connect(): Unable to connect to PostgreSQL server: FATAL:  password authentication failed for user &quot;postgres&quot;
+[Method: GET, Route: api/arrets]
+in SYSTEMPATH\Database\BaseConnection.php on line 606.
+ 1 SYSTEMPATH\Database\BaseConnection.php(795): CodeIgniter\Database\BaseConnection->initialize()
+ 2 APPPATH\Models\ArretModel.php(160): CodeIgniter\Database\BaseConnection->query('SELECT
+                id,
+                nom,
+                ST_X(point) AS longitude,
+                ST_Y(point) AS latitude,
+                ST_AsGeoJSON(point) AS geojson
+             FROM arret
+             ORDER BY nom ASC')
+ 3 APPPATH\Controllers\Api\ArretController.php(14): App\Models\ArretModel->getAllWithCoords()
+ 4 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\Api\ArretController->getAll()
+ 5 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Api\ArretController))
+ 6 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 7 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+ 8 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 9 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+10 SYSTEMPATH\rewrite.php(44): require_once('E:\\Dossier_Bryan\\ITU\\S4\\SIG\\PROJET\\Projet_TaxiBe\\public\\index.php')
+ERROR - 2026-06-25 14:29:26 --> Error connecting to the database: ErrorException: pg_connect(): Unable to connect to PostgreSQL server: FATAL:  password authentication failed for user &quot;postgres&quot; in E:\Dossier_Bryan\ITU\S4\SIG\PROJET\Projet_TaxiBe\system\Database\Postgre\Connection.php:78
+Stack trace:
+#0 [internal function]: CodeIgniter\Debug\Exceptions->errorHandler(2, 'pg_connect(): U...', 'E:\\Dossier_Brya...', 78)
+#1 E:\Dossier_Bryan\ITU\S4\SIG\PROJET\Projet_TaxiBe\system\Database\Postgre\Connection.php(78): pg_connect('host=localhost ...')
+#2 E:\Dossier_Bryan\ITU\S4\SIG\PROJET\Projet_TaxiBe\system\Database\BaseConnection.php(555): CodeIgniter\Database\Postgre\Connection->connect(false)
+#3 E:\Dossier_Bryan\ITU\S4\SIG\PROJET\Projet_TaxiBe\system\Database\BaseConnection.php(795): CodeIgniter\Database\BaseConnection->initialize()
+#4 E:\Dossier_Bryan\ITU\S4\SIG\PROJET\Projet_TaxiBe\app\Models\ArretModel.php(160): CodeIgniter\Database\BaseConnection->query('SELECT\r\n       ...')
+#5 E:\Dossier_Bryan\ITU\S4\SIG\PROJET\Projet_TaxiBe\app\Controllers\Api\ArretController.php(14): App\Models\ArretModel->getAllWithCoords()
+#6 E:\Dossier_Bryan\ITU\S4\SIG\PROJET\Projet_TaxiBe\system\CodeIgniter.php(951): App\Controllers\Api\ArretController->getAll()
+#7 E:\Dossier_Bryan\ITU\S4\SIG\PROJET\Projet_TaxiBe\system\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Api\ArretController))
+#8 E:\Dossier_Bryan\ITU\S4\SIG\PROJET\Projet_TaxiBe\system\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(NULL, Object(Config\Cache), false)
+#9 E:\Dossier_Bryan\ITU\S4\SIG\PROJET\Projet_TaxiBe\system\Boot.php(417): CodeIgniter\CodeIgniter->run()
+#10 E:\Dossier_Bryan\ITU\S4\SIG\PROJET\Projet_TaxiBe\system\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+#11 E:\Dossier_Bryan\ITU\S4\SIG\PROJET\Projet_TaxiBe\public\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+#12 E:\Dossier_Bryan\ITU\S4\SIG\PROJET\Projet_TaxiBe\system\rewrite.php(44): require_once('E:\\Dossier_Brya...')
+#13 {main}
+CRITICAL - 2026-06-25 14:29:26 --> CodeIgniter\Database\Exceptions\DatabaseException: Unable to connect to the database.
+Main connection [Postgre]: pg_connect(): Unable to connect to PostgreSQL server: FATAL:  password authentication failed for user &quot;postgres&quot;
+[Method: GET, Route: api/arrets]
+in SYSTEMPATH\Database\BaseConnection.php on line 606.
+ 1 SYSTEMPATH\Database\BaseConnection.php(795): CodeIgniter\Database\BaseConnection->initialize()
+ 2 APPPATH\Models\ArretModel.php(160): CodeIgniter\Database\BaseConnection->query('SELECT
+                id,
+                nom,
+                ST_X(point) AS longitude,
+                ST_Y(point) AS latitude,
+                ST_AsGeoJSON(point) AS geojson
+             FROM arret
+             ORDER BY nom ASC')
+ 3 APPPATH\Controllers\Api\ArretController.php(14): App\Models\ArretModel->getAllWithCoords()
+ 4 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\Api\ArretController->getAll()
+ 5 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Api\ArretController))
+ 6 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 7 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+ 8 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 9 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+10 SYSTEMPATH\rewrite.php(44): require_once('E:\\Dossier_Bryan\\ITU\\S4\\SIG\\PROJET\\Projet_TaxiBe\\public\\index.php')
