@@ -11,11 +11,14 @@
 
 -- 1. Créer la base de données (à exécuter en tant que superuser postgres)
 -- Décommenter si la base n'existe pas encore :
--- CREATE DATABASE taxibe
---     WITH ENCODING = 'UTF8'
---     LC_COLLATE = 'fr_FR.UTF-8'
---     LC_CTYPE   = 'fr_FR.UTF-8'
---     TEMPLATE   = template0;
+
+
+CREATE DATABASE taxibe
+    WITH ENCODING = 'UTF8'
+    LC_COLLATE = 'fr_FR.UTF-8'
+    LC_CTYPE   = 'fr_FR.UTF-8'
+    TEMPLATE   = template0;
+
 
 \c taxibe;
 
@@ -44,7 +47,7 @@ CREATE TABLE bus (
 CREATE TABLE arret (
     id    SERIAL PRIMARY KEY,
     nom   VARCHAR(150) NOT NULL,
-    point GEOMETRY(Point, 4326) NOT NULL  -- WGS84 (latitude/longitude)
+    point GEOMETRY(Point, 4326) NOT NULL  
 );
 
 -- Index spatial GIST pour requêtes ST_DWithin / KNN
@@ -65,8 +68,8 @@ CREATE TABLE trajet_arret (
     id_trajet INTEGER NOT NULL REFERENCES trajet(id) ON DELETE CASCADE,
     id_arret  INTEGER NOT NULL REFERENCES arret(id)  ON DELETE CASCADE,
     ordre     INTEGER NOT NULL,
-    UNIQUE (id_trajet, id_arret),   -- Un arrêt une seule fois par trajet
-    UNIQUE (id_trajet, ordre)       -- Pas de doublon de position dans la séquence
+    UNIQUE (id_trajet, id_arret),  
+    UNIQUE (id_trajet, ordre)      
 );
 
 CREATE INDEX idx_trajet_arret_trajet ON trajet_arret(id_trajet);
