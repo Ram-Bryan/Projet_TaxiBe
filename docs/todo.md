@@ -93,8 +93,7 @@ WHERE ta_dep.id_arret   = :id_arret_depart
 
 ---
 
-## 🚀 Fonctionnalités futures (hors scope jour 1)
-
+                                                              
 - [ ] Optimisation de frais (calcul du trajet le moins cher)
 - [ ] Correspondances : bus A → arrêt X → bus B
 - [ ] Estimation du temps de trajet
