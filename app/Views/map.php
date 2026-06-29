@@ -167,6 +167,53 @@
             let circleDep = null;
             let circleArr = null;
 
+            // Données moyens
+            let moyensData = [];
+            window.trajetDistances = {};
+
+            function loadMoyens() {
+                fetch('/api/moyens')
+                .then(r => r.json())
+                .then(data => {
+                    moyensData = data;
+                }).catch(e => console.error("Erreur chargement moyens", e));
+            }
+            loadMoyens();
+
+            window.formatTime = function(minutes) {
+                if (minutes < 0) return "0min";
+                const d = Math.floor(minutes / (24 * 60));
+                const h = Math.floor((minutes % (24 * 60)) / 60);
+                const m = Math.round(minutes % 60);
+                
+                let res = "";
+                if (d > 0) res += d + "d ";
+                if (h > 0) res += h + "h ";
+                if (m > 0 || res === "") res += m + "min";
+                return res.trim();
+            };
+
+            window.updateTrajetTime = function(trajetId, vitesse, btnElement) {
+                const distMeters = window.trajetDistances[trajetId];
+                if (!distMeters) return;
+                const timeHours = (distMeters / 1000) / vitesse;
+                const timeMinutes = timeHours * 60;
+                
+                const spanTime = document.getElementById('trajet-time-' + trajetId);
+                if (spanTime) {
+                    spanTime.textContent = '~' + window.formatTime(timeMinutes);
+                }
+
+                if (btnElement) {
+                    const group = btnElement.parentElement;
+                    const buttons = group.querySelectorAll('button');
+                    buttons.forEach(b => {
+                        b.style.backgroundColor = '#17a2b8';
+                    });
+                    btnElement.style.backgroundColor = '#117a8b';
+                }
+            };
+
             map.on('click', function(e) {
                 if (appState.currentMapTab === 'tab-admin') {
                     document.getElementById('latArret').value = e.latlng.lat.toFixed(6);
@@ -281,32 +328,97 @@
                     let html = '';
 
                     if (dep) {
-                        html += `<p style="font-size:13px; margin-bottom:5px;">Marche Départ ➡️ <b>${dep.nom}</b>: <b>${dep.distance_metres}m</b></p>`;
+                        html += `<p style="font-size:13px; margin-bottom:5px;">Arrêt Départ ➡️ <b>${dep.nom}</b></p>`;
                         circleDep = L.circleMarker([dep.latitude, dep.longitude], {color:'red', fillColor:'red', fillOpacity: 0.2, radius:15, weight:4}).addTo(map);
                     }
                     if (arr) {
-                        html += `<p style="font-size:13px; margin-top:0;">Arrêt Arrivée ➡️ <b>${arr.nom}</b>: <b>${arr.distance_metres}m</b></p>`;
+                        html += `<p style="font-size:13px; margin-top:0;">Arrêt Arrivée ➡️ <b>${arr.nom}</b></p>`;
                         circleArr = L.circleMarker([arr.latitude, arr.longitude], {color:'green', fillColor:'green', fillOpacity: 0.2, radius:15, weight:4}).addTo(map);
                     }
 
                     if (!trajets || trajets.length === 0) {
                         html += '<p style="color:orange;font-size:12px; font-weight:bold;">Aucun bus direct reliant ces deux arrêts dans ce sens de parcours.</p>';
+                        resDiv.innerHTML = html;
                     } else {
-                        html += '<ul class="list-group">';
-                        trajets.forEach(t => {
-                            html += `
-                                <li onclick="window.showPolyline(${t.id})">
-                                    <span><b>${t.nom_bus}</b><br><small style="color:#666;">${t.description}</small></span>
-                                    <span style="font-size:16px;">🛣️</span>
-                                </li>`;
-                        });
-                        html += '</ul>';
-                    }
-                    resDiv.innerHTML = html;
+                        resDiv.innerHTML = '<p style="font-size:12px;"><i>Calcul des distances en cours...</i></p>';
+                        
+                        let busSpeed = 30; // fallback
+                        const busObj = moyensData.find(m => m.nom.toLowerCase().includes('bus'));
+                        if (busObj) busSpeed = busObj.vitesse;
+                        const busId = busObj ? busObj.id : null;
 
-                    // Afficher automatiquement le trajet du premier résultat
-                    if (trajets && trajets.length > 0) {
-                        window.showPolyline(trajets[0].id);
+                        Promise.all(trajets.map(t => fetch('/api/trajets/' + t.id).then(r => r.json())))
+                        .then(trajetsDetails => {
+                            html += '<ul class="list-group">';
+                            window.trajetDistances = {}; // reset pour cette recherche
+                            
+                            trajets.forEach((t, i) => {
+                                const tDetails = trajetsDetails[i];
+                                let distMeters = 0;
+                                if (tDetails && tDetails.arrets) {
+                                    const startIndex = tDetails.arrets.findIndex(a => parseInt(a.id) === parseInt(dep.id));
+                                    const endIndex = tDetails.arrets.findIndex(a => parseInt(a.id) === parseInt(arr.id));
+                                    if (startIndex !== -1 && endIndex !== -1 && startIndex <= endIndex) {
+                                        const subWaypoints = tDetails.arrets.slice(startIndex, endIndex + 1)
+                                            .map(a => L.latLng(parseFloat(a.latitude), parseFloat(a.longitude)));
+                                        for(let j=0; j<subWaypoints.length - 1; j++) {
+                                            distMeters += subWaypoints[j].distanceTo(subWaypoints[j+1]);
+                                        }
+                                    }
+                                }
+                                
+                                window.trajetDistances[t.id] = distMeters;
+
+                                let timeStr = "";
+                                if (distMeters > 0) {
+                                    const timeHours = (distMeters / 1000) / busSpeed;
+                                    timeStr = window.formatTime(timeHours * 60);
+                                }
+                                
+                                let moyensBtnsHtml = '';
+                                if (distMeters > 0) {
+                                    moyensBtnsHtml = '<div style="margin-top:8px; display:flex; gap:5px; flex-wrap:wrap;" onclick="event.stopPropagation()">';
+                                    moyensData.forEach(moyen => {
+                                        const isActive = (moyen.id === busId);
+                                        const bgColor = isActive ? '#117a8b' : '#17a2b8';
+                                        moyensBtnsHtml += `<button type="button" class="btn-info" style="font-size:10px; padding:3px 6px; background-color:${bgColor}; border:none; border-radius:3px; color:white; cursor:pointer;" onclick="window.updateTrajetTime(${t.id}, ${moyen.vitesse}, this)">${moyen.nom}</button>`;
+                                    });
+                                    moyensBtnsHtml += '</div>';
+                                }
+
+                                let distanceStr = "";
+                                if (distMeters > 0) {
+                                    if (distMeters >= 1000) {
+                                        distanceStr = ` (${(distMeters / 1000).toFixed(2)} km)`;
+                                    } else {
+                                        distanceStr = ` (${Math.round(distMeters)} m)`;
+                                    }
+                                }
+
+                                html += `
+                                    <li onclick="window.showPolyline(${t.id})" style="flex-direction: column; align-items: flex-start;">
+                                        <div style="display:flex; justify-content:space-between; align-items:flex-start; width:100%;">
+                                            <span style="flex:1; padding-right:10px;"><b>${t.nom_bus}</b> <span style="font-size:11px; color:#555;">${distanceStr}</span><br><small style="color:#666;">${t.description}</small></span>
+                                            <div style="text-align: right; min-width: 60px;">
+                                                <span id="trajet-time-${t.id}" style="font-size:12px; font-weight:bold; color:#28a745;">${timeStr ? `~${timeStr}` : ''}</span><br>
+                                                <span style="font-size:16px;">🛣️</span>
+                                            </div>
+                                        </div>
+                                        ${moyensBtnsHtml}
+                                    </li>`;
+                            });
+                            html += '</ul>';
+                            
+                            resDiv.innerHTML = html;
+
+                            // Afficher automatiquement le trajet du premier résultat
+                            if (trajets && trajets.length > 0) {
+                                window.showPolyline(trajets[0].id);
+                            }
+                        }).catch(e => {
+                            console.error(e);
+                            resDiv.innerHTML = '<span style="color:red;font-size:12px;">Erreur lors du calcul des distances.</span>';
+                        });
                     }
                 }).catch(() => { resDiv.innerHTML = '<span style="color:red;font-size:12px;">Erreur de connexion BD (mot de passe Postgres).</span>'; });
 
@@ -347,6 +459,11 @@
                         const subWaypoints = data.arrets
                             .slice(startIndex, endIndex + 1)
                             .map(a => L.latLng(parseFloat(a.latitude), parseFloat(a.longitude)));
+                            
+                        let distMeters = 0;
+                        for(let i=0; i<subWaypoints.length - 1; i++) {
+                            distMeters += subWaypoints[i].distanceTo(subWaypoints[i+1]);
+                        }
 
                         routingSegment = L.Routing.control({
                             waypoints: subWaypoints,

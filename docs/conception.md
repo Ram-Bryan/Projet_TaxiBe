@@ -7,8 +7,10 @@ CodeIgniter + PostGres (PostGIS) + Leaflet
 - optimisation de frais (mais pas encore urgent)
 - API: Overpass API pour avoir les quarters: recherche des arrets dans ce quartiers
 
+
 ## Conception BD:
 - table bus: id, nom
 - table trajet: id, id_bus, description
 - table arret: id, nom, point (geometry)
 - table trajet_arret: id, id_trajet, id_arret, ordre
+

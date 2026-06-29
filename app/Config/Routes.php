@@ -28,3 +28,6 @@ $routes->delete('api/trajets/(:num)', 'Api\TrajetController::delete/$1');
 
 // API Recherche
 $routes->post('api/search', 'Api\SearchController::search');
+
+// API Moyens
+$routes->get('api/moyens', 'Api\MoyenController::index');

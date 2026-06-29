@@ -36,6 +36,14 @@ DROP TABLE IF EXISTS trajet_arret CASCADE;
 DROP TABLE IF EXISTS trajet       CASCADE;
 DROP TABLE IF EXISTS arret        CASCADE;
 DROP TABLE IF EXISTS bus          CASCADE;
+DROP TABLE IF EXISTS moyen        CASCADE;
+
+-- Table moyen
+CREATE TABLE moyen (
+    id SERIAL PRIMARY KEY,
+    nom VARCHAR(50) NOT NULL,
+    vitesse NUMERIC NOT NULL
+);
 
 -- Table bus
 CREATE TABLE bus (
@@ -78,6 +86,12 @@ CREATE INDEX idx_trajet_arret_arret  ON trajet_arret(id_arret);
 -- ============================================================================
 -- 4. Données de test — Antananarivo
 -- ============================================================================
+
+-- Moyens
+INSERT INTO moyen (nom, vitesse) VALUES
+    ('🚶 Marche', 5),
+    ('🛵 Moto', 40),
+    ('🚌 Bus', 30);
 
 -- Bus
 INSERT INTO bus (nom) VALUES
@@ -130,7 +144,9 @@ SELECT 'arret',                      COUNT(*)        FROM arret
 UNION ALL
 SELECT 'trajet',                     COUNT(*)        FROM trajet
 UNION ALL
-SELECT 'trajet_arret',               COUNT(*)        FROM trajet_arret;
+SELECT 'trajet_arret',               COUNT(*)        FROM trajet_arret
+UNION ALL
+SELECT 'moyen',                      COUNT(*)        FROM moyen;
 
 -- Vérification géométrique
 SELECT nom, ST_AsText(point) AS wkt, ST_IsValid(point) AS valide
