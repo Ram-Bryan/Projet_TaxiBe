@@ -32,17 +32,33 @@ CREATE EXTENSION IF NOT EXISTS postgis;
 -- ============================================================================
 
 -- Suppression dans l'ordre inverse des FK pour re-run idempotent
-DROP TABLE IF EXISTS trajet_arret CASCADE;
-DROP TABLE IF EXISTS trajet       CASCADE;
-DROP TABLE IF EXISTS arret        CASCADE;
-DROP TABLE IF EXISTS bus          CASCADE;
-DROP TABLE IF EXISTS moyen        CASCADE;
+DROP TABLE IF EXISTS historique_frais CASCADE;
+DROP TABLE IF EXISTS frais            CASCADE;
+DROP TABLE IF EXISTS trajet_arret     CASCADE;
+DROP TABLE IF EXISTS trajet           CASCADE;
+DROP TABLE IF EXISTS arret            CASCADE;
+DROP TABLE IF EXISTS bus              CASCADE;
+DROP TABLE IF EXISTS moyen            CASCADE;
 
 -- Table moyen
 CREATE TABLE moyen (
     id SERIAL PRIMARY KEY,
     nom VARCHAR(50) NOT NULL,
     vitesse NUMERIC NOT NULL
+);
+
+-- Table frais : contient le tarif actuel par trajet de bus
+CREATE TABLE frais (
+    id      SERIAL PRIMARY KEY,
+    montant NUMERIC NOT NULL
+);
+
+-- Table historique_frais : trace chaque changement de tarif
+CREATE TABLE historique_frais (
+    id              SERIAL PRIMARY KEY,
+    id_frais        INTEGER NOT NULL REFERENCES frais(id) ON DELETE CASCADE,
+    montant         NUMERIC NOT NULL,
+    date_changement TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
 -- Table bus
@@ -93,6 +109,13 @@ INSERT INTO moyen (nom, vitesse) VALUES
     ('🛵 Moto', 40),
     ('🚌 Bus', 30);
 
+-- Frais initial : 600 Ar par trajet de bus
+INSERT INTO frais (montant) VALUES (600);
+
+-- Enregistrement initial dans l'historique (normalisation)
+INSERT INTO historique_frais (id_frais, montant)
+SELECT id, montant FROM frais WHERE montant = 600;
+
 -- Bus
 INSERT INTO bus (nom) VALUES
     ('Taxi-Be 001 — Analakely ↔ Ambohipo'),
@@ -138,15 +161,19 @@ INSERT INTO trajet_arret (id_trajet, id_arret, ordre) VALUES
 -- ============================================================================
 -- 5. Vérification
 -- ============================================================================
-SELECT 'bus'          AS table_name, COUNT(*) AS nb FROM bus
+SELECT 'bus'              AS table_name, COUNT(*) AS nb FROM bus
 UNION ALL
-SELECT 'arret',                      COUNT(*)        FROM arret
+SELECT 'arret',                          COUNT(*)        FROM arret
 UNION ALL
-SELECT 'trajet',                     COUNT(*)        FROM trajet
+SELECT 'trajet',                         COUNT(*)        FROM trajet
 UNION ALL
-SELECT 'trajet_arret',               COUNT(*)        FROM trajet_arret
+SELECT 'trajet_arret',                   COUNT(*)        FROM trajet_arret
 UNION ALL
-SELECT 'moyen',                      COUNT(*)        FROM moyen;
+SELECT 'moyen',                          COUNT(*)        FROM moyen
+UNION ALL
+SELECT 'frais',                          COUNT(*)        FROM frais
+UNION ALL
+SELECT 'historique_frais',              COUNT(*)        FROM historique_frais;
 
 -- Vérification géométrique
 SELECT nom, ST_AsText(point) AS wkt, ST_IsValid(point) AS valide

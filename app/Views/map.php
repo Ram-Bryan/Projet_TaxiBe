@@ -293,14 +293,13 @@
                     return;
                 }
 
-                // --- RESET DES ANCIENS MAPPINGS DE RECHERCHE ---
+                // --- RESET ---
                 if (routingFull)    { map.removeControl(routingFull);    routingFull    = null; }
                 if (routingSegment) { map.removeControl(routingSegment); routingSegment = null; }
                 if (circleDep)      { map.removeLayer(circleDep);        circleDep      = null; }
                 if (circleArr)      { map.removeLayer(circleArr);        circleArr      = null; }
                 lastFoundDepId = null;
                 lastFoundArrId = null;
-                // -----------------------------------------------
 
                 resDiv.innerHTML = '<i>Recherche en cours...</i>';
                 const payload = {
@@ -317,11 +316,11 @@
                 .then(data => {
                     if(data.error) { resDiv.innerHTML = `<span style="color:red;font-size:12px;">${data.error}</span>`; return; }
 
-                    const dep    = data.arret_depart;
-                    const arr    = data.arret_arrivee;
+                    const dep     = data.arret_depart;
+                    const arr     = data.arret_arrivee;
                     const trajets = data.trajets;
+                    const prixUnitaire = data.prix_unitaire || 600;
 
-                    // Sauvegarder pour le sub-routing (seulement si le départ est trouvé)
                     lastFoundDepId = dep ? dep.id : null;
                     lastFoundArrId = arr ? arr.id : null;
 
@@ -337,136 +336,191 @@
                     }
 
                     if (!trajets || trajets.length === 0) {
-                        html += '<p style="color:orange;font-size:12px; font-weight:bold;">Aucun bus direct reliant ces deux arrêts dans ce sens de parcours.</p>';
+                        html += '<p style="color:orange;font-size:12px; font-weight:bold;">Aucun trajet reliant ces deux arrêts trouvé.</p>';
                         resDiv.innerHTML = html;
-                    } else {
-                        resDiv.innerHTML = '<p style="font-size:12px;"><i>Calcul des distances en cours...</i></p>';
-                        
-                        let busSpeed = 30; // fallback
-                        const busObj = moyensData.find(m => m.nom.toLowerCase().includes('bus'));
-                        if (busObj) busSpeed = busObj.vitesse;
-                        const busId = busObj ? busObj.id : null;
+                        return;
+                    }
 
-                        Promise.all(trajets.map(t => fetch('/api/trajets/' + t.id).then(r => r.json())))
-                        .then(trajetsDetails => {
-                            html += '<ul class="list-group">';
-                            window.trajetDistances = {}; // reset pour cette recherche
-                            
-                            trajets.forEach((t, i) => {
-                                const tDetails = trajetsDetails[i];
-                                let distMeters = 0;
-                                if (tDetails && tDetails.arrets) {
-                                    const startIndex = tDetails.arrets.findIndex(a => parseInt(a.id) === parseInt(dep.id));
-                                    const endIndex = tDetails.arrets.findIndex(a => parseInt(a.id) === parseInt(arr.id));
-                                    if (startIndex !== -1 && endIndex !== -1 && startIndex <= endIndex) {
-                                        const subWaypoints = tDetails.arrets.slice(startIndex, endIndex + 1)
+                    resDiv.innerHTML = '<p style="font-size:12px;"><i>Calcul des distances en cours...</i></p>';
+
+                    // Collecter les IDs de tous les trajets uniques à charger
+                    const allTrajetIds = [];
+                    trajets.forEach(t => {
+                        t.legs.forEach(leg => {
+                            if (!allTrajetIds.includes(leg.id)) allTrajetIds.push(leg.id);
+                        });
+                    });
+
+                    const busObj = moyensData.find(m => m.nom.toLowerCase().includes('bus'));
+                    const busSpeed = busObj ? busObj.vitesse : 30;
+                    const busId = busObj ? busObj.id : null;
+
+                    // Charger tous les détails des trajets uniques
+                    const detailsPromises = allTrajetIds.map(id => fetch('/api/trajets/' + id).then(r => r.json()));
+                    Promise.all(detailsPromises).then(detailsList => {
+                        // Index: trajet_id -> détails complets
+                        const trajetDetailsMap = {};
+                        allTrajetIds.forEach((id, i) => { trajetDetailsMap[id] = detailsList[i]; });
+
+                        window.trajetDistances = {};
+                        window.trajetLegsMap   = {}; // combo_id -> legs
+
+                        html += '<ul class="list-group">';
+
+                        trajets.forEach((t, comboIdx) => {
+                            const comboId = 'combo-' + comboIdx;
+
+                            // Calculer la distance totale de tous les legs
+                            let totalDistMeters = 0;
+                            t.legs.forEach(leg => {
+                                const details = trajetDetailsMap[leg.id];
+                                if (details && details.arrets) {
+                                    const fromIdx = details.arrets.findIndex(a => parseInt(a.id) === parseInt(leg.from_arret));
+                                    const toIdx   = details.arrets.findIndex(a => parseInt(a.id) === parseInt(leg.to_arret));
+                                    if (fromIdx !== -1 && toIdx !== -1 && fromIdx <= toIdx) {
+                                        const pts = details.arrets.slice(fromIdx, toIdx + 1)
                                             .map(a => L.latLng(parseFloat(a.latitude), parseFloat(a.longitude)));
-                                        for(let j=0; j<subWaypoints.length - 1; j++) {
-                                            distMeters += subWaypoints[j].distanceTo(subWaypoints[j+1]);
+                                        for (let j = 0; j < pts.length - 1; j++) {
+                                            totalDistMeters += pts[j].distanceTo(pts[j+1]);
                                         }
                                     }
                                 }
-                                
-                                window.trajetDistances[t.id] = distMeters;
-
-                                let timeStr = "";
-                                if (distMeters > 0) {
-                                    const timeHours = (distMeters / 1000) / busSpeed;
-                                    timeStr = window.formatTime(timeHours * 60);
-                                }
-                                
-                                let moyensBtnsHtml = '';
-                                if (distMeters > 0) {
-                                    moyensBtnsHtml = '<div style="margin-top:8px; display:flex; gap:5px; flex-wrap:wrap;" onclick="event.stopPropagation()">';
-                                    moyensData.forEach(moyen => {
-                                        const isActive = (moyen.id === busId);
-                                        const bgColor = isActive ? '#117a8b' : '#17a2b8';
-                                        moyensBtnsHtml += `<button type="button" class="btn-info" style="font-size:10px; padding:3px 6px; background-color:${bgColor}; border:none; border-radius:3px; color:white; cursor:pointer;" onclick="window.updateTrajetTime(${t.id}, ${moyen.vitesse}, this)">${moyen.nom}</button>`;
-                                    });
-                                    moyensBtnsHtml += '</div>';
-                                }
-
-                                let distanceStr = "";
-                                if (distMeters > 0) {
-                                    if (distMeters >= 1000) {
-                                        distanceStr = ` (${(distMeters / 1000).toFixed(2)} km)`;
-                                    } else {
-                                        distanceStr = ` (${Math.round(distMeters)} m)`;
-                                    }
-                                }
-
-                                html += `
-                                    <li onclick="window.showPolyline(${t.id})" style="flex-direction: column; align-items: flex-start;">
-                                        <div style="display:flex; justify-content:space-between; align-items:flex-start; width:100%;">
-                                            <span style="flex:1; padding-right:10px;"><b>${t.nom_bus}</b> <span style="font-size:11px; color:#555;">${distanceStr}</span><br><small style="color:#666;">${t.description}</small></span>
-                                            <div style="text-align: right; min-width: 60px;">
-                                                <span id="trajet-time-${t.id}" style="font-size:12px; font-weight:bold; color:#28a745;">${timeStr ? `~${timeStr}` : ''}</span><br>
-                                                <span style="font-size:16px;">🛣️</span>
-                                            </div>
-                                        </div>
-                                        ${moyensBtnsHtml}
-                                    </li>`;
                             });
-                            html += '</ul>';
-                            
-                            resDiv.innerHTML = html;
 
-                            // Afficher automatiquement le trajet du premier résultat
-                            if (trajets && trajets.length > 0) {
-                                window.showPolyline(trajets[0].id);
+                            window.trajetDistances[comboId] = totalDistMeters;
+                            window.trajetLegsMap[comboId]   = t.legs;
+
+                            // Affichage distance
+                            let distanceStr = '';
+                            if (totalDistMeters >= 1000) {
+                                distanceStr = `(${(totalDistMeters / 1000).toFixed(2)} km)`;
+                            } else if (totalDistMeters > 0) {
+                                distanceStr = `(${Math.round(totalDistMeters)} m)`;
                             }
-                        }).catch(e => {
-                            console.error(e);
-                            resDiv.innerHTML = '<span style="color:red;font-size:12px;">Erreur lors du calcul des distances.</span>';
+
+                            // Affichage temps
+                            let timeStr = '';
+                            if (totalDistMeters > 0) {
+                                timeStr = window.formatTime((totalDistMeters / 1000) / busSpeed * 60);
+                            }
+
+                            // Prix
+                            const prixStr = `${t.prix_total} Ar`;
+                            const prixBadgeColor = t.nb_bus === 1 ? '#28a745' : '#fd7e14';
+
+                            // Correspondances info
+                            let corrHtml = '';
+                            if (t.type === 'correspondance' && t.correspondances && t.correspondances.length > 0) {
+                                corrHtml = `<small style="color:#6c757d;">&#x1F504; Correspondance à l'arrêt #${t.correspondances.join(', #')}</small><br>`;
+                            }
+
+                            // Boutons de transport
+                            let moyensBtnsHtml = '';
+                            if (totalDistMeters > 0) {
+                                moyensBtnsHtml = '<div style="margin-top:8px; display:flex; gap:5px; flex-wrap:wrap;" onclick="event.stopPropagation()">';
+                                moyensData.forEach(moyen => {
+                                    const isActive = (moyen.id === busId);
+                                    const bgColor = isActive ? '#117a8b' : '#17a2b8';
+                                    moyensBtnsHtml += `<button type="button" style="font-size:10px; padding:3px 6px; background-color:${bgColor}; border:none; border-radius:3px; color:white; cursor:pointer;" onclick="window.updateTrajetTime('${comboId}', ${moyen.vitesse}, this)">${moyen.nom}</button>`;
+                                });
+                                moyensBtnsHtml += '</div>';
+                            }
+
+                            html += `
+                                <li onclick="window.showComboRoute('${comboId}')" style="flex-direction: column; align-items: flex-start;">
+                                    <div style="display:flex; justify-content:space-between; align-items:flex-start; width:100%;">
+                                        <span style="flex:1; padding-right:8px;">
+                                            <b>${t.nom_bus}</b>
+                                            <span style="font-size:11px; color:#555;"> ${distanceStr}</span><br>
+                                            ${corrHtml}
+                                        </span>
+                                        <div style="text-align:right; min-width:70px; flex-shrink:0;">
+                                            <span id="trajet-time-${comboId}" style="font-size:12px; font-weight:bold; color:#28a745;">${timeStr ? `~${timeStr}` : ''}</span><br>
+                                            <span style="font-size:12px; font-weight:bold; color:${prixBadgeColor}; background:${prixBadgeColor}22; padding:2px 5px; border-radius:3px;">${prixStr}</span>
+                                        </div>
+                                    </div>
+                                    ${moyensBtnsHtml}
+                                </li>`;
                         });
-                    }
-                }).catch(() => { resDiv.innerHTML = '<span style="color:red;font-size:12px;">Erreur de connexion BD (mot de passe Postgres).</span>'; });
+
+                        html += '</ul>';
+                        resDiv.innerHTML = html;
+
+                        // Afficher automatiquement le premier résultat
+                        if (trajets.length > 0) {
+                            window.showComboRoute('combo-0');
+                        }
+                    }).catch(e => {
+                        console.error(e);
+                        resDiv.innerHTML = '<span style="color:red;font-size:12px;">Erreur lors du calcul des distances.</span>';
+                    });
+                }).catch(() => { resDiv.innerHTML = '<span style="color:red;font-size:12px;">Erreur de connexion BD.</span>'; });
 
             });
 
 
             /* ---------- FONCTIONS MUTUALISÉES ---------- */
-            window.showPolyline = function(idTrajet) {
-                fetch('/api/trajets/' + idTrajet)
-                .then(r => r.json())
-                .then(data => {
-                    if (routingFull)    { map.removeControl(routingFull);    routingFull    = null; }
-                    if (routingSegment) { map.removeControl(routingSegment); routingSegment = null; }
-                    if (!data.arrets || data.arrets.length === 0) return;
 
-                    const allWaypoints = data.arrets.map(a => L.latLng(parseFloat(a.latitude), parseFloat(a.longitude)));
+            // updateTrajetTime : maintenant comboId peut être 'combo-0', 'combo-1'...
+            window.updateTrajetTime = function(comboId, vitesse, btnElement) {
+                const distMeters = window.trajetDistances[comboId];
+                if (!distMeters) return;
+                const timeHours   = (distMeters / 1000) / vitesse;
+                const timeMinutes = timeHours * 60;
 
-                    // Déterminer s'il y a un segment à surligner
-                    let startIndex = -1, endIndex = -1;
-                    if (lastFoundDepId && lastFoundArrId) {
-                        startIndex = data.arrets.findIndex(a => parseInt(a.id) === parseInt(lastFoundDepId));
-                        endIndex   = data.arrets.findIndex(a => parseInt(a.id) === parseInt(lastFoundArrId));
-                    }
-                    const doHighlight = startIndex !== -1 && endIndex !== -1 && startIndex <= endIndex;
+                const spanTime = document.getElementById('trajet-time-' + comboId);
+                if (spanTime) spanTime.textContent = '~' + window.formatTime(timeMinutes);
 
-                    // Trajet complet en BLEU (toujours visible, le vert se superpose dessus)
-                    routingFull = L.Routing.control({
-                        waypoints: allWaypoints,
-                        routeWhileDragging: false,
-                        router: L.Routing.osrmv1({ serviceUrl: 'https://router.project-osrm.org/route/v1' }),
-                        lineOptions: { styles: [{ color: '#1a73e8', opacity: 0.5, weight: 4 }] },
-                        show: false, addWaypoints: false, fitSelectedRoutes: !doHighlight, showAlternatives: false,
-                        createMarker: function() { return null; }
-                    }).addTo(map);
+                if (btnElement) {
+                    btnElement.parentElement.querySelectorAll('button').forEach(b => {
+                        b.style.backgroundColor = '#17a2b8';
+                    });
+                    btnElement.style.backgroundColor = '#117a8b';
+                }
+            };
 
-                    // Portion départ → arrivée en VERT
-                    if (doHighlight) {
-                        const subWaypoints = data.arrets
-                            .slice(startIndex, endIndex + 1)
+            // showComboRoute : dessine tous les legs d'une combinaison
+            window.showComboRoute = function(comboId) {
+                const legs = window.trajetLegsMap ? window.trajetLegsMap[comboId] : null;
+                if (!legs || legs.length === 0) return;
+
+                if (routingFull)    { map.removeControl(routingFull);    routingFull    = null; }
+                if (routingSegment) { map.removeControl(routingSegment); routingSegment = null; }
+
+                // Charger les détails de chaque leg, puis dessiner
+                const legIds = legs.map(l => l.id);
+                Promise.all(legIds.map(id => fetch('/api/trajets/' + id).then(r => r.json())))
+                .then(details => {
+                    // Dessiner d'abord les trajets complets en bleu
+                    details.forEach(data => {
+                        if (!data.arrets || data.arrets.length === 0) return;
+                        const allWaypoints = data.arrets.map(a => L.latLng(parseFloat(a.latitude), parseFloat(a.longitude)));
+                        routingFull = L.Routing.control({
+                            waypoints: allWaypoints,
+                            routeWhileDragging: false,
+                            router: L.Routing.osrmv1({ serviceUrl: 'https://router.project-osrm.org/route/v1' }),
+                            lineOptions: { styles: [{ color: '#1a73e8', opacity: 0.4, weight: 4 }] },
+                            show: false, addWaypoints: false, fitSelectedRoutes: false, showAlternatives: false,
+                            createMarker: function() { return null; }
+                        }).addTo(map);
+                    });
+
+                    // Dessiner les segments utiles en vert
+                    let allSubWaypoints = [];
+                    legs.forEach((leg, i) => {
+                        const data = details[i];
+                        if (!data || !data.arrets) return;
+                        const fromIdx = data.arrets.findIndex(a => parseInt(a.id) === parseInt(leg.from_arret));
+                        const toIdx   = data.arrets.findIndex(a => parseInt(a.id) === parseInt(leg.to_arret));
+                        if (fromIdx === -1 || toIdx === -1) return;
+                        const pts = data.arrets.slice(fromIdx, toIdx + 1)
                             .map(a => L.latLng(parseFloat(a.latitude), parseFloat(a.longitude)));
-                            
-                        let distMeters = 0;
-                        for(let i=0; i<subWaypoints.length - 1; i++) {
-                            distMeters += subWaypoints[i].distanceTo(subWaypoints[i+1]);
-                        }
+                        allSubWaypoints = allSubWaypoints.concat(pts);
+                    });
 
+                    if (allSubWaypoints.length > 1) {
                         routingSegment = L.Routing.control({
-                            waypoints: subWaypoints,
+                            waypoints: allSubWaypoints,
                             routeWhileDragging: false,
                             router: L.Routing.osrmv1({ serviceUrl: 'https://router.project-osrm.org/route/v1' }),
                             lineOptions: { styles: [{ color: '#28a745', opacity: 0.95, weight: 7 }] },
@@ -477,6 +531,26 @@
                 }).catch(e => console.error(e));
             };
 
+            // Conserver showPolyline pour compatibilité avec le tab Admin
+            window.showPolyline = function(idTrajet) {
+                fetch('/api/trajets/' + idTrajet)
+                .then(r => r.json())
+                .then(data => {
+                    if (routingFull)    { map.removeControl(routingFull);    routingFull    = null; }
+                    if (routingSegment) { map.removeControl(routingSegment); routingSegment = null; }
+                    if (!data.arrets || data.arrets.length === 0) return;
+
+                    const allWaypoints = data.arrets.map(a => L.latLng(parseFloat(a.latitude), parseFloat(a.longitude)));
+                    routingFull = L.Routing.control({
+                        waypoints: allWaypoints,
+                        routeWhileDragging: false,
+                        router: L.Routing.osrmv1({ serviceUrl: 'https://router.project-osrm.org/route/v1' }),
+                        lineOptions: { styles: [{ color: '#1a73e8', opacity: 0.5, weight: 4 }] },
+                        show: false, addWaypoints: false, fitSelectedRoutes: true, showAlternatives: false,
+                        createMarker: function() { return null; }
+                    }).addTo(map);
+                }).catch(e => console.error(e));
+            };
 
             /* ---------- ADMIN EXAMPLES ---------- */
             document.getElementById('formBus').addEventListener('submit', function(e) {

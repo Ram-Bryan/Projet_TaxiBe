@@ -166,4 +166,47 @@ class TrajetModel extends Model
             [$idTrajet]
         )->getResultArray();
     }
+
+    /**
+     * Retourne tous les arrêts d'un trajet avec leur ordre.
+     *
+     * @param int $idTrajet
+     * @return array  Liste de ['id_arret' => ..., 'ordre' => ...]
+     */
+    public function getArretIdsWithOrder(int $idTrajet): array
+    {
+        return $this->db->query(
+            "SELECT ta.id_arret, ta.ordre
+             FROM trajet_arret ta
+             WHERE ta.id_trajet = ?
+             ORDER BY ta.ordre ASC",
+            [$idTrajet]
+        )->getResultArray();
+    }
+
+    /**
+     * Retourne tous les trajets avec leurs arrêts (pour la construction du graphe BFS).
+     * Format : [ [id, nom_bus, description, arrets => [id_arret, ordre]], ... ]
+     *
+     * @return array
+     */
+    public function getAllTrajetsWithArrets(): array
+    {
+        // Tous les trajets
+        $trajets = $this->db->query(
+            "SELECT t.id, t.description, b.nom AS nom_bus
+             FROM trajet t
+             JOIN bus b ON b.id = t.id_bus
+             ORDER BY t.id ASC"
+        )->getResultArray();
+
+        // Pour chaque trajet, charger ses arrêts
+        foreach ($trajets as &$trajet) {
+            $trajet['arrets'] = $this->getArretIdsWithOrder((int)$trajet['id']);
+        }
+        unset($trajet);
+
+        return $trajets;
+    }
 }
+
