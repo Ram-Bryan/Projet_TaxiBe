@@ -12,12 +12,16 @@
 -- Décommenter si la base n'existe pas encore :
 
 -- psql -U postgres -d taxibe -f new_db.sql
+
+DROP DATABASE taxibe;
+
 CREATE DATABASE taxibe
     WITH ENCODING = 'UTF8'
     LC_COLLATE = 'fr_FR.UTF-8'
     LC_CTYPE   = 'fr_FR.UTF-8'
     TEMPLATE   = template0;
 
+\c taxibe 
 -- ============================================================================
 -- 2. Activer l'extension PostGIS
 -- ============================================================================

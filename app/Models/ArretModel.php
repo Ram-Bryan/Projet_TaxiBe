@@ -208,4 +208,32 @@ class ArretModel extends Model
              ORDER BY nom ASC"
         )->getResultArray();
     }
+
+    /**
+     * Retourne les noms de plusieurs arrêts en une seule requête.
+     * Résultat : [ id => nom, ... ]
+     *
+     * @param array $ids  Liste d'IDs d'arrêts
+     * @return array      Map [id => nom]
+     */
+    public function getNamesByIds(array $ids): array
+    {
+        if (empty($ids)) {
+            return [];
+        }
+
+        $ids = array_values($ids); // Réindexer les clés pour le bind de CI4
+
+        $placeholders = implode(',', array_fill(0, count($ids), '?'));
+        $rows = $this->db->query(
+            "SELECT id, nom FROM arret WHERE id IN ($placeholders)",
+            $ids
+        )->getResultArray();
+
+        $map = [];
+        foreach ($rows as $row) {
+            $map[(int)$row['id']] = $row['nom'];
+        }
+        return $map;
+    }
 }

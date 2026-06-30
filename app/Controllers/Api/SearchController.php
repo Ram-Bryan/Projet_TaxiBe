@@ -101,21 +101,46 @@ class SearchController extends BaseController
         );
 
         // --- Calculer le prix de chaque combinaison et trier ---
+        // D'abord, collecter tous les IDs d'arrêts uniques pour les résoudre en noms
+        $allArretIds = [];
+        foreach ($combinaisons as $combo) {
+            foreach ($combo['legs'] as $leg) {
+                $allArretIds[] = (int)$leg['from_arret'];
+                $allArretIds[] = (int)$leg['to_arret'];
+            }
+        }
+        $arretNoms = $arretModel->getNamesByIds(array_unique($allArretIds));
+
         $results = [];
         foreach ($combinaisons as $combo) {
-            $nbBus = count($combo['legs']); // nombre de bus utilisés
+            $nbBus = count($combo['legs']);
             $prix  = $nbBus * $prixParTrajet;
 
+            // Enrichir chaque leg avec les noms des arrêts
+            $enrichedLegs = [];
+            foreach ($combo['legs'] as $leg) {
+                $leg['from_arret_nom'] = $arretNoms[$leg['from_arret']] ?? ('Arrêt #' . $leg['from_arret']);
+                $leg['to_arret_nom']   = $arretNoms[$leg['to_arret']]   ?? ('Arrêt #' . $leg['to_arret']);
+                $enrichedLegs[] = $leg;
+            }
+
+            // Construire le label lisible du parcours :
+            // ex: "Analakely ➔ [Taxi-Be 001] ➔ Isotry ➔ [Taxi-Be 002] ➔ Ambohibao"
+            $journeyLabel = $enrichedLegs[0]['from_arret_nom'];
+            foreach ($enrichedLegs as $leg) {
+                $journeyLabel .= ' → ' . $leg['nom_bus'] . ' → ' . $leg['to_arret_nom'];
+            }
+
             $results[] = [
-                'legs'          => $combo['legs'],         // tableau des segments de trajet
-                'correspondances' => $combo['correspondances'], // arrêts de changement
-                'nb_bus'        => $nbBus,
-                'prix_total'    => $prix,
-                // Pour la compatibilité avec le frontend : résumé textuel
-                'id'            => implode('-', array_column($combo['legs'], 'id')),
-                'nom_bus'       => implode(' ➔ ', array_column($combo['legs'], 'nom_bus')),
-                'description'   => $this->buildDescription($combo),
-                'type'          => $nbBus === 1 ? 'direct' : 'correspondance',
+                'legs'            => $enrichedLegs,
+                'correspondances' => $combo['correspondances'],
+                'nb_bus'          => $nbBus,
+                'prix_total'      => $prix,
+                'id'              => implode('-', array_column($enrichedLegs, 'id')),
+                'nom_bus'         => implode(' ➔ ', array_column($enrichedLegs, 'nom_bus')),
+                'journey_label'   => $journeyLabel,
+                'description'     => $this->buildDescription($combo),
+                'type'            => $nbBus === 1 ? 'direct' : 'correspondance',
             ];
         }
 

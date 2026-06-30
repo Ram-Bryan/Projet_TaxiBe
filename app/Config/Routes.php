@@ -5,8 +5,18 @@ use CodeIgniter\Router\RouteCollection;
 /**
  * @var RouteCollection $routes
  */
-$routes->get('/', 'MapController::index');
+// Auth
+$routes->get('login', 'AuthController::index');
+$routes->post('login', 'AuthController::login');
+$routes->get('logout', 'AuthController::logout');
 
+// Frontoffice
+$routes->get('/', 'MapController::index', ['filter' => 'auth']);
+
+// Backoffice
+$routes->group('admin', ['filter' => ['auth', 'admin']], static function ($routes) {
+    $routes->get('/', 'AdminController::index');
+});
 // API Arrêts
 $routes->get('api/arrets', 'Api\ArretController::getAll');
 $routes->post('api/arrets', 'Api\ArretController::create');
