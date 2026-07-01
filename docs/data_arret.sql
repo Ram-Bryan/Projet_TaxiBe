@@ -6,7 +6,7 @@
 --   psql -U postgres -f taxibe_final_complet.sql
 -- ============================================================================
 
--- \c taxibetest
+-- \c taxibe
 
 -- 1. Extension PostGIS
 CREATE EXTENSION IF NOT EXISTS postgis;

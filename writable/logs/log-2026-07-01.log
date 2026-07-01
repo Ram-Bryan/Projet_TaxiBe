@@ -61,3 +61,225 @@ DEBUG - 2026-07-01 10:57:19 --> Session: Class initialized using 'CodeIgniter\Se
 DEBUG - 2026-07-01 10:59:08 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
 DEBUG - 2026-07-01 10:59:49 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
 DEBUG - 2026-07-01 11:09:55 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-07-01 11:26:48 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-07-01 11:27:01 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-07-01 11:27:34 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-07-01 11:27:45 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-07-01 11:28:07 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-07-01 11:28:07 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-07-01 11:28:31 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+ERROR - 2026-07-01 11:28:32 --> Error connecting to the database: Error: Call to undefined function CodeIgniter\Database\Postgre\pg_connect() in /home/itu/Documents/S4/SIG/projet/Projet_TaxiBe/system/Database/Postgre/Connection.php:78
+Stack trace:
+#0 /home/itu/Documents/S4/SIG/projet/Projet_TaxiBe/system/Database/BaseConnection.php(555): CodeIgniter\Database\Postgre\Connection->connect()
+#1 /home/itu/Documents/S4/SIG/projet/Projet_TaxiBe/system/Database/BaseConnection.php(795): CodeIgniter\Database\BaseConnection->initialize()
+#2 /home/itu/Documents/S4/SIG/projet/Projet_TaxiBe/system/Database/BaseBuilder.php(1649): CodeIgniter\Database\BaseConnection->query()
+#3 /home/itu/Documents/S4/SIG/projet/Projet_TaxiBe/system/Model.php(295): CodeIgniter\Database\BaseBuilder->get()
+#4 /home/itu/Documents/S4/SIG/projet/Projet_TaxiBe/system/BaseModel.php(714): CodeIgniter\Model->doFirst()
+#5 /home/itu/Documents/S4/SIG/projet/Projet_TaxiBe/app/Controllers/AuthController.php(27): CodeIgniter\BaseModel->first()
+#6 /home/itu/Documents/S4/SIG/projet/Projet_TaxiBe/system/CodeIgniter.php(951): App\Controllers\AuthController->login()
+#7 /home/itu/Documents/S4/SIG/projet/Projet_TaxiBe/system/CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController()
+#8 /home/itu/Documents/S4/SIG/projet/Projet_TaxiBe/system/CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest()
+#9 /home/itu/Documents/S4/SIG/projet/Projet_TaxiBe/system/Boot.php(417): CodeIgniter\CodeIgniter->run()
+#10 /home/itu/Documents/S4/SIG/projet/Projet_TaxiBe/system/Boot.php(68): CodeIgniter\Boot::runCodeIgniter()
+#11 /home/itu/Documents/S4/SIG/projet/Projet_TaxiBe/public/index.php(59): CodeIgniter\Boot::bootWeb()
+#12 /home/itu/Documents/S4/SIG/projet/Projet_TaxiBe/system/rewrite.php(44): require_once('...')
+#13 {main}
+CRITICAL - 2026-07-01 11:28:32 --> CodeIgniter\Database\Exceptions\DatabaseException: Unable to connect to the database.
+Main connection [Postgre]: Call to undefined function CodeIgniter\Database\Postgre\pg_connect()
+[Method: POST, Route: login]
+in SYSTEMPATH/Database/BaseConnection.php on line 606.
+ 1 SYSTEMPATH/Database/BaseConnection.php(795): CodeIgniter\Database\BaseConnection->initialize()
+ 2 SYSTEMPATH/Database/BaseBuilder.php(1649): CodeIgniter\Database\BaseConnection->query()
+ 3 SYSTEMPATH/Model.php(295): CodeIgniter\Database\BaseBuilder->get()
+ 4 SYSTEMPATH/BaseModel.php(714): CodeIgniter\Model->doFirst()
+ 5 APPPATH/Controllers/AuthController.php(27): CodeIgniter\BaseModel->first()
+ 6 SYSTEMPATH/CodeIgniter.php(951): App\Controllers\AuthController->login()
+ 7 SYSTEMPATH/CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController()
+ 8 SYSTEMPATH/CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest()
+ 9 SYSTEMPATH/Boot.php(417): CodeIgniter\CodeIgniter->run()
+10 SYSTEMPATH/Boot.php(68): CodeIgniter\Boot::runCodeIgniter()
+11 FCPATH/index.php(59): CodeIgniter\Boot::bootWeb()
+12 SYSTEMPATH/rewrite.php(44): require_once('/home/itu/Documents/S4/SIG/projet/Projet_TaxiBe/public/index.php')
+DEBUG - 2026-07-01 11:32:26 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+ERROR - 2026-07-01 11:32:26 --> Error connecting to the database: Error: Call to undefined function CodeIgniter\Database\Postgre\pg_connect() in /home/itu/Documents/S4/SIG/projet/Projet_TaxiBe/system/Database/Postgre/Connection.php:78
+Stack trace:
+#0 /home/itu/Documents/S4/SIG/projet/Projet_TaxiBe/system/Database/BaseConnection.php(555): CodeIgniter\Database\Postgre\Connection->connect()
+#1 /home/itu/Documents/S4/SIG/projet/Projet_TaxiBe/system/Database/BaseConnection.php(795): CodeIgniter\Database\BaseConnection->initialize()
+#2 /home/itu/Documents/S4/SIG/projet/Projet_TaxiBe/system/Database/BaseBuilder.php(1649): CodeIgniter\Database\BaseConnection->query()
+#3 /home/itu/Documents/S4/SIG/projet/Projet_TaxiBe/system/Model.php(295): CodeIgniter\Database\BaseBuilder->get()
+#4 /home/itu/Documents/S4/SIG/projet/Projet_TaxiBe/system/BaseModel.php(714): CodeIgniter\Model->doFirst()
+#5 /home/itu/Documents/S4/SIG/projet/Projet_TaxiBe/app/Controllers/AuthController.php(27): CodeIgniter\BaseModel->first()
+#6 /home/itu/Documents/S4/SIG/projet/Projet_TaxiBe/system/CodeIgniter.php(951): App\Controllers\AuthController->login()
+#7 /home/itu/Documents/S4/SIG/projet/Projet_TaxiBe/system/CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController()
+#8 /home/itu/Documents/S4/SIG/projet/Projet_TaxiBe/system/CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest()
+#9 /home/itu/Documents/S4/SIG/projet/Projet_TaxiBe/system/Boot.php(417): CodeIgniter\CodeIgniter->run()
+#10 /home/itu/Documents/S4/SIG/projet/Projet_TaxiBe/system/Boot.php(68): CodeIgniter\Boot::runCodeIgniter()
+#11 /home/itu/Documents/S4/SIG/projet/Projet_TaxiBe/public/index.php(59): CodeIgniter\Boot::bootWeb()
+#12 /home/itu/Documents/S4/SIG/projet/Projet_TaxiBe/system/rewrite.php(44): require_once('...')
+#13 {main}
+CRITICAL - 2026-07-01 11:32:26 --> CodeIgniter\Database\Exceptions\DatabaseException: Unable to connect to the database.
+Main connection [Postgre]: Call to undefined function CodeIgniter\Database\Postgre\pg_connect()
+[Method: POST, Route: login]
+in SYSTEMPATH/Database/BaseConnection.php on line 606.
+ 1 SYSTEMPATH/Database/BaseConnection.php(795): CodeIgniter\Database\BaseConnection->initialize()
+ 2 SYSTEMPATH/Database/BaseBuilder.php(1649): CodeIgniter\Database\BaseConnection->query()
+ 3 SYSTEMPATH/Model.php(295): CodeIgniter\Database\BaseBuilder->get()
+ 4 SYSTEMPATH/BaseModel.php(714): CodeIgniter\Model->doFirst()
+ 5 APPPATH/Controllers/AuthController.php(27): CodeIgniter\BaseModel->first()
+ 6 SYSTEMPATH/CodeIgniter.php(951): App\Controllers\AuthController->login()
+ 7 SYSTEMPATH/CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController()
+ 8 SYSTEMPATH/CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest()
+ 9 SYSTEMPATH/Boot.php(417): CodeIgniter\CodeIgniter->run()
+10 SYSTEMPATH/Boot.php(68): CodeIgniter\Boot::runCodeIgniter()
+11 FCPATH/index.php(59): CodeIgniter\Boot::bootWeb()
+12 SYSTEMPATH/rewrite.php(44): require_once('/home/itu/Documents/S4/SIG/projet/Projet_TaxiBe/public/index.php')
+DEBUG - 2026-07-01 11:32:28 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+ERROR - 2026-07-01 11:32:28 --> Error connecting to the database: Error: Call to undefined function CodeIgniter\Database\Postgre\pg_connect() in /home/itu/Documents/S4/SIG/projet/Projet_TaxiBe/system/Database/Postgre/Connection.php:78
+Stack trace:
+#0 /home/itu/Documents/S4/SIG/projet/Projet_TaxiBe/system/Database/BaseConnection.php(555): CodeIgniter\Database\Postgre\Connection->connect()
+#1 /home/itu/Documents/S4/SIG/projet/Projet_TaxiBe/system/Database/BaseConnection.php(795): CodeIgniter\Database\BaseConnection->initialize()
+#2 /home/itu/Documents/S4/SIG/projet/Projet_TaxiBe/system/Database/BaseBuilder.php(1649): CodeIgniter\Database\BaseConnection->query()
+#3 /home/itu/Documents/S4/SIG/projet/Projet_TaxiBe/system/Model.php(295): CodeIgniter\Database\BaseBuilder->get()
+#4 /home/itu/Documents/S4/SIG/projet/Projet_TaxiBe/system/BaseModel.php(714): CodeIgniter\Model->doFirst()
+#5 /home/itu/Documents/S4/SIG/projet/Projet_TaxiBe/app/Controllers/AuthController.php(27): CodeIgniter\BaseModel->first()
+#6 /home/itu/Documents/S4/SIG/projet/Projet_TaxiBe/system/CodeIgniter.php(951): App\Controllers\AuthController->login()
+#7 /home/itu/Documents/S4/SIG/projet/Projet_TaxiBe/system/CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController()
+#8 /home/itu/Documents/S4/SIG/projet/Projet_TaxiBe/system/CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest()
+#9 /home/itu/Documents/S4/SIG/projet/Projet_TaxiBe/system/Boot.php(417): CodeIgniter\CodeIgniter->run()
+#10 /home/itu/Documents/S4/SIG/projet/Projet_TaxiBe/system/Boot.php(68): CodeIgniter\Boot::runCodeIgniter()
+#11 /home/itu/Documents/S4/SIG/projet/Projet_TaxiBe/public/index.php(59): CodeIgniter\Boot::bootWeb()
+#12 /home/itu/Documents/S4/SIG/projet/Projet_TaxiBe/system/rewrite.php(44): require_once('...')
+#13 {main}
+CRITICAL - 2026-07-01 11:32:28 --> CodeIgniter\Database\Exceptions\DatabaseException: Unable to connect to the database.
+Main connection [Postgre]: Call to undefined function CodeIgniter\Database\Postgre\pg_connect()
+[Method: POST, Route: login]
+in SYSTEMPATH/Database/BaseConnection.php on line 606.
+ 1 SYSTEMPATH/Database/BaseConnection.php(795): CodeIgniter\Database\BaseConnection->initialize()
+ 2 SYSTEMPATH/Database/BaseBuilder.php(1649): CodeIgniter\Database\BaseConnection->query()
+ 3 SYSTEMPATH/Model.php(295): CodeIgniter\Database\BaseBuilder->get()
+ 4 SYSTEMPATH/BaseModel.php(714): CodeIgniter\Model->doFirst()
+ 5 APPPATH/Controllers/AuthController.php(27): CodeIgniter\BaseModel->first()
+ 6 SYSTEMPATH/CodeIgniter.php(951): App\Controllers\AuthController->login()
+ 7 SYSTEMPATH/CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController()
+ 8 SYSTEMPATH/CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest()
+ 9 SYSTEMPATH/Boot.php(417): CodeIgniter\CodeIgniter->run()
+10 SYSTEMPATH/Boot.php(68): CodeIgniter\Boot::runCodeIgniter()
+11 FCPATH/index.php(59): CodeIgniter\Boot::bootWeb()
+12 SYSTEMPATH/rewrite.php(44): require_once('/home/itu/Documents/S4/SIG/projet/Projet_TaxiBe/public/index.php')
+DEBUG - 2026-07-01 11:32:29 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-07-01 11:32:36 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+ERROR - 2026-07-01 11:32:36 --> Error connecting to the database: Error: Call to undefined function CodeIgniter\Database\Postgre\pg_connect() in /home/itu/Documents/S4/SIG/projet/Projet_TaxiBe/system/Database/Postgre/Connection.php:78
+Stack trace:
+#0 /home/itu/Documents/S4/SIG/projet/Projet_TaxiBe/system/Database/BaseConnection.php(555): CodeIgniter\Database\Postgre\Connection->connect()
+#1 /home/itu/Documents/S4/SIG/projet/Projet_TaxiBe/system/Database/BaseConnection.php(795): CodeIgniter\Database\BaseConnection->initialize()
+#2 /home/itu/Documents/S4/SIG/projet/Projet_TaxiBe/system/Database/BaseBuilder.php(1649): CodeIgniter\Database\BaseConnection->query()
+#3 /home/itu/Documents/S4/SIG/projet/Projet_TaxiBe/system/Model.php(295): CodeIgniter\Database\BaseBuilder->get()
+#4 /home/itu/Documents/S4/SIG/projet/Projet_TaxiBe/system/BaseModel.php(714): CodeIgniter\Model->doFirst()
+#5 /home/itu/Documents/S4/SIG/projet/Projet_TaxiBe/app/Controllers/AuthController.php(27): CodeIgniter\BaseModel->first()
+#6 /home/itu/Documents/S4/SIG/projet/Projet_TaxiBe/system/CodeIgniter.php(951): App\Controllers\AuthController->login()
+#7 /home/itu/Documents/S4/SIG/projet/Projet_TaxiBe/system/CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController()
+#8 /home/itu/Documents/S4/SIG/projet/Projet_TaxiBe/system/CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest()
+#9 /home/itu/Documents/S4/SIG/projet/Projet_TaxiBe/system/Boot.php(417): CodeIgniter\CodeIgniter->run()
+#10 /home/itu/Documents/S4/SIG/projet/Projet_TaxiBe/system/Boot.php(68): CodeIgniter\Boot::runCodeIgniter()
+#11 /home/itu/Documents/S4/SIG/projet/Projet_TaxiBe/public/index.php(59): CodeIgniter\Boot::bootWeb()
+#12 /home/itu/Documents/S4/SIG/projet/Projet_TaxiBe/system/rewrite.php(44): require_once('...')
+#13 {main}
+CRITICAL - 2026-07-01 11:32:36 --> CodeIgniter\Database\Exceptions\DatabaseException: Unable to connect to the database.
+Main connection [Postgre]: Call to undefined function CodeIgniter\Database\Postgre\pg_connect()
+[Method: POST, Route: login]
+in SYSTEMPATH/Database/BaseConnection.php on line 606.
+ 1 SYSTEMPATH/Database/BaseConnection.php(795): CodeIgniter\Database\BaseConnection->initialize()
+ 2 SYSTEMPATH/Database/BaseBuilder.php(1649): CodeIgniter\Database\BaseConnection->query()
+ 3 SYSTEMPATH/Model.php(295): CodeIgniter\Database\BaseBuilder->get()
+ 4 SYSTEMPATH/BaseModel.php(714): CodeIgniter\Model->doFirst()
+ 5 APPPATH/Controllers/AuthController.php(27): CodeIgniter\BaseModel->first()
+ 6 SYSTEMPATH/CodeIgniter.php(951): App\Controllers\AuthController->login()
+ 7 SYSTEMPATH/CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController()
+ 8 SYSTEMPATH/CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest()
+ 9 SYSTEMPATH/Boot.php(417): CodeIgniter\CodeIgniter->run()
+10 SYSTEMPATH/Boot.php(68): CodeIgniter\Boot::runCodeIgniter()
+11 FCPATH/index.php(59): CodeIgniter\Boot::bootWeb()
+12 SYSTEMPATH/rewrite.php(44): require_once('/home/itu/Documents/S4/SIG/projet/Projet_TaxiBe/public/index.php')
+DEBUG - 2026-07-01 11:33:13 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-07-01 11:33:26 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+ERROR - 2026-07-01 11:33:26 --> Error connecting to the database: Error: Call to undefined function CodeIgniter\Database\Postgre\pg_connect() in /home/itu/Documents/S4/SIG/projet/Projet_TaxiBe/system/Database/Postgre/Connection.php:78
+Stack trace:
+#0 /home/itu/Documents/S4/SIG/projet/Projet_TaxiBe/system/Database/BaseConnection.php(555): CodeIgniter\Database\Postgre\Connection->connect()
+#1 /home/itu/Documents/S4/SIG/projet/Projet_TaxiBe/system/Database/BaseConnection.php(795): CodeIgniter\Database\BaseConnection->initialize()
+#2 /home/itu/Documents/S4/SIG/projet/Projet_TaxiBe/system/Database/BaseBuilder.php(1649): CodeIgniter\Database\BaseConnection->query()
+#3 /home/itu/Documents/S4/SIG/projet/Projet_TaxiBe/system/Model.php(295): CodeIgniter\Database\BaseBuilder->get()
+#4 /home/itu/Documents/S4/SIG/projet/Projet_TaxiBe/system/BaseModel.php(714): CodeIgniter\Model->doFirst()
+#5 /home/itu/Documents/S4/SIG/projet/Projet_TaxiBe/app/Controllers/AuthController.php(27): CodeIgniter\BaseModel->first()
+#6 /home/itu/Documents/S4/SIG/projet/Projet_TaxiBe/system/CodeIgniter.php(951): App\Controllers\AuthController->login()
+#7 /home/itu/Documents/S4/SIG/projet/Projet_TaxiBe/system/CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController()
+#8 /home/itu/Documents/S4/SIG/projet/Projet_TaxiBe/system/CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest()
+#9 /home/itu/Documents/S4/SIG/projet/Projet_TaxiBe/system/Boot.php(417): CodeIgniter\CodeIgniter->run()
+#10 /home/itu/Documents/S4/SIG/projet/Projet_TaxiBe/system/Boot.php(68): CodeIgniter\Boot::runCodeIgniter()
+#11 /home/itu/Documents/S4/SIG/projet/Projet_TaxiBe/public/index.php(59): CodeIgniter\Boot::bootWeb()
+#12 /home/itu/Documents/S4/SIG/projet/Projet_TaxiBe/system/rewrite.php(44): require_once('...')
+#13 {main}
+CRITICAL - 2026-07-01 11:33:26 --> CodeIgniter\Database\Exceptions\DatabaseException: Unable to connect to the database.
+Main connection [Postgre]: Call to undefined function CodeIgniter\Database\Postgre\pg_connect()
+[Method: POST, Route: login]
+in SYSTEMPATH/Database/BaseConnection.php on line 606.
+ 1 SYSTEMPATH/Database/BaseConnection.php(795): CodeIgniter\Database\BaseConnection->initialize()
+ 2 SYSTEMPATH/Database/BaseBuilder.php(1649): CodeIgniter\Database\BaseConnection->query()
+ 3 SYSTEMPATH/Model.php(295): CodeIgniter\Database\BaseBuilder->get()
+ 4 SYSTEMPATH/BaseModel.php(714): CodeIgniter\Model->doFirst()
+ 5 APPPATH/Controllers/AuthController.php(27): CodeIgniter\BaseModel->first()
+ 6 SYSTEMPATH/CodeIgniter.php(951): App\Controllers\AuthController->login()
+ 7 SYSTEMPATH/CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController()
+ 8 SYSTEMPATH/CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest()
+ 9 SYSTEMPATH/Boot.php(417): CodeIgniter\CodeIgniter->run()
+10 SYSTEMPATH/Boot.php(68): CodeIgniter\Boot::runCodeIgniter()
+11 FCPATH/index.php(59): CodeIgniter\Boot::bootWeb()
+12 SYSTEMPATH/rewrite.php(44): require_once('/home/itu/Documents/S4/SIG/projet/Projet_TaxiBe/public/index.php')
+DEBUG - 2026-07-01 11:39:20 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-07-01 11:39:20 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-07-01 11:39:48 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-07-01 11:39:48 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-07-01 11:40:03 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-07-01 11:40:03 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-07-01 11:41:55 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-07-01 11:48:10 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-07-01 12:00:04 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-07-01 12:02:11 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-07-01 12:02:11 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-07-01 12:02:24 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-07-01 12:02:24 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-07-01 12:03:44 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-07-01 12:03:44 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-07-01 12:03:53 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-07-01 12:03:54 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-07-01 12:20:02 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2026-07-01 12:20:19 --> ParseError: syntax error, unexpected token "private"
+[Method: POST, Route: api/search]
+in APPPATH/Controllers/Api/SearchController.php on line 432.
+ 1 SYSTEMPATH/Autoloader/Autoloader.php(295): CodeIgniter\Autoloader\Autoloader->includeFile()
+ 2 SYSTEMPATH/Autoloader/Autoloader.php(271): CodeIgniter\Autoloader\Autoloader->loadInNamespace()
+ 3 [internal function]: CodeIgniter\Autoloader\Autoloader->loadClass()
+ 4 SYSTEMPATH/Router/Router.php(792): class_exists()
+ 5 SYSTEMPATH/Router/Router.php(230): CodeIgniter\Router\Router->processRouteAttributes()
+ 6 SYSTEMPATH/CodeIgniter.php(829): CodeIgniter\Router\Router->handle()
+ 7 SYSTEMPATH/CodeIgniter.php(441): CodeIgniter\CodeIgniter->tryToRouteIt()
+ 8 SYSTEMPATH/CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest()
+ 9 SYSTEMPATH/Boot.php(417): CodeIgniter\CodeIgniter->run()
+10 SYSTEMPATH/Boot.php(68): CodeIgniter\Boot::runCodeIgniter()
+11 FCPATH/index.php(59): CodeIgniter\Boot::bootWeb()
+12 SYSTEMPATH/rewrite.php(44): require_once('/home/itu/Documents/S4/SIG/projet/Projet_TaxiBe/public/index.php')
+CRITICAL - 2026-07-01 12:20:24 --> ParseError: syntax error, unexpected token "private"
+[Method: POST, Route: api/search]
+in APPPATH/Controllers/Api/SearchController.php on line 432.
+ 1 SYSTEMPATH/Autoloader/Autoloader.php(295): CodeIgniter\Autoloader\Autoloader->includeFile()
+ 2 SYSTEMPATH/Autoloader/Autoloader.php(271): CodeIgniter\Autoloader\Autoloader->loadInNamespace()
+ 3 [internal function]: CodeIgniter\Autoloader\Autoloader->loadClass()
+ 4 SYSTEMPATH/Router/Router.php(792): class_exists()
+ 5 SYSTEMPATH/Router/Router.php(230): CodeIgniter\Router\Router->processRouteAttributes()
+ 6 SYSTEMPATH/CodeIgniter.php(829): CodeIgniter\Router\Router->handle()
+ 7 SYSTEMPATH/CodeIgniter.php(441): CodeIgniter\CodeIgniter->tryToRouteIt()
+ 8 SYSTEMPATH/CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest()
+ 9 SYSTEMPATH/Boot.php(417): CodeIgniter\CodeIgniter->run()
+10 SYSTEMPATH/Boot.php(68): CodeIgniter\Boot::runCodeIgniter()
+11 FCPATH/index.php(59): CodeIgniter\Boot::bootWeb()
+12 SYSTEMPATH/rewrite.php(44): require_once('/home/itu/Documents/S4/SIG/projet/Projet_TaxiBe/public/index.php')
+DEBUG - 2026-07-01 12:22:59 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.

@@ -191,6 +191,47 @@ class ArretModel extends Model
     }
 
     /**
+     * Retourne, pour chaque arrêt, la liste des AUTRES arrêts situés dans un
+     * rayon de marche donné.
+     *
+     * Sert à permettre des correspondances "à pied" entre deux arrêts proches
+     * mais distincts en base (ex: un arrêt "Aller" et son équivalent "Retour"
+     * à quelques centaines de mètres, ou deux lignes qui ne se croisent pas
+     * exactement au même point d'arrêt mais dont les arrêts respectifs sont
+     * à distance de marche l'un de l'autre).
+     *
+     * Une seule requête en self-join spatial (plus efficace que d'appeler
+     * findInRadius() arrêt par arrêt).
+     *
+     * @param float $rayonMetres Rayon de marche accepté (défaut 400m)
+     * @return array [ id_arret => [ ['id', 'distance_metres'], ... ], ... ]
+     */
+    public function getVoisinsProches(float $rayonMetres = 400): array
+    {
+        $rows = $this->db->query(
+            "SELECT
+                a1.id AS id_arret,
+                a2.id AS id_voisin,
+                ST_Distance(a1.point::geography, a2.point::geography) AS distance_metres
+             FROM arret a1
+             JOIN arret a2 ON a2.id != a1.id
+             WHERE ST_DWithin(a1.point::geography, a2.point::geography, ?)
+             ORDER BY a1.id, distance_metres ASC",
+            [$rayonMetres]
+        )->getResultArray();
+
+        $voisins = [];
+        foreach ($rows as $row) {
+            $voisins[(int) $row['id_arret']][] = [
+                'id'              => (int) $row['id_voisin'],
+                'distance_metres' => (float) $row['distance_metres'],
+            ];
+        }
+
+        return $voisins;
+    }
+
+    /**
      * Retourne tous les arrêts avec leurs coordonnées pour l'affichage Leaflet.
      *
      * @return array Arrêts avec longitude, latitude, et GeoJSON
