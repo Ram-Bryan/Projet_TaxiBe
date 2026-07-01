@@ -282,6 +282,22 @@
         .status-msg.success { background: #E8F5E9; color: var(--success); display: block; }
         .status-msg.error { background: #FFEBEE; color: var(--danger); display: block; }
 
+        /* Tooltip arrêt (hover) */
+        .arret-tooltip {
+            background-color: #3E2723;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            padding: 4px 9px;
+            font-size: 0.78rem;
+            font-weight: 500;
+            white-space: nowrap;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+        }
+        .arret-tooltip::before {
+            border-top-color: #3E2723 !important;
+        }
+
         .hidden { display: none !important; }
 
     </style>
@@ -360,6 +376,26 @@
         let allArrets = []; 
         let selectedTrajetArrets = []; 
         let tempTrajetLine = null; 
+        let isTrajetEditMode = false;
+
+        function toggleTrajetEditMode() {
+            isTrajetEditMode = !isTrajetEditMode;
+            const btn = document.getElementById('btnToggleTrajetMode');
+            const ind = document.getElementById('trajetEditIndicator');
+            if(isTrajetEditMode) {
+                btn.className = 'btn-danger-sm';
+                btn.style.width = '100%';
+                btn.style.padding = '10px';
+                btn.innerText = "Désactiver le Mode Sélection";
+                ind.style.display = 'block';
+            } else {
+                btn.className = 'btn-primary';
+                btn.style.width = '100%';
+                btn.style.padding = '10px';
+                btn.innerText = "Activer le Mode Sélection d'arrêts";
+                ind.style.display = 'none';
+            }
+        }
 
         const svgPinDep = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>`;
         const svgFlagArr = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" x2="4" y1="22" y2="15"/></svg>`;
@@ -413,11 +449,18 @@
                 data.forEach(a => {
                     const marker = L.marker([parseFloat(a.latitude), parseFloat(a.longitude)], {icon: mkStop})
                         .addTo(globalArretsLayer)
-                        .bindPopup(`<b>${a.nom}</b>`);
-                    
-                    if(currentView === 'trajet') {
-                        marker.on('click', () => handleTrajetArretClick(a));
-                    }
+                        .bindTooltip(a.nom, {
+                            permanent: false,
+                            direction: 'top',
+                            offset: [0, -18],
+                            className: 'arret-tooltip'
+                        });
+
+                    marker.on('click', () => {
+                        if(currentView === 'trajet' && isTrajetEditMode) {
+                            handleTrajetArretClick(a);
+                        }
+                    });
                 });
             });
         }
@@ -500,12 +543,14 @@
                     document.getElementById('arretForm').addEventListener('submit', handleArretSubmit);
                     break;
                 case 'trajet':
+                    isTrajetEditMode = false;
                     panelTitle.innerText = "Gestion des Trajets";
                     panelBody.innerHTML = `
-                        <p style="font-size:0.8rem; color:var(--text-muted); margin-bottom:15px;">
-                            <i data-lucide="mouse-pointer-click" style="width:14px;height:14px;vertical-align:middle;"></i> 
-                            Cliquez sur les arrêts sur la carte pour définir l'ordre du trajet.
-                        </p>
+                        <button type="button" id="btnToggleTrajetMode" class="btn-primary" onclick="toggleTrajetEditMode()" style="width:100%; padding:10px; margin-bottom:15px; font-weight:600;">Activer le Mode Sélection d'arrêts</button>
+                        <div id="trajetEditIndicator" style="display:none; padding:10px; background:#e3f2fd; border:1px solid #90caf9; border-radius:6px; margin-bottom:15px; font-size:0.85rem; color:#0d47a1;">
+                            <i data-lucide="info" style="width:14px;height:14px;vertical-align:middle;"></i> 
+                            Le mode sélection est actif. Veuillez cliquer directement sur la carte pour lister les arrêts qui composent ce trajet.
+                        </div>
                         <form id="trajetForm">
                             <div class="form-group">
                                 <label>Sélectionner un Bus</label>
@@ -530,6 +575,7 @@
                         <h3 style="margin-top:20px; font-size:1rem;">Liste des Trajets</h3>
                         <ul class="data-list" id="trajetList"></ul>
                     `;
+                    lucide.createIcons();
                     loadTrajetBusSelect();
                     loadTrajetList();
                     break;
@@ -640,17 +686,50 @@
 
         function renderSelectedArrets() {
             const ul = document.getElementById('selectedArretsList');
-            if(!ul) return;
-            
-            if(selectedTrajetArrets.length === 0) {
-                ul.innerHTML = '<li style="color:#999; font-style:italic;">Aucun arrêt sélectionné</li>';
+            if (!ul) return;
+
+            // Vider la liste proprement
+            ul.innerHTML = '';
+
+            if (selectedTrajetArrets.length === 0) {
+                const emptyLi = document.createElement('li');
+                emptyLi.style.color = '#999';
+                emptyLi.style.fontStyle = 'italic';
+                emptyLi.textContent = 'Aucun arrêt sélectionné';
+                ul.appendChild(emptyLi);
                 return;
             }
-            
-            ul.innerHTML = '';
+
             selectedTrajetArrets.forEach((a, index) => {
-                ul.innerHTML += `<li style="padding:4px 0; border-bottom:1px solid #eee;"><b>${index + 1}.</b> ${a.nom}</li>`;
+                const li = document.createElement('li');
+                li.style.cssText = 'padding:5px 0; border-bottom:1px solid #eee; display:flex; justify-content:space-between; align-items:center;';
+
+                const span = document.createElement('span');
+                span.innerHTML = `<b>${index + 1}.</b> ${a.nom}`;
+
+                const btn = document.createElement('button');
+                btn.type = 'button';
+                btn.title = 'Retirer cet arrêt';
+                btn.textContent = '×';
+                btn.style.cssText = 'background:none; border:none; cursor:pointer; color:#D32F2F; font-size:1.2rem; font-weight:bold; line-height:1; padding:2px 6px; flex-shrink:0;';
+
+                // Utiliser addEventListener pour éviter les problèmes de onclick inline
+                btn.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    removeArretFromSelection(a.id);
+                });
+
+                li.appendChild(span);
+                li.appendChild(btn);
+                ul.appendChild(li);
             });
+        }
+
+        function removeArretFromSelection(arretId) {
+            // Comparer avec == pour gérer les cas string/number
+            selectedTrajetArrets = selectedTrajetArrets.filter(a => a.id != arretId);
+            renderSelectedArrets();
+            drawTempTrajetLine();
         }
 
         function drawTempTrajetLine() {

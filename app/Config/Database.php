@@ -29,7 +29,7 @@ class Database extends Config
         'hostname'   => 'localhost',
         'username'   => 'postgres',
         'password'   => '',
-        'database'   => 'taxibe',
+        'database'   => 'taxibetest',
         'schema'     => 'public',
         'DBDriver'   => 'Postgre',
         'DBPrefix'   => '',
