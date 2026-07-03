@@ -424,7 +424,7 @@
         msg.innerHTML='<span class="spinner"></span>';
         if (!navigator.geolocation){msg.textContent='Non supporté';return;}
         navigator.geolocation.getCurrentPosition(
-            pos=>{ msg.textContent=''; const ll=[pos.coords.latitude,pos.coords.longitude]; placePt(searchMode,L.latLng(ll[0],ll[1])); gMap.setView(ll,15); },
+            pos=>{ msg.textContent=''; const ll=[pos.coords.latitude,pos.coords.longitude]; placePt('dep',L.latLng(ll[0],ll[1])); gMap.setView(ll,15); },
             err=>{ msg.textContent='Erreur: '+err.message; },
             {enableHighAccuracy:true}
         );

@@ -1,62 +1,260 @@
-# CodeIgniter 4 Framework
+# TaxiBe - Système de Gestion des Trajets en Transport Public
 
-## What is CodeIgniter?
+TaxiBe est une application web complète pour la gestion et l'optimisation des trajets en bus à Bruxelles, permettant aux utilisateurs de planifier leurs itinéraires et aux administrateurs de gérer les arrêts, bus et tarifs.
 
-CodeIgniter is a PHP full-stack web framework that is light, fast, flexible and secure.
-More information can be found at the [official site](https://codeigniter.com).
+## 📋 Table des matières
 
-This repository holds the distributable version of the framework.
-It has been built from the
-[development repository](https://github.com/codeigniter4/CodeIgniter4).
+- [Fonctionnalités](#-fonctionnalités)
+- [Architecture](#-architecture)
+- [Installation](#-installation)
+- [Configuration](#-configuration)
+- [Structure du projet](#-structure-du-projet)
+- [Utilisation](#-utilisation)
+- [Base de données](#-base-de-données)
+- [Technologies](#-technologies)
 
-More information about the plans for version 4 can be found in [CodeIgniter 4](https://forum.codeigniter.com/forumdisplay.php?fid=28) on the forums.
+## ✨ Fonctionnalités
 
-You can read the [user guide](https://codeigniter.com/user_guide/)
-corresponding to the latest version of the framework.
+### Pour les utilisateurs (Frontoffice)
+- **Géolocalisation** : Localisation en temps réel de l'utilisateur
+- **Planification de trajets** : Entrée d'un lieu de départ et d'arrivée
+- **Trajets optimisés** : Affichage de plusieurs options de trajets disponibles
+- **Estimation des frais** : Calcul automatique des tarifs selon le trajet choisi
+- **Informations détaillées** : Temps d'arrivée estimé et distance du trajet
+- **Visualisation cartographique** : Affichage des trajets sur une carte interactive avec Leaflet/OSM
 
-## Important Change with index.php
+### Pour les administrateurs (Backoffice)
+- **Authentification sécurisée** : Gestion des utilisateurs avec rôles (admin/simple)
+- **Gestion des arrêts** : CRUD complet pour créer, modifier, supprimer les arrêts
+- **Gestion des trajets** : Création de trajets en sélectionnant les arrêts sur la carte
+- **Gestion des bus** : CRUD pour les véhicules disponibles
+- **Gestion des tarifs** : Configuration des frais et historique des modifications
+- **API REST** : Endpoints pour intégration avec d'autres services
 
-`index.php` is no longer in the root of the project! It has been moved inside the *public* folder,
-for better security and separation of components.
+## 🏗️ Architecture
 
-This means that you should configure your web server to "point" to your project's *public* folder, and
-not to the project root. A better practice would be to configure a virtual host to point there. A poor practice would be to point your web server to the project root and expect to enter *public/...*, as the rest of your logic and the
-framework are exposed.
+L'application suit le pattern **MVC** (Modèle-Vue-Contrôleur) fourni par CodeIgniter 4.
 
-**Please** read the user guide for a better explanation of how CI4 works!
+```
+Frontoffice (Public)
+├── MapController          # Gestion des trajets utilisateur
+└── Vues utilisateur
 
-## Repository Management
+Backoffice (Admin)
+├── AdminController        # Gestion complète
+├── AuthController         # Authentification
+└── Vues administrateur
 
-We use GitHub issues, in our main repository, to track **BUGS** and to track approved **DEVELOPMENT** work packages.
-We use our [forum](http://forum.codeigniter.com) to provide SUPPORT and to discuss
-FEATURE REQUESTS.
+API
+└── Controllers/Api/       # Endpoints REST
+```
 
-This repository is a "distribution" one, built by our release preparation script.
-Problems with it can be raised on our forum, or as issues in the main repository.
+## 🚀 Installation
 
-## Contributing
+### Prérequis
+- PHP 7.4 ou supérieur
+- PostgreSQL 12+ avec extension PostGIS
+- Composer
+- Node.js (optionnel, pour les assets front)
 
-We welcome contributions from the community.
+### Étapes
 
-Please read the [*Contributing to CodeIgniter*](https://github.com/codeigniter4/CodeIgniter4/blob/develop/CONTRIBUTING.md) section in the development repository.
+1. **Cloner le repository**
+   ```bash
+   git clone <url-repo>
+   cd Projet_TaxiBe
+   ```
 
-## Server Requirements
+2. **Installer les dépendances**
+   ```bash
+   composer install
+   ```
 
-PHP version 8.2 or higher is required, with the following extensions installed:
+3. **Configurer l'environnement**
+   ```bash
+   cp env .env
+   # Éditer .env et configurer les paramètres
+   ```
 
-- [intl](http://php.net/manual/en/intl.requirements.php)
-- [mbstring](http://php.net/manual/en/mbstring.installation.php)
+4. **Créer la base de données PostgreSQL**
+   ```bash
+   createdb taxibe
+   ```
 
-> [!WARNING]
-> - The end of life date for PHP 7.4 was November 28, 2022.
-> - The end of life date for PHP 8.0 was November 26, 2023.
-> - The end of life date for PHP 8.1 was December 31, 2025.
-> - If you are still using below PHP 8.2, you should upgrade immediately.
-> - The end of life date for PHP 8.2 will be December 31, 2026.
+5. **Adapter les identifiants dans `.env`**
+   ```
+   database.default.hostname = localhost
+   database.default.database = taxibe
+   database.default.username = postgres
+   database.default.password = <votre_mdp>
+   ```
 
-Additionally, make sure that the following extensions are enabled in your PHP:
+6. **Exécuter les migrations**
+   ```bash
+   php spark migrate
+   ```
 
-- json (enabled by default - don't turn it off)
-- [mysqlnd](http://php.net/manual/en/mysqlnd.install.php) if you plan to use MySQL
-- [libcurl](http://php.net/manual/en/curl.requirements.php) if you plan to use the HTTP\CURLRequest library
-# Projet_TaxiBe
+7. **Insérer les données de test**
+   ```bash
+   php spark db:seed TaxiBeSeeder
+   ```
+
+8. **Vérifier que l'application fonctionne**
+   ```bash
+   php spark serve
+   ```
+
+   Accédez à : `http://localhost:8080`
+
+## ⚙️ Configuration
+
+### Fichier `.env`
+
+Les paramètres importants à configurer :
+
+```env
+# Base de données
+database.default.hostname = localhost
+database.default.database = taxibe
+database.default.username = postgres
+database.default.password = votre_mot_de_passe
+
+# URL de l'application
+app.baseURL = http://localhost:8080
+
+# Mode de sécurité
+app.forceGlobalSecureRequests = false
+```
+
+## 📁 Structure du projet
+
+```
+Projet_TaxiBe/
+├── app/
+│   ├── Config/              # Fichiers de configuration
+│   ├── Controllers/         # Contrôleurs (Admin, Auth, Map, Api)
+│   ├── Models/              # Modèles (Arret, Bus, Trajet, etc.)
+│   ├── Views/               # Templates HTML/PHP
+│   ├── Filters/             # Filtres d'authentification
+│   └── Database/
+│       ├── Migrations/      # Migrations de schéma
+│       └── Seeds/           # Données de test
+├── public/
+│   └── index.php            # Point d'entrée
+├── docs/                    # Documentation
+│   ├── conception.md        # Architecture et conception
+│   └── indication.md        # Instructions d'installation
+├── writable/                # Dossiers en écriture (logs, cache)
+├── composer.json            # Dépendances PHP
+└── phpunit.xml.dist         # Configuration tests
+```
+
+## 💾 Base de données
+
+### Schéma principal
+
+**Table `utilisateur`** - Gestion des utilisateurs
+```sql
+- id (PK)
+- nom, email (UNIQUE)
+- mot_de_passe (hashé)
+- role ('admin' ou 'simple')
+```
+
+**Table `arret`** - Arrêts de bus avec géolocalisation (PostGIS)
+```sql
+- id (PK)
+- nom
+- point (GEOMETRY - latitude/longitude)
+```
+
+**Table `bus`** - Véhicules
+```sql
+- id (PK)
+- nom
+```
+
+**Table `trajet`** - Trajets de bus
+```sql
+- id (PK)
+- id_bus (FK)
+- description
+```
+
+**Table `trajet_arret`** - Liaison trajet ↔ arrêts
+```sql
+- id (PK)
+- id_trajet (FK)
+- id_arret (FK)
+- ordre (ordre des arrêts)
+```
+
+**Table `frais`** - Tarifs actuels
+```sql
+- id (PK)
+- montant
+```
+
+**Table `historique_frais`** - Historique des modifications de tarifs
+```sql
+- id (PK)
+- id_frais (FK)
+- montant
+- date_changement
+```
+
+**Table `moyen`** - Types de transport
+```sql
+- id (PK)
+- nom
+- vitesse
+```
+
+## 🎯 Utilisation
+
+### Pour un utilisateur
+1. Accéder au site public
+2. Autoriser la géolocalisation
+3. Entrer destination finale
+4. Voir les trajets disponibles avec prix et durée
+5. Sélectionner un trajet
+
+### Pour un administrateur
+1. Se connecter avec identifiants admin
+2. Accéder au backoffice
+3. Gérer arrêts, bus, trajets et tarifs
+4. Voir les statistiques d'utilisation
+
+## 🛠️ Technologies
+
+| Couche | Technologies |
+|--------|--------------|
+| **Backend** | PHP 7.4+, CodeIgniter 4 |
+| **Base de données** | PostgreSQL 12+, PostGIS (géospatial) |
+| **Frontend** | HTML5, CSS3, JavaScript (ES6+) |
+| **Cartographie** | Leaflet, OpenStreetMap (OSM) |
+| **Calcul d'itinéraires** | Leaflet Routing Machine (OSRM) |
+| **Icons UI** | Lucide (CDN) |
+| **Tests** | PHPUnit |
+
+## 📖 Documentation supplémentaire
+
+- [Conception technique](docs/conception.md)
+- [Instructions d'installation détaillées](docs/indication.md)
+
+## 👥 Contribution
+
+Pour toute contribution, veuillez :
+1. Créer une branche (`git checkout -b feature/AmazingFeature`)
+2. Commiter vos changements (`git commit -m 'Add AmazingFeature'`)
+3. Pousser la branche (`git push origin feature/AmazingFeature`)
+4. Ouvrir une Pull Request
+
+## 📝 Licence
+
+Ce projet est licencié sous la Licence MIT. Voir le fichier [LICENSE](LICENSE) pour plus de détails.
+
+---
+
+**Version** : 1.0.0  
+**Dernière mise à jour** : Juillet 2026
