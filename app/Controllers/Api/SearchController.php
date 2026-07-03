@@ -20,8 +20,12 @@ use App\Models\FraisModel;
  * lignes qui ne se croisent pas exactement au même arrêt).
  *
  * Élagage des combinaisons qui font un détour excessif par rapport à la
- * distance à vol d'oiseau. Tri par distance réelle totale (marche + bus)
- * croissante.
+ * distance à vol d'oiseau, ainsi que des combinaisons "dominées" par un
+ * autre chemin qui atteint le même arrêt avec moins de bus et/ou moins de
+ * distance (voir findCombinations). Un filtre supplémentaire élimine les
+ * correspondances redondantes (changer de bus alors que le bus initial
+ * dessert déjà la suite du trajet). Tri par distance réelle totale
+ * (marche + bus), pénalisée par le nombre de correspondances.
  */
 class SearchController extends BaseController
 {
@@ -45,6 +49,11 @@ class SearchController extends BaseController
     // Distance plancher (mètres) en dessous de laquelle on n'applique pas
     // la limite de détour, pour ne pas pénaliser les très courts trajets.
     private const DISTANCE_PLANCHER_M = 3000.0;
+
+    // Pénalité "confort" ajoutée au score de tri par correspondance
+    // (chaque changement de bus coûte du temps d'attente / de l'incertitude
+    // qui n'est pas reflété par la seule distance parcourue).
+    private const MALUS_CORRESPONDANCE_M = 600.0;
 
     public function search()
     {
@@ -144,7 +153,8 @@ class SearchController extends BaseController
             'distance_metres' => (float) $a['distance_metres'],
         ], $candidatsArrivee);
 
-        // --- BFS multi-sources / multi-destinations, avec élagage anti-détour ---
+        // --- BFS multi-sources / multi-destinations, avec élagage anti-détour
+        //     ET élagage par dominance (voir findCombinations) ---
         $combinaisons = $this->findCombinations(
             $departsCandidats,
             $arriveesCandidats,
@@ -165,12 +175,23 @@ class SearchController extends BaseController
         }
         $arretNoms = $arretModel->getNamesByIds(array_unique($allArretIds));
 
-        // --- Construction des résultats + dédoublonnage ---
+        // --- Construction des résultats + dédoublonnage + filtre anti-redondance ---
         $results = [];
         $vus = []; // signature de legs déjà vue -> index dans $results
 
         foreach ($combinaisons as $combo) {
             $nbBus = count($combo['legs']);
+
+            // NOUVEAU : si une combinaison à plusieurs bus contient une
+            // correspondance inutile (le bus précédent dessert déjà l'arrêt
+            // où le bus suivant nous dépose, ou plus loin), on l'écarte.
+            // Cela élimine les cas "3 bus alors que 2 (ou 1) suffisaient"
+            // qui ont échappé à l'élagage par dominance du BFS (ex: deux
+            // lignes différentes qui empruntent le même axe).
+            if ($nbBus > 1 && $this->aCorrespondanceRedondante($combo['legs'], $trajetIndex)) {
+                continue;
+            }
+
             $prix = $nbBus * $prixParTrajet;
 
             $distanceTotale = $combo['marche_depart']
@@ -231,11 +252,17 @@ class SearchController extends BaseController
             }
         }
 
-        // Tri : d'abord par distance réelle totale (évite les détours /
-        // trajets trop longs), puis par prix, puis par nombre de bus.
+        // Tri : par score = distance réelle totale + pénalité par
+        // correspondance (voir MALUS_CORRESPONDANCE_M), puis par prix, puis
+        // par nombre de bus. Le malus évite qu'une combinaison à 3 bus ne
+        // passe devant une combinaison à 2 bus pour un gain de distance
+        // négligeable.
         usort($results, function ($a, $b) {
-            if ($a['distance_totale_m'] !== $b['distance_totale_m']) {
-                return $a['distance_totale_m'] <=> $b['distance_totale_m'];
+            $scoreA = $a['distance_totale_m'] + (($a['nb_bus'] - 1) * self::MALUS_CORRESPONDANCE_M);
+            $scoreB = $b['distance_totale_m'] + (($b['nb_bus'] - 1) * self::MALUS_CORRESPONDANCE_M);
+
+            if ($scoreA !== $scoreB) {
+                return $scoreA <=> $scoreB;
             }
             if ($a['prix_total'] !== $b['prix_total']) {
                 return $a['prix_total'] <=> $b['prix_total'];
@@ -261,8 +288,17 @@ class SearchController extends BaseController
 
     /**
      * Trouve toutes les combinaisons de trajets (BFS multi-sources /
-     * multi-destinations, max $maxBus bus), en élaguant les branches dont la
-     * distance parcourue dépasse $maxDistanceAutorisee.
+     * multi-destinations, max $maxBus bus), en élaguant :
+     *
+     *  1) les branches dont la distance parcourue dépasse
+     *     $maxDistanceAutorisee (anti-détour, inchangé) ;
+     *  2) les branches "dominées" : si un arrêt a déjà été atteint par un
+     *     autre chemin avec un nombre de bus inférieur ou égal ET une
+     *     distance inférieure ou égale, il est inutile de continuer à
+     *     explorer le chemin courant depuis cet arrêt (élagage par
+     *     dominance — NOUVEAU). C'est ce qui empêche l'algorithme de
+     *     proposer 3 bus quand 2 suffisent déjà pour atteindre le même
+     *     arrêt de façon au moins aussi bonne.
      *
      * À chaque étape, la correspondance est possible non seulement à l'arrêt
      * exact où le bus précédent dépose le passager, mais aussi à tout arrêt
@@ -292,6 +328,11 @@ class SearchController extends BaseController
         $arriveeIds = array_column($arriveesCandidats, 'id_arret');
         $arriveeMarche = array_column($arriveesCandidats, 'distance_metres', 'id_arret');
 
+        // NOUVEAU : meilleur état connu pour chaque arrêt intermédiaire
+        // atteint pendant le BFS. Clé = id_arret, valeur = ['legs' => n,
+        // 'distance' => mètres]. Sert à l'élagage par dominance ci-dessous.
+        $bestState = [];
+
         // File BFS initialisée avec TOUS les arrêts candidats de départ
         $queue = [];
         foreach ($departsCandidats as $dep) {
@@ -314,16 +355,38 @@ class SearchController extends BaseController
             }
 
             $currentArret = $state['current_arret'];
+            $nbLegsActuel = count($state['legs']);
 
             // -----------------------------------------------------------------
-// Détermination des points d'embarquement.
-//
-// Au départ du trajet (aucun bus encore pris), on ne doit utiliser
-// QUE l'arrêt candidat trouvé depuis la position GPS.
-//
-// Les arrêts voisins ne sont autorisés qu'après avoir déjà pris un
-// premier bus, c'est-à-dire uniquement pour les correspondances.
-// -----------------------------------------------------------------
+            // Élagage par dominance (NOUVEAU).
+            //
+            // Si on a déjà découvert un chemin qui atteint $currentArret avec
+            // un nombre de bus inférieur ou égal ET une distance de bus
+            // inférieure ou égale à l'état courant, alors continuer à
+            // explorer depuis l'état courant ne peut produire que des
+            // combinaisons dominées (au moins aussi longues, avec au moins
+            // autant de correspondances). On coupe la branche.
+            //
+            // On ne fait cette vérification que pour les arrêts intermédiaires
+            // (nbLegsActuel > 0) : les arrêts candidats de départ initiaux
+            // doivent tous être explorés au moins une fois.
+            // -----------------------------------------------------------------
+            if ($nbLegsActuel > 0 && isset($bestState[$currentArret])) {
+                $best = $bestState[$currentArret];
+                if ($best['legs'] <= $nbLegsActuel && $best['distance'] <= $state['distance_bus']) {
+                    continue;
+                }
+            }
+
+            // -----------------------------------------------------------------
+            // Détermination des points d'embarquement.
+            //
+            // Au départ du trajet (aucun bus encore pris), on ne doit utiliser
+            // QUE l'arrêt candidat trouvé depuis la position GPS.
+            //
+            // Les arrêts voisins ne sont autorisés qu'après avoir déjà pris un
+            // premier bus, c'est-à-dire uniquement pour les correspondances.
+            // -----------------------------------------------------------------
             $pointsEmbarquement = [
                 [
                     'id' => $currentArret,
@@ -405,15 +468,36 @@ class SearchController extends BaseController
                         }
 
                         if (count($newLegs) < $maxBus) {
-                            $queue[] = [
-                                'current_arret' => $arretId,
-                                'legs' => $newLegs,
-                                'correspondances' => $newCorrespondances,
-                                'used_trajets' => $newUsedTrajets,
-                                'marche_depart' => $state['marche_depart'],
-                                'marche_correspondances' => $newMarcheCorrespondances,
-                                'distance_bus' => $nouvelleDistanceBus,
-                            ];
+                            $nouveauNbLegs = count($newLegs);
+
+                            // NOUVEAU : on n'enqueue cet état que s'il
+                            // améliore (ou égale, la première fois) le
+                            // meilleur état connu pour cet arrêt. Sinon la
+                            // branche est déjà dominée et n'a pas besoin
+                            // d'être explorée davantage.
+                            $ameliore = !isset($bestState[$arretId])
+                                || $bestState[$arretId]['legs'] > $nouveauNbLegs
+                                || (
+                                    $bestState[$arretId]['legs'] === $nouveauNbLegs
+                                    && $bestState[$arretId]['distance'] > $nouvelleDistanceBus
+                                );
+
+                            if ($ameliore) {
+                                $bestState[$arretId] = [
+                                    'legs' => $nouveauNbLegs,
+                                    'distance' => $nouvelleDistanceBus,
+                                ];
+
+                                $queue[] = [
+                                    'current_arret' => $arretId,
+                                    'legs' => $newLegs,
+                                    'correspondances' => $newCorrespondances,
+                                    'used_trajets' => $newUsedTrajets,
+                                    'marche_depart' => $state['marche_depart'],
+                                    'marche_correspondances' => $newMarcheCorrespondances,
+                                    'distance_bus' => $nouvelleDistanceBus,
+                                ];
+                            }
                         }
                     }
                 }
@@ -497,6 +581,58 @@ class SearchController extends BaseController
         }
 
         return $filtres;
+    }
+
+    /**
+     * NOUVEAU : détecte une correspondance redondante dans une combinaison.
+     *
+     * Une correspondance est redondante si un bus pris tôt dans le trajet
+     * dessert déjà (plus loin sur sa propre ligne, après le point où on en
+     * descend) un arrêt où un bus suivant nous emmène. Concrètement : on
+     * aurait pu rester dans le premier bus au lieu de changer.
+     *
+     * Cas typique visé : deux lignes différentes empruntent le même axe sur
+     * une portion du trajet ; le BFS trouve un chemin qui change de bus au
+     * milieu de cet axe commun alors que le premier bus continuait déjà
+     * jusqu'à (ou au-delà de) la destination du second.
+     *
+     * @param array $legs        Les legs de la combinaison, dans l'ordre
+     * @param array $trajetIndex Index [trajet_id => trajet complet (avec arrêts triés par ordre)]
+     */
+    private function aCorrespondanceRedondante(array $legs, array $trajetIndex): bool
+    {
+        foreach ($legs as $i => $legI) {
+            $trajetI = $trajetIndex[$legI['id']] ?? null;
+            if ($trajetI === null) {
+                continue;
+            }
+
+            // Tous les arrêts que le bus i dessert encore après le point
+            // où on en descend dans cette combinaison (ordre > ordre_to).
+            $idsApres = [];
+            foreach ($trajetI['arrets'] as $a) {
+                if ((int) $a['ordre'] > $legI['ordre_to']) {
+                    $idsApres[(int) $a['id_arret']] = true;
+                }
+            }
+
+            if (empty($idsApres)) {
+                continue;
+            }
+
+            foreach ($legs as $j => $legJ) {
+                if ($j <= $i) {
+                    continue;
+                }
+                // Le bus i desservait déjà l'arrêt où le bus j (ultérieur)
+                // nous dépose : la correspondance entre i et j était inutile.
+                if (isset($idsApres[(int) $legJ['to_arret']])) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
     }
 
     // =========================================================================

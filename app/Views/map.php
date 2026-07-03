@@ -419,16 +419,87 @@
     }
 
     // ===== GEOLOC =====
-    function doGeoloc() {
-        const msg=document.getElementById('posMsg');
-        msg.innerHTML='<span class="spinner"></span>';
-        if (!navigator.geolocation){msg.textContent='Non supporté';return;}
-        navigator.geolocation.getCurrentPosition(
-            pos=>{ msg.textContent=''; const ll=[pos.coords.latitude,pos.coords.longitude]; placePt(searchMode,L.latLng(ll[0],ll[1])); gMap.setView(ll,15); },
-            err=>{ msg.textContent='Erreur: '+err.message; },
-            {enableHighAccuracy:true}
-        );
+    let accuracyCircle = null;
+
+function doGeoloc() {
+    const msg = document.getElementById("posMsg");
+    const geoBtn = document.querySelector('.geo-btn');
+
+    if (!navigator.geolocation) {
+        msg.textContent = "La géolocalisation n'est pas supportée par votre navigateur.";
+        return;
     }
+
+    msg.innerHTML = '<span class="spinner"></span> Localisation en cours...';
+    geoBtn.disabled = true;
+
+    // Un seul appel suffit en WiFi : les fixes successifs n'améliorent
+    // quasiment jamais la précision, contrairement au GPS.
+    navigator.geolocation.getCurrentPosition(
+        (position) => {
+            geoBtn.disabled = false;
+            const { latitude: lat, longitude: lng, accuracy } = position.coords;
+            const acc = Math.round(accuracy);
+
+            msg.textContent = accuracyMessage(acc);
+
+            const ll = L.latLng(lat, lng);
+            placePt(searchMode, ll);
+            showAccuracyCircle(ll, accuracy);
+            gMap.setView(ll, accuracyToZoom(accuracy));
+        },
+        (err) => {
+            geoBtn.disabled = false;
+            handleGeoError(err, msg);
+        },
+        {
+            enableHighAccuracy: true, // sans effet réel en WiFi pur, mais inoffensif
+            timeout: 15000,           // un peu plus large : le lookup WiFi peut être lent en zone peu cartographiée
+            maximumAge: 0         // réutilise un fix récent (< 1 min) au lieu de relancer une requête à chaque clic
+        }
+    );
+}
+
+function accuracyMessage(acc) {
+    if (acc <= 30)  return `Position trouvée (±${acc} m) — bonne précision`;
+    if (acc <= 150) return `Position trouvée (±${acc} m) — précision WiFi standard`;
+    return `Position approximative (±${acc} m) — ajustez si besoin en cliquant sur la carte`;
+}
+
+function accuracyToZoom(acc) {
+    if (acc <= 30)   return 17;
+    if (acc <= 100)  return 16;
+    if (acc <= 300)  return 15;
+    if (acc <= 1000) return 13;
+    return 11;
+}
+
+function showAccuracyCircle(latlng, accuracy) {
+    if (accuracyCircle) gMap.removeLayer(accuracyCircle);
+    accuracyCircle = L.circle(latlng, {
+        radius: accuracy,
+        color: '#1565C0',
+        fillColor: '#1565C0',
+        fillOpacity: 0.08,
+        weight: 1
+    }).addTo(gMap);
+}
+
+function handleGeoError(err, msg) {
+    switch (err.code) {
+        case err.PERMISSION_DENIED:
+            msg.textContent = "Localisation refusée. Autorisez l'accès dans les paramètres du site (icône 🔒 à côté de l'URL).";
+            break;
+        case err.POSITION_UNAVAILABLE:
+            msg.textContent = "Position indisponible (WiFi/réseau insuffisant). Cliquez directement sur la carte.";
+            break;
+        case err.TIMEOUT:
+            msg.textContent = "Délai dépassé. Réessayez ou cliquez directement sur la carte.";
+            break;
+        default:
+            msg.textContent = "Erreur de géolocalisation. Cliquez directement sur la carte.";
+    }
+}
 
     // ===== SEARCH =====
     function doSearch() {

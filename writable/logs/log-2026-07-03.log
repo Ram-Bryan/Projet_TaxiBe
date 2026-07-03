@@ -1,0 +1,24 @@
+CRITICAL - 2026-07-03 06:06:59 --> ErrorException: Undefined variable $newLegs
+[Method: POST, Route: api/search]
+in APPPATH/Controllers/Api/SearchController.php on line 335.
+ 1 APPPATH/Controllers/Api/SearchController.php(335): CodeIgniter\Debug\Exceptions->errorHandler()
+ 2 APPPATH/Controllers/Api/SearchController.php(148): App\Controllers\Api\SearchController->findCombinations()
+ 3 SYSTEMPATH/CodeIgniter.php(951): App\Controllers\Api\SearchController->search()
+ 4 SYSTEMPATH/CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController()
+ 5 SYSTEMPATH/CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest()
+ 6 SYSTEMPATH/Boot.php(417): CodeIgniter\CodeIgniter->run()
+ 7 SYSTEMPATH/Boot.php(68): CodeIgniter\Boot::runCodeIgniter()
+ 8 FCPATH/index.php(59): CodeIgniter\Boot::bootWeb()
+ 9 SYSTEMPATH/rewrite.php(44): require_once('/home/itu/Documents/S4/SIG/projet/Projet_TaxiBe/public/index.php')
+CRITICAL - 2026-07-03 06:07:03 --> ErrorException: Undefined variable $newLegs
+[Method: POST, Route: api/search]
+in APPPATH/Controllers/Api/SearchController.php on line 335.
+ 1 APPPATH/Controllers/Api/SearchController.php(335): CodeIgniter\Debug\Exceptions->errorHandler()
+ 2 APPPATH/Controllers/Api/SearchController.php(148): App\Controllers\Api\SearchController->findCombinations()
+ 3 SYSTEMPATH/CodeIgniter.php(951): App\Controllers\Api\SearchController->search()
+ 4 SYSTEMPATH/CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController()
+ 5 SYSTEMPATH/CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest()
+ 6 SYSTEMPATH/Boot.php(417): CodeIgniter\CodeIgniter->run()
+ 7 SYSTEMPATH/Boot.php(68): CodeIgniter\Boot::runCodeIgniter()
+ 8 FCPATH/index.php(59): CodeIgniter\Boot::bootWeb()
+ 9 SYSTEMPATH/rewrite.php(44): require_once('/home/itu/Documents/S4/SIG/projet/Projet_TaxiBe/public/index.php')
