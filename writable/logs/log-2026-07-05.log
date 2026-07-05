@@ -1,0 +1,587 @@
+DEBUG - 2026-07-05 14:00:42 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-07-05 14:00:43 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-07-05 14:01:08 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-07-05 14:01:08 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+ERROR - 2026-07-05 14:02:10 --> pg_query(): Query failed: ERROR:  duplicate key value violates unique constraint &quot;arret_pkey&quot;
+DETAIL:  Key (id)=(2) already exists.
+in SYSTEMPATH\Database\Postgre\Connection.php on line 200.
+ 1 SYSTEMPATH\Database\BaseConnection.php(910): CodeIgniter\Database\Postgre\Connection->execute('INSERT INTO arret (nom, point)
+             VALUES (\'Test2\', ST_SetSRID(ST_MakePoint(47.508831, -18.973669), 4326))
+             RETURNING id')
+ 2 SYSTEMPATH\Database\BaseConnection.php(827): CodeIgniter\Database\BaseConnection->simpleQuery('INSERT INTO arret (nom, point)
+             VALUES (\'Test2\', ST_SetSRID(ST_MakePoint(47.508831, -18.973669), 4326))
+             RETURNING id')
+ 3 APPPATH\Models\ArretModel.php(55): CodeIgniter\Database\BaseConnection->query('INSERT INTO arret (nom, point)
+             VALUES (?, ST_SetSRID(ST_MakePoint(?, ?), 4326))
+             RETURNING id', [...])
+ 4 APPPATH\Controllers\Api\ArretController.php(26): App\Models\ArretModel->insertWithPoint('Test2', -18.973669, 47.508831)
+ 5 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\Api\ArretController->create()
+ 6 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Api\ArretController))
+ 7 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 8 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+ 9 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+10 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+11 SYSTEMPATH\rewrite.php(44): require_once('E:\\Dossier_Bryan\\ITU\\S4\\SIG\\PROJET\\Projet_TaxiBe\\public\\index.php')
+CRITICAL - 2026-07-05 14:02:10 --> CodeIgniter\Database\Exceptions\DatabaseException: pg_query(): Query failed: ERROR:  duplicate key value violates unique constraint &quot;arret_pkey&quot;
+DETAIL:  Key (id)=(2) already exists.
+[Method: POST, Route: api/arrets]
+in SYSTEMPATH\Database\BaseConnection.php on line 865.
+ 1 APPPATH\Models\ArretModel.php(55): CodeIgniter\Database\BaseConnection->query('INSERT INTO arret (nom, point)
+             VALUES (?, ST_SetSRID(ST_MakePoint(?, ?), 4326))
+             RETURNING id', [...])
+ 2 APPPATH\Controllers\Api\ArretController.php(26): App\Models\ArretModel->insertWithPoint('Test2', -18.973669, 47.508831)
+ 3 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\Api\ArretController->create()
+ 4 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Api\ArretController))
+ 5 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 6 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+ 7 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 8 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+ 9 SYSTEMPATH\rewrite.php(44): require_once('E:\\Dossier_Bryan\\ITU\\S4\\SIG\\PROJET\\Projet_TaxiBe\\public\\index.php')
+CRITICAL - 2026-07-05 14:02:10 --> [Caused by] CodeIgniter\Database\Exceptions\DatabaseException: pg_query(): Query failed: ERROR:  duplicate key value violates unique constraint &quot;arret_pkey&quot;
+DETAIL:  Key (id)=(2) already exists.
+in SYSTEMPATH\Database\Postgre\Connection.php on line 212.
+ 1 SYSTEMPATH\Database\BaseConnection.php(910): CodeIgniter\Database\Postgre\Connection->execute('INSERT INTO arret (nom, point)
+             VALUES (\'Test2\', ST_SetSRID(ST_MakePoint(47.508831, -18.973669), 4326))
+             RETURNING id')
+ 2 SYSTEMPATH\Database\BaseConnection.php(827): CodeIgniter\Database\BaseConnection->simpleQuery('INSERT INTO arret (nom, point)
+             VALUES (\'Test2\', ST_SetSRID(ST_MakePoint(47.508831, -18.973669), 4326))
+             RETURNING id')
+ 3 APPPATH\Models\ArretModel.php(55): CodeIgniter\Database\BaseConnection->query('INSERT INTO arret (nom, point)
+             VALUES (?, ST_SetSRID(ST_MakePoint(?, ?), 4326))
+             RETURNING id', [...])
+ 4 APPPATH\Controllers\Api\ArretController.php(26): App\Models\ArretModel->insertWithPoint('Test2', -18.973669, 47.508831)
+ 5 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\Api\ArretController->create()
+ 6 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Api\ArretController))
+ 7 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 8 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+ 9 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+10 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+11 SYSTEMPATH\rewrite.php(44): require_once('E:\\Dossier_Bryan\\ITU\\S4\\SIG\\PROJET\\Projet_TaxiBe\\public\\index.php')
+CRITICAL - 2026-07-05 14:02:10 --> [Caused by] ErrorException: pg_query(): Query failed: ERROR:  duplicate key value violates unique constraint &quot;arret_pkey&quot;
+DETAIL:  Key (id)=(2) already exists.
+in SYSTEMPATH\Database\Postgre\Connection.php on line 200.
+ 1 [internal function]: CodeIgniter\Debug\Exceptions->errorHandler(2, 'pg_query(): Query failed: ERROR:  duplicate key value violates unique constraint &quot;arret_pkey&quot;
+DETAIL:  Key (id)=(2) already exists.', 'E:\\Dossier_Bryan\\ITU\\S4\\SIG\\PROJET\\Projet_TaxiBe\\system\\Database\\Postgre\\Connection.php', 200)
+ 2 SYSTEMPATH\Database\Postgre\Connection.php(200): pg_query(Object(PgSql\Connection), 'INSERT INTO arret (nom, point)
+             VALUES (\'Test2\', ST_SetSRID(ST_MakePoint(47.508831, -18.973669), 4326))
+             RETURNING id')
+ 3 SYSTEMPATH\Database\BaseConnection.php(910): CodeIgniter\Database\Postgre\Connection->execute('INSERT INTO arret (nom, point)
+             VALUES (\'Test2\', ST_SetSRID(ST_MakePoint(47.508831, -18.973669), 4326))
+             RETURNING id')
+ 4 SYSTEMPATH\Database\BaseConnection.php(827): CodeIgniter\Database\BaseConnection->simpleQuery('INSERT INTO arret (nom, point)
+             VALUES (\'Test2\', ST_SetSRID(ST_MakePoint(47.508831, -18.973669), 4326))
+             RETURNING id')
+ 5 APPPATH\Models\ArretModel.php(55): CodeIgniter\Database\BaseConnection->query('INSERT INTO arret (nom, point)
+             VALUES (?, ST_SetSRID(ST_MakePoint(?, ?), 4326))
+             RETURNING id', [...])
+ 6 APPPATH\Controllers\Api\ArretController.php(26): App\Models\ArretModel->insertWithPoint('Test2', -18.973669, 47.508831)
+ 7 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\Api\ArretController->create()
+ 8 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Api\ArretController))
+ 9 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+10 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+11 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+12 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+13 SYSTEMPATH\rewrite.php(44): require_once('E:\\Dossier_Bryan\\ITU\\S4\\SIG\\PROJET\\Projet_TaxiBe\\public\\index.php')
+ERROR - 2026-07-05 14:02:16 --> pg_query(): Query failed: ERROR:  duplicate key value violates unique constraint &quot;arret_pkey&quot;
+DETAIL:  Key (id)=(3) already exists.
+in SYSTEMPATH\Database\Postgre\Connection.php on line 200.
+ 1 SYSTEMPATH\Database\BaseConnection.php(910): CodeIgniter\Database\Postgre\Connection->execute('INSERT INTO arret (nom, point)
+             VALUES (\'Test2\', ST_SetSRID(ST_MakePoint(47.508831, -18.973669), 4326))
+             RETURNING id')
+ 2 SYSTEMPATH\Database\BaseConnection.php(827): CodeIgniter\Database\BaseConnection->simpleQuery('INSERT INTO arret (nom, point)
+             VALUES (\'Test2\', ST_SetSRID(ST_MakePoint(47.508831, -18.973669), 4326))
+             RETURNING id')
+ 3 APPPATH\Models\ArretModel.php(55): CodeIgniter\Database\BaseConnection->query('INSERT INTO arret (nom, point)
+             VALUES (?, ST_SetSRID(ST_MakePoint(?, ?), 4326))
+             RETURNING id', [...])
+ 4 APPPATH\Controllers\Api\ArretController.php(26): App\Models\ArretModel->insertWithPoint('Test2', -18.973669, 47.508831)
+ 5 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\Api\ArretController->create()
+ 6 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Api\ArretController))
+ 7 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 8 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+ 9 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+10 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+11 SYSTEMPATH\rewrite.php(44): require_once('E:\\Dossier_Bryan\\ITU\\S4\\SIG\\PROJET\\Projet_TaxiBe\\public\\index.php')
+CRITICAL - 2026-07-05 14:02:16 --> CodeIgniter\Database\Exceptions\DatabaseException: pg_query(): Query failed: ERROR:  duplicate key value violates unique constraint &quot;arret_pkey&quot;
+DETAIL:  Key (id)=(3) already exists.
+[Method: POST, Route: api/arrets]
+in SYSTEMPATH\Database\BaseConnection.php on line 865.
+ 1 APPPATH\Models\ArretModel.php(55): CodeIgniter\Database\BaseConnection->query('INSERT INTO arret (nom, point)
+             VALUES (?, ST_SetSRID(ST_MakePoint(?, ?), 4326))
+             RETURNING id', [...])
+ 2 APPPATH\Controllers\Api\ArretController.php(26): App\Models\ArretModel->insertWithPoint('Test2', -18.973669, 47.508831)
+ 3 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\Api\ArretController->create()
+ 4 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Api\ArretController))
+ 5 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 6 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+ 7 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 8 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+ 9 SYSTEMPATH\rewrite.php(44): require_once('E:\\Dossier_Bryan\\ITU\\S4\\SIG\\PROJET\\Projet_TaxiBe\\public\\index.php')
+CRITICAL - 2026-07-05 14:02:16 --> [Caused by] CodeIgniter\Database\Exceptions\DatabaseException: pg_query(): Query failed: ERROR:  duplicate key value violates unique constraint &quot;arret_pkey&quot;
+DETAIL:  Key (id)=(3) already exists.
+in SYSTEMPATH\Database\Postgre\Connection.php on line 212.
+ 1 SYSTEMPATH\Database\BaseConnection.php(910): CodeIgniter\Database\Postgre\Connection->execute('INSERT INTO arret (nom, point)
+             VALUES (\'Test2\', ST_SetSRID(ST_MakePoint(47.508831, -18.973669), 4326))
+             RETURNING id')
+ 2 SYSTEMPATH\Database\BaseConnection.php(827): CodeIgniter\Database\BaseConnection->simpleQuery('INSERT INTO arret (nom, point)
+             VALUES (\'Test2\', ST_SetSRID(ST_MakePoint(47.508831, -18.973669), 4326))
+             RETURNING id')
+ 3 APPPATH\Models\ArretModel.php(55): CodeIgniter\Database\BaseConnection->query('INSERT INTO arret (nom, point)
+             VALUES (?, ST_SetSRID(ST_MakePoint(?, ?), 4326))
+             RETURNING id', [...])
+ 4 APPPATH\Controllers\Api\ArretController.php(26): App\Models\ArretModel->insertWithPoint('Test2', -18.973669, 47.508831)
+ 5 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\Api\ArretController->create()
+ 6 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Api\ArretController))
+ 7 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 8 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+ 9 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+10 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+11 SYSTEMPATH\rewrite.php(44): require_once('E:\\Dossier_Bryan\\ITU\\S4\\SIG\\PROJET\\Projet_TaxiBe\\public\\index.php')
+CRITICAL - 2026-07-05 14:02:16 --> [Caused by] ErrorException: pg_query(): Query failed: ERROR:  duplicate key value violates unique constraint &quot;arret_pkey&quot;
+DETAIL:  Key (id)=(3) already exists.
+in SYSTEMPATH\Database\Postgre\Connection.php on line 200.
+ 1 [internal function]: CodeIgniter\Debug\Exceptions->errorHandler(2, 'pg_query(): Query failed: ERROR:  duplicate key value violates unique constraint &quot;arret_pkey&quot;
+DETAIL:  Key (id)=(3) already exists.', 'E:\\Dossier_Bryan\\ITU\\S4\\SIG\\PROJET\\Projet_TaxiBe\\system\\Database\\Postgre\\Connection.php', 200)
+ 2 SYSTEMPATH\Database\Postgre\Connection.php(200): pg_query(Object(PgSql\Connection), 'INSERT INTO arret (nom, point)
+             VALUES (\'Test2\', ST_SetSRID(ST_MakePoint(47.508831, -18.973669), 4326))
+             RETURNING id')
+ 3 SYSTEMPATH\Database\BaseConnection.php(910): CodeIgniter\Database\Postgre\Connection->execute('INSERT INTO arret (nom, point)
+             VALUES (\'Test2\', ST_SetSRID(ST_MakePoint(47.508831, -18.973669), 4326))
+             RETURNING id')
+ 4 SYSTEMPATH\Database\BaseConnection.php(827): CodeIgniter\Database\BaseConnection->simpleQuery('INSERT INTO arret (nom, point)
+             VALUES (\'Test2\', ST_SetSRID(ST_MakePoint(47.508831, -18.973669), 4326))
+             RETURNING id')
+ 5 APPPATH\Models\ArretModel.php(55): CodeIgniter\Database\BaseConnection->query('INSERT INTO arret (nom, point)
+             VALUES (?, ST_SetSRID(ST_MakePoint(?, ?), 4326))
+             RETURNING id', [...])
+ 6 APPPATH\Controllers\Api\ArretController.php(26): App\Models\ArretModel->insertWithPoint('Test2', -18.973669, 47.508831)
+ 7 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\Api\ArretController->create()
+ 8 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Api\ArretController))
+ 9 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+10 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+11 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+12 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+13 SYSTEMPATH\rewrite.php(44): require_once('E:\\Dossier_Bryan\\ITU\\S4\\SIG\\PROJET\\Projet_TaxiBe\\public\\index.php')
+ERROR - 2026-07-05 14:02:27 --> pg_query(): Query failed: ERROR:  duplicate key value violates unique constraint &quot;arret_pkey&quot;
+DETAIL:  Key (id)=(4) already exists.
+in SYSTEMPATH\Database\Postgre\Connection.php on line 200.
+ 1 SYSTEMPATH\Database\BaseConnection.php(910): CodeIgniter\Database\Postgre\Connection->execute('INSERT INTO arret (nom, point)
+             VALUES (\'Test2\', ST_SetSRID(ST_MakePoint(47.507544, -18.977484), 4326))
+             RETURNING id')
+ 2 SYSTEMPATH\Database\BaseConnection.php(827): CodeIgniter\Database\BaseConnection->simpleQuery('INSERT INTO arret (nom, point)
+             VALUES (\'Test2\', ST_SetSRID(ST_MakePoint(47.507544, -18.977484), 4326))
+             RETURNING id')
+ 3 APPPATH\Models\ArretModel.php(55): CodeIgniter\Database\BaseConnection->query('INSERT INTO arret (nom, point)
+             VALUES (?, ST_SetSRID(ST_MakePoint(?, ?), 4326))
+             RETURNING id', [...])
+ 4 APPPATH\Controllers\Api\ArretController.php(26): App\Models\ArretModel->insertWithPoint('Test2', -18.977484, 47.507544)
+ 5 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\Api\ArretController->create()
+ 6 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Api\ArretController))
+ 7 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 8 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+ 9 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+10 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+11 SYSTEMPATH\rewrite.php(44): require_once('E:\\Dossier_Bryan\\ITU\\S4\\SIG\\PROJET\\Projet_TaxiBe\\public\\index.php')
+CRITICAL - 2026-07-05 14:02:27 --> CodeIgniter\Database\Exceptions\DatabaseException: pg_query(): Query failed: ERROR:  duplicate key value violates unique constraint &quot;arret_pkey&quot;
+DETAIL:  Key (id)=(4) already exists.
+[Method: POST, Route: api/arrets]
+in SYSTEMPATH\Database\BaseConnection.php on line 865.
+ 1 APPPATH\Models\ArretModel.php(55): CodeIgniter\Database\BaseConnection->query('INSERT INTO arret (nom, point)
+             VALUES (?, ST_SetSRID(ST_MakePoint(?, ?), 4326))
+             RETURNING id', [...])
+ 2 APPPATH\Controllers\Api\ArretController.php(26): App\Models\ArretModel->insertWithPoint('Test2', -18.977484, 47.507544)
+ 3 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\Api\ArretController->create()
+ 4 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Api\ArretController))
+ 5 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 6 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+ 7 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 8 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+ 9 SYSTEMPATH\rewrite.php(44): require_once('E:\\Dossier_Bryan\\ITU\\S4\\SIG\\PROJET\\Projet_TaxiBe\\public\\index.php')
+CRITICAL - 2026-07-05 14:02:27 --> [Caused by] CodeIgniter\Database\Exceptions\DatabaseException: pg_query(): Query failed: ERROR:  duplicate key value violates unique constraint &quot;arret_pkey&quot;
+DETAIL:  Key (id)=(4) already exists.
+in SYSTEMPATH\Database\Postgre\Connection.php on line 212.
+ 1 SYSTEMPATH\Database\BaseConnection.php(910): CodeIgniter\Database\Postgre\Connection->execute('INSERT INTO arret (nom, point)
+             VALUES (\'Test2\', ST_SetSRID(ST_MakePoint(47.507544, -18.977484), 4326))
+             RETURNING id')
+ 2 SYSTEMPATH\Database\BaseConnection.php(827): CodeIgniter\Database\BaseConnection->simpleQuery('INSERT INTO arret (nom, point)
+             VALUES (\'Test2\', ST_SetSRID(ST_MakePoint(47.507544, -18.977484), 4326))
+             RETURNING id')
+ 3 APPPATH\Models\ArretModel.php(55): CodeIgniter\Database\BaseConnection->query('INSERT INTO arret (nom, point)
+             VALUES (?, ST_SetSRID(ST_MakePoint(?, ?), 4326))
+             RETURNING id', [...])
+ 4 APPPATH\Controllers\Api\ArretController.php(26): App\Models\ArretModel->insertWithPoint('Test2', -18.977484, 47.507544)
+ 5 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\Api\ArretController->create()
+ 6 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Api\ArretController))
+ 7 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 8 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+ 9 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+10 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+11 SYSTEMPATH\rewrite.php(44): require_once('E:\\Dossier_Bryan\\ITU\\S4\\SIG\\PROJET\\Projet_TaxiBe\\public\\index.php')
+CRITICAL - 2026-07-05 14:02:27 --> [Caused by] ErrorException: pg_query(): Query failed: ERROR:  duplicate key value violates unique constraint &quot;arret_pkey&quot;
+DETAIL:  Key (id)=(4) already exists.
+in SYSTEMPATH\Database\Postgre\Connection.php on line 200.
+ 1 [internal function]: CodeIgniter\Debug\Exceptions->errorHandler(2, 'pg_query(): Query failed: ERROR:  duplicate key value violates unique constraint &quot;arret_pkey&quot;
+DETAIL:  Key (id)=(4) already exists.', 'E:\\Dossier_Bryan\\ITU\\S4\\SIG\\PROJET\\Projet_TaxiBe\\system\\Database\\Postgre\\Connection.php', 200)
+ 2 SYSTEMPATH\Database\Postgre\Connection.php(200): pg_query(Object(PgSql\Connection), 'INSERT INTO arret (nom, point)
+             VALUES (\'Test2\', ST_SetSRID(ST_MakePoint(47.507544, -18.977484), 4326))
+             RETURNING id')
+ 3 SYSTEMPATH\Database\BaseConnection.php(910): CodeIgniter\Database\Postgre\Connection->execute('INSERT INTO arret (nom, point)
+             VALUES (\'Test2\', ST_SetSRID(ST_MakePoint(47.507544, -18.977484), 4326))
+             RETURNING id')
+ 4 SYSTEMPATH\Database\BaseConnection.php(827): CodeIgniter\Database\BaseConnection->simpleQuery('INSERT INTO arret (nom, point)
+             VALUES (\'Test2\', ST_SetSRID(ST_MakePoint(47.507544, -18.977484), 4326))
+             RETURNING id')
+ 5 APPPATH\Models\ArretModel.php(55): CodeIgniter\Database\BaseConnection->query('INSERT INTO arret (nom, point)
+             VALUES (?, ST_SetSRID(ST_MakePoint(?, ?), 4326))
+             RETURNING id', [...])
+ 6 APPPATH\Controllers\Api\ArretController.php(26): App\Models\ArretModel->insertWithPoint('Test2', -18.977484, 47.507544)
+ 7 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\Api\ArretController->create()
+ 8 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Api\ArretController))
+ 9 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+10 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+11 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+12 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+13 SYSTEMPATH\rewrite.php(44): require_once('E:\\Dossier_Bryan\\ITU\\S4\\SIG\\PROJET\\Projet_TaxiBe\\public\\index.php')
+ERROR - 2026-07-05 14:02:43 --> pg_query(): Query failed: ERROR:  duplicate key value violates unique constraint &quot;arret_pkey&quot;
+DETAIL:  Key (id)=(5) already exists.
+in SYSTEMPATH\Database\Postgre\Connection.php on line 200.
+ 1 SYSTEMPATH\Database\BaseConnection.php(910): CodeIgniter\Database\Postgre\Connection->execute('INSERT INTO arret (nom, point)
+             VALUES (\'Test2\', ST_SetSRID(ST_MakePoint(47.510977, -18.962386), 4326))
+             RETURNING id')
+ 2 SYSTEMPATH\Database\BaseConnection.php(827): CodeIgniter\Database\BaseConnection->simpleQuery('INSERT INTO arret (nom, point)
+             VALUES (\'Test2\', ST_SetSRID(ST_MakePoint(47.510977, -18.962386), 4326))
+             RETURNING id')
+ 3 APPPATH\Models\ArretModel.php(55): CodeIgniter\Database\BaseConnection->query('INSERT INTO arret (nom, point)
+             VALUES (?, ST_SetSRID(ST_MakePoint(?, ?), 4326))
+             RETURNING id', [...])
+ 4 APPPATH\Controllers\Api\ArretController.php(26): App\Models\ArretModel->insertWithPoint('Test2', -18.962386, 47.510977)
+ 5 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\Api\ArretController->create()
+ 6 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Api\ArretController))
+ 7 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 8 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+ 9 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+10 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+11 SYSTEMPATH\rewrite.php(44): require_once('E:\\Dossier_Bryan\\ITU\\S4\\SIG\\PROJET\\Projet_TaxiBe\\public\\index.php')
+CRITICAL - 2026-07-05 14:02:43 --> CodeIgniter\Database\Exceptions\DatabaseException: pg_query(): Query failed: ERROR:  duplicate key value violates unique constraint &quot;arret_pkey&quot;
+DETAIL:  Key (id)=(5) already exists.
+[Method: POST, Route: api/arrets]
+in SYSTEMPATH\Database\BaseConnection.php on line 865.
+ 1 APPPATH\Models\ArretModel.php(55): CodeIgniter\Database\BaseConnection->query('INSERT INTO arret (nom, point)
+             VALUES (?, ST_SetSRID(ST_MakePoint(?, ?), 4326))
+             RETURNING id', [...])
+ 2 APPPATH\Controllers\Api\ArretController.php(26): App\Models\ArretModel->insertWithPoint('Test2', -18.962386, 47.510977)
+ 3 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\Api\ArretController->create()
+ 4 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Api\ArretController))
+ 5 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 6 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+ 7 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 8 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+ 9 SYSTEMPATH\rewrite.php(44): require_once('E:\\Dossier_Bryan\\ITU\\S4\\SIG\\PROJET\\Projet_TaxiBe\\public\\index.php')
+CRITICAL - 2026-07-05 14:02:43 --> [Caused by] CodeIgniter\Database\Exceptions\DatabaseException: pg_query(): Query failed: ERROR:  duplicate key value violates unique constraint &quot;arret_pkey&quot;
+DETAIL:  Key (id)=(5) already exists.
+in SYSTEMPATH\Database\Postgre\Connection.php on line 212.
+ 1 SYSTEMPATH\Database\BaseConnection.php(910): CodeIgniter\Database\Postgre\Connection->execute('INSERT INTO arret (nom, point)
+             VALUES (\'Test2\', ST_SetSRID(ST_MakePoint(47.510977, -18.962386), 4326))
+             RETURNING id')
+ 2 SYSTEMPATH\Database\BaseConnection.php(827): CodeIgniter\Database\BaseConnection->simpleQuery('INSERT INTO arret (nom, point)
+             VALUES (\'Test2\', ST_SetSRID(ST_MakePoint(47.510977, -18.962386), 4326))
+             RETURNING id')
+ 3 APPPATH\Models\ArretModel.php(55): CodeIgniter\Database\BaseConnection->query('INSERT INTO arret (nom, point)
+             VALUES (?, ST_SetSRID(ST_MakePoint(?, ?), 4326))
+             RETURNING id', [...])
+ 4 APPPATH\Controllers\Api\ArretController.php(26): App\Models\ArretModel->insertWithPoint('Test2', -18.962386, 47.510977)
+ 5 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\Api\ArretController->create()
+ 6 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Api\ArretController))
+ 7 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 8 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+ 9 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+10 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+11 SYSTEMPATH\rewrite.php(44): require_once('E:\\Dossier_Bryan\\ITU\\S4\\SIG\\PROJET\\Projet_TaxiBe\\public\\index.php')
+CRITICAL - 2026-07-05 14:02:43 --> [Caused by] ErrorException: pg_query(): Query failed: ERROR:  duplicate key value violates unique constraint &quot;arret_pkey&quot;
+DETAIL:  Key (id)=(5) already exists.
+in SYSTEMPATH\Database\Postgre\Connection.php on line 200.
+ 1 [internal function]: CodeIgniter\Debug\Exceptions->errorHandler(2, 'pg_query(): Query failed: ERROR:  duplicate key value violates unique constraint &quot;arret_pkey&quot;
+DETAIL:  Key (id)=(5) already exists.', 'E:\\Dossier_Bryan\\ITU\\S4\\SIG\\PROJET\\Projet_TaxiBe\\system\\Database\\Postgre\\Connection.php', 200)
+ 2 SYSTEMPATH\Database\Postgre\Connection.php(200): pg_query(Object(PgSql\Connection), 'INSERT INTO arret (nom, point)
+             VALUES (\'Test2\', ST_SetSRID(ST_MakePoint(47.510977, -18.962386), 4326))
+             RETURNING id')
+ 3 SYSTEMPATH\Database\BaseConnection.php(910): CodeIgniter\Database\Postgre\Connection->execute('INSERT INTO arret (nom, point)
+             VALUES (\'Test2\', ST_SetSRID(ST_MakePoint(47.510977, -18.962386), 4326))
+             RETURNING id')
+ 4 SYSTEMPATH\Database\BaseConnection.php(827): CodeIgniter\Database\BaseConnection->simpleQuery('INSERT INTO arret (nom, point)
+             VALUES (\'Test2\', ST_SetSRID(ST_MakePoint(47.510977, -18.962386), 4326))
+             RETURNING id')
+ 5 APPPATH\Models\ArretModel.php(55): CodeIgniter\Database\BaseConnection->query('INSERT INTO arret (nom, point)
+             VALUES (?, ST_SetSRID(ST_MakePoint(?, ?), 4326))
+             RETURNING id', [...])
+ 6 APPPATH\Controllers\Api\ArretController.php(26): App\Models\ArretModel->insertWithPoint('Test2', -18.962386, 47.510977)
+ 7 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\Api\ArretController->create()
+ 8 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Api\ArretController))
+ 9 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+10 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+11 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+12 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+13 SYSTEMPATH\rewrite.php(44): require_once('E:\\Dossier_Bryan\\ITU\\S4\\SIG\\PROJET\\Projet_TaxiBe\\public\\index.php')
+ERROR - 2026-07-05 14:03:06 --> pg_query(): Query failed: ERROR:  duplicate key value violates unique constraint &quot;arret_pkey&quot;
+DETAIL:  Key (id)=(6) already exists.
+in SYSTEMPATH\Database\Postgre\Connection.php on line 200.
+ 1 SYSTEMPATH\Database\BaseConnection.php(910): CodeIgniter\Database\Postgre\Connection->execute('INSERT INTO arret (nom, point)
+             VALUES (\'tttt\', ST_SetSRID(ST_MakePoint(47.510204, -18.971234), 4326))
+             RETURNING id')
+ 2 SYSTEMPATH\Database\BaseConnection.php(827): CodeIgniter\Database\BaseConnection->simpleQuery('INSERT INTO arret (nom, point)
+             VALUES (\'tttt\', ST_SetSRID(ST_MakePoint(47.510204, -18.971234), 4326))
+             RETURNING id')
+ 3 APPPATH\Models\ArretModel.php(55): CodeIgniter\Database\BaseConnection->query('INSERT INTO arret (nom, point)
+             VALUES (?, ST_SetSRID(ST_MakePoint(?, ?), 4326))
+             RETURNING id', [...])
+ 4 APPPATH\Controllers\Api\ArretController.php(26): App\Models\ArretModel->insertWithPoint('tttt', -18.971234, 47.510204)
+ 5 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\Api\ArretController->create()
+ 6 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Api\ArretController))
+ 7 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 8 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+ 9 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+10 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+11 SYSTEMPATH\rewrite.php(44): require_once('E:\\Dossier_Bryan\\ITU\\S4\\SIG\\PROJET\\Projet_TaxiBe\\public\\index.php')
+CRITICAL - 2026-07-05 14:03:06 --> CodeIgniter\Database\Exceptions\DatabaseException: pg_query(): Query failed: ERROR:  duplicate key value violates unique constraint &quot;arret_pkey&quot;
+DETAIL:  Key (id)=(6) already exists.
+[Method: POST, Route: api/arrets]
+in SYSTEMPATH\Database\BaseConnection.php on line 865.
+ 1 APPPATH\Models\ArretModel.php(55): CodeIgniter\Database\BaseConnection->query('INSERT INTO arret (nom, point)
+             VALUES (?, ST_SetSRID(ST_MakePoint(?, ?), 4326))
+             RETURNING id', [...])
+ 2 APPPATH\Controllers\Api\ArretController.php(26): App\Models\ArretModel->insertWithPoint('tttt', -18.971234, 47.510204)
+ 3 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\Api\ArretController->create()
+ 4 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Api\ArretController))
+ 5 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 6 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+ 7 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 8 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+ 9 SYSTEMPATH\rewrite.php(44): require_once('E:\\Dossier_Bryan\\ITU\\S4\\SIG\\PROJET\\Projet_TaxiBe\\public\\index.php')
+CRITICAL - 2026-07-05 14:03:06 --> [Caused by] CodeIgniter\Database\Exceptions\DatabaseException: pg_query(): Query failed: ERROR:  duplicate key value violates unique constraint &quot;arret_pkey&quot;
+DETAIL:  Key (id)=(6) already exists.
+in SYSTEMPATH\Database\Postgre\Connection.php on line 212.
+ 1 SYSTEMPATH\Database\BaseConnection.php(910): CodeIgniter\Database\Postgre\Connection->execute('INSERT INTO arret (nom, point)
+             VALUES (\'tttt\', ST_SetSRID(ST_MakePoint(47.510204, -18.971234), 4326))
+             RETURNING id')
+ 2 SYSTEMPATH\Database\BaseConnection.php(827): CodeIgniter\Database\BaseConnection->simpleQuery('INSERT INTO arret (nom, point)
+             VALUES (\'tttt\', ST_SetSRID(ST_MakePoint(47.510204, -18.971234), 4326))
+             RETURNING id')
+ 3 APPPATH\Models\ArretModel.php(55): CodeIgniter\Database\BaseConnection->query('INSERT INTO arret (nom, point)
+             VALUES (?, ST_SetSRID(ST_MakePoint(?, ?), 4326))
+             RETURNING id', [...])
+ 4 APPPATH\Controllers\Api\ArretController.php(26): App\Models\ArretModel->insertWithPoint('tttt', -18.971234, 47.510204)
+ 5 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\Api\ArretController->create()
+ 6 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Api\ArretController))
+ 7 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 8 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+ 9 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+10 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+11 SYSTEMPATH\rewrite.php(44): require_once('E:\\Dossier_Bryan\\ITU\\S4\\SIG\\PROJET\\Projet_TaxiBe\\public\\index.php')
+CRITICAL - 2026-07-05 14:03:06 --> [Caused by] ErrorException: pg_query(): Query failed: ERROR:  duplicate key value violates unique constraint &quot;arret_pkey&quot;
+DETAIL:  Key (id)=(6) already exists.
+in SYSTEMPATH\Database\Postgre\Connection.php on line 200.
+ 1 [internal function]: CodeIgniter\Debug\Exceptions->errorHandler(2, 'pg_query(): Query failed: ERROR:  duplicate key value violates unique constraint &quot;arret_pkey&quot;
+DETAIL:  Key (id)=(6) already exists.', 'E:\\Dossier_Bryan\\ITU\\S4\\SIG\\PROJET\\Projet_TaxiBe\\system\\Database\\Postgre\\Connection.php', 200)
+ 2 SYSTEMPATH\Database\Postgre\Connection.php(200): pg_query(Object(PgSql\Connection), 'INSERT INTO arret (nom, point)
+             VALUES (\'tttt\', ST_SetSRID(ST_MakePoint(47.510204, -18.971234), 4326))
+             RETURNING id')
+ 3 SYSTEMPATH\Database\BaseConnection.php(910): CodeIgniter\Database\Postgre\Connection->execute('INSERT INTO arret (nom, point)
+             VALUES (\'tttt\', ST_SetSRID(ST_MakePoint(47.510204, -18.971234), 4326))
+             RETURNING id')
+ 4 SYSTEMPATH\Database\BaseConnection.php(827): CodeIgniter\Database\BaseConnection->simpleQuery('INSERT INTO arret (nom, point)
+             VALUES (\'tttt\', ST_SetSRID(ST_MakePoint(47.510204, -18.971234), 4326))
+             RETURNING id')
+ 5 APPPATH\Models\ArretModel.php(55): CodeIgniter\Database\BaseConnection->query('INSERT INTO arret (nom, point)
+             VALUES (?, ST_SetSRID(ST_MakePoint(?, ?), 4326))
+             RETURNING id', [...])
+ 6 APPPATH\Controllers\Api\ArretController.php(26): App\Models\ArretModel->insertWithPoint('tttt', -18.971234, 47.510204)
+ 7 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\Api\ArretController->create()
+ 8 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Api\ArretController))
+ 9 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+10 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+11 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+12 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+13 SYSTEMPATH\rewrite.php(44): require_once('E:\\Dossier_Bryan\\ITU\\S4\\SIG\\PROJET\\Projet_TaxiBe\\public\\index.php')
+ERROR - 2026-07-05 14:03:39 --> pg_query(): Query failed: ERROR:  duplicate key value violates unique constraint &quot;arret_pkey&quot;
+DETAIL:  Key (id)=(7) already exists.
+in SYSTEMPATH\Database\Postgre\Connection.php on line 200.
+ 1 SYSTEMPATH\Database\BaseConnection.php(910): CodeIgniter\Database\Postgre\Connection->execute('INSERT INTO arret (nom, point)
+             VALUES (\'tttt\', ST_SetSRID(ST_MakePoint(47.501864, -18.97189), 4326))
+             RETURNING id')
+ 2 SYSTEMPATH\Database\BaseConnection.php(827): CodeIgniter\Database\BaseConnection->simpleQuery('INSERT INTO arret (nom, point)
+             VALUES (\'tttt\', ST_SetSRID(ST_MakePoint(47.501864, -18.97189), 4326))
+             RETURNING id')
+ 3 APPPATH\Models\ArretModel.php(55): CodeIgniter\Database\BaseConnection->query('INSERT INTO arret (nom, point)
+             VALUES (?, ST_SetSRID(ST_MakePoint(?, ?), 4326))
+             RETURNING id', [...])
+ 4 APPPATH\Controllers\Api\ArretController.php(26): App\Models\ArretModel->insertWithPoint('tttt', -18.97189, 47.501864)
+ 5 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\Api\ArretController->create()
+ 6 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Api\ArretController))
+ 7 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 8 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+ 9 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+10 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+11 SYSTEMPATH\rewrite.php(44): require_once('E:\\Dossier_Bryan\\ITU\\S4\\SIG\\PROJET\\Projet_TaxiBe\\public\\index.php')
+CRITICAL - 2026-07-05 14:03:39 --> CodeIgniter\Database\Exceptions\DatabaseException: pg_query(): Query failed: ERROR:  duplicate key value violates unique constraint &quot;arret_pkey&quot;
+DETAIL:  Key (id)=(7) already exists.
+[Method: POST, Route: api/arrets]
+in SYSTEMPATH\Database\BaseConnection.php on line 865.
+ 1 APPPATH\Models\ArretModel.php(55): CodeIgniter\Database\BaseConnection->query('INSERT INTO arret (nom, point)
+             VALUES (?, ST_SetSRID(ST_MakePoint(?, ?), 4326))
+             RETURNING id', [...])
+ 2 APPPATH\Controllers\Api\ArretController.php(26): App\Models\ArretModel->insertWithPoint('tttt', -18.97189, 47.501864)
+ 3 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\Api\ArretController->create()
+ 4 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Api\ArretController))
+ 5 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 6 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+ 7 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 8 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+ 9 SYSTEMPATH\rewrite.php(44): require_once('E:\\Dossier_Bryan\\ITU\\S4\\SIG\\PROJET\\Projet_TaxiBe\\public\\index.php')
+CRITICAL - 2026-07-05 14:03:39 --> [Caused by] CodeIgniter\Database\Exceptions\DatabaseException: pg_query(): Query failed: ERROR:  duplicate key value violates unique constraint &quot;arret_pkey&quot;
+DETAIL:  Key (id)=(7) already exists.
+in SYSTEMPATH\Database\Postgre\Connection.php on line 212.
+ 1 SYSTEMPATH\Database\BaseConnection.php(910): CodeIgniter\Database\Postgre\Connection->execute('INSERT INTO arret (nom, point)
+             VALUES (\'tttt\', ST_SetSRID(ST_MakePoint(47.501864, -18.97189), 4326))
+             RETURNING id')
+ 2 SYSTEMPATH\Database\BaseConnection.php(827): CodeIgniter\Database\BaseConnection->simpleQuery('INSERT INTO arret (nom, point)
+             VALUES (\'tttt\', ST_SetSRID(ST_MakePoint(47.501864, -18.97189), 4326))
+             RETURNING id')
+ 3 APPPATH\Models\ArretModel.php(55): CodeIgniter\Database\BaseConnection->query('INSERT INTO arret (nom, point)
+             VALUES (?, ST_SetSRID(ST_MakePoint(?, ?), 4326))
+             RETURNING id', [...])
+ 4 APPPATH\Controllers\Api\ArretController.php(26): App\Models\ArretModel->insertWithPoint('tttt', -18.97189, 47.501864)
+ 5 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\Api\ArretController->create()
+ 6 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Api\ArretController))
+ 7 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 8 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+ 9 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+10 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+11 SYSTEMPATH\rewrite.php(44): require_once('E:\\Dossier_Bryan\\ITU\\S4\\SIG\\PROJET\\Projet_TaxiBe\\public\\index.php')
+CRITICAL - 2026-07-05 14:03:39 --> [Caused by] ErrorException: pg_query(): Query failed: ERROR:  duplicate key value violates unique constraint &quot;arret_pkey&quot;
+DETAIL:  Key (id)=(7) already exists.
+in SYSTEMPATH\Database\Postgre\Connection.php on line 200.
+ 1 [internal function]: CodeIgniter\Debug\Exceptions->errorHandler(2, 'pg_query(): Query failed: ERROR:  duplicate key value violates unique constraint &quot;arret_pkey&quot;
+DETAIL:  Key (id)=(7) already exists.', 'E:\\Dossier_Bryan\\ITU\\S4\\SIG\\PROJET\\Projet_TaxiBe\\system\\Database\\Postgre\\Connection.php', 200)
+ 2 SYSTEMPATH\Database\Postgre\Connection.php(200): pg_query(Object(PgSql\Connection), 'INSERT INTO arret (nom, point)
+             VALUES (\'tttt\', ST_SetSRID(ST_MakePoint(47.501864, -18.97189), 4326))
+             RETURNING id')
+ 3 SYSTEMPATH\Database\BaseConnection.php(910): CodeIgniter\Database\Postgre\Connection->execute('INSERT INTO arret (nom, point)
+             VALUES (\'tttt\', ST_SetSRID(ST_MakePoint(47.501864, -18.97189), 4326))
+             RETURNING id')
+ 4 SYSTEMPATH\Database\BaseConnection.php(827): CodeIgniter\Database\BaseConnection->simpleQuery('INSERT INTO arret (nom, point)
+             VALUES (\'tttt\', ST_SetSRID(ST_MakePoint(47.501864, -18.97189), 4326))
+             RETURNING id')
+ 5 APPPATH\Models\ArretModel.php(55): CodeIgniter\Database\BaseConnection->query('INSERT INTO arret (nom, point)
+             VALUES (?, ST_SetSRID(ST_MakePoint(?, ?), 4326))
+             RETURNING id', [...])
+ 6 APPPATH\Controllers\Api\ArretController.php(26): App\Models\ArretModel->insertWithPoint('tttt', -18.97189, 47.501864)
+ 7 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\Api\ArretController->create()
+ 8 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Api\ArretController))
+ 9 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+10 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+11 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+12 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+13 SYSTEMPATH\rewrite.php(44): require_once('E:\\Dossier_Bryan\\ITU\\S4\\SIG\\PROJET\\Projet_TaxiBe\\public\\index.php')
+DEBUG - 2026-07-05 14:05:15 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-07-05 14:05:53 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-07-05 14:06:36 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-07-05 14:07:09 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-07-05 14:08:35 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-07-05 14:08:52 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-07-05 14:19:27 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-07-05 14:19:34 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-07-05 14:19:34 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-07-05 14:19:44 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-07-05 14:19:44 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+ERROR - 2026-07-05 14:20:07 --> pg_query(): Query failed: ERROR:  duplicate key value violates unique constraint &quot;arret_pkey&quot;
+DETAIL:  Key (id)=(2) already exists.
+in SYSTEMPATH\Database\Postgre\Connection.php on line 200.
+ 1 SYSTEMPATH\Database\BaseConnection.php(910): CodeIgniter\Database\Postgre\Connection->execute('INSERT INTO arret (nom, point)
+             VALUES (\'tttt\', ST_SetSRID(ST_MakePoint(47.498016, -18.951915), 4326))
+             RETURNING id')
+ 2 SYSTEMPATH\Database\BaseConnection.php(827): CodeIgniter\Database\BaseConnection->simpleQuery('INSERT INTO arret (nom, point)
+             VALUES (\'tttt\', ST_SetSRID(ST_MakePoint(47.498016, -18.951915), 4326))
+             RETURNING id')
+ 3 APPPATH\Models\ArretModel.php(55): CodeIgniter\Database\BaseConnection->query('INSERT INTO arret (nom, point)
+             VALUES (?, ST_SetSRID(ST_MakePoint(?, ?), 4326))
+             RETURNING id', [...])
+ 4 APPPATH\Controllers\Api\ArretController.php(26): App\Models\ArretModel->insertWithPoint('tttt', -18.951915, 47.498016)
+ 5 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\Api\ArretController->create()
+ 6 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Api\ArretController))
+ 7 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 8 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+ 9 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+10 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+11 SYSTEMPATH\rewrite.php(44): require_once('E:\\Dossier_Bryan\\ITU\\S4\\SIG\\PROJET\\Projet_TaxiBe\\public\\index.php')
+CRITICAL - 2026-07-05 14:20:07 --> CodeIgniter\Database\Exceptions\DatabaseException: pg_query(): Query failed: ERROR:  duplicate key value violates unique constraint &quot;arret_pkey&quot;
+DETAIL:  Key (id)=(2) already exists.
+[Method: POST, Route: api/arrets]
+in SYSTEMPATH\Database\BaseConnection.php on line 865.
+ 1 APPPATH\Models\ArretModel.php(55): CodeIgniter\Database\BaseConnection->query('INSERT INTO arret (nom, point)
+             VALUES (?, ST_SetSRID(ST_MakePoint(?, ?), 4326))
+             RETURNING id', [...])
+ 2 APPPATH\Controllers\Api\ArretController.php(26): App\Models\ArretModel->insertWithPoint('tttt', -18.951915, 47.498016)
+ 3 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\Api\ArretController->create()
+ 4 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Api\ArretController))
+ 5 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 6 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+ 7 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 8 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+ 9 SYSTEMPATH\rewrite.php(44): require_once('E:\\Dossier_Bryan\\ITU\\S4\\SIG\\PROJET\\Projet_TaxiBe\\public\\index.php')
+CRITICAL - 2026-07-05 14:20:07 --> [Caused by] CodeIgniter\Database\Exceptions\DatabaseException: pg_query(): Query failed: ERROR:  duplicate key value violates unique constraint &quot;arret_pkey&quot;
+DETAIL:  Key (id)=(2) already exists.
+in SYSTEMPATH\Database\Postgre\Connection.php on line 212.
+ 1 SYSTEMPATH\Database\BaseConnection.php(910): CodeIgniter\Database\Postgre\Connection->execute('INSERT INTO arret (nom, point)
+             VALUES (\'tttt\', ST_SetSRID(ST_MakePoint(47.498016, -18.951915), 4326))
+             RETURNING id')
+ 2 SYSTEMPATH\Database\BaseConnection.php(827): CodeIgniter\Database\BaseConnection->simpleQuery('INSERT INTO arret (nom, point)
+             VALUES (\'tttt\', ST_SetSRID(ST_MakePoint(47.498016, -18.951915), 4326))
+             RETURNING id')
+ 3 APPPATH\Models\ArretModel.php(55): CodeIgniter\Database\BaseConnection->query('INSERT INTO arret (nom, point)
+             VALUES (?, ST_SetSRID(ST_MakePoint(?, ?), 4326))
+             RETURNING id', [...])
+ 4 APPPATH\Controllers\Api\ArretController.php(26): App\Models\ArretModel->insertWithPoint('tttt', -18.951915, 47.498016)
+ 5 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\Api\ArretController->create()
+ 6 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Api\ArretController))
+ 7 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 8 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+ 9 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+10 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+11 SYSTEMPATH\rewrite.php(44): require_once('E:\\Dossier_Bryan\\ITU\\S4\\SIG\\PROJET\\Projet_TaxiBe\\public\\index.php')
+CRITICAL - 2026-07-05 14:20:07 --> [Caused by] ErrorException: pg_query(): Query failed: ERROR:  duplicate key value violates unique constraint &quot;arret_pkey&quot;
+DETAIL:  Key (id)=(2) already exists.
+in SYSTEMPATH\Database\Postgre\Connection.php on line 200.
+ 1 [internal function]: CodeIgniter\Debug\Exceptions->errorHandler(2, 'pg_query(): Query failed: ERROR:  duplicate key value violates unique constraint &quot;arret_pkey&quot;
+DETAIL:  Key (id)=(2) already exists.', 'E:\\Dossier_Bryan\\ITU\\S4\\SIG\\PROJET\\Projet_TaxiBe\\system\\Database\\Postgre\\Connection.php', 200)
+ 2 SYSTEMPATH\Database\Postgre\Connection.php(200): pg_query(Object(PgSql\Connection), 'INSERT INTO arret (nom, point)
+             VALUES (\'tttt\', ST_SetSRID(ST_MakePoint(47.498016, -18.951915), 4326))
+             RETURNING id')
+ 3 SYSTEMPATH\Database\BaseConnection.php(910): CodeIgniter\Database\Postgre\Connection->execute('INSERT INTO arret (nom, point)
+             VALUES (\'tttt\', ST_SetSRID(ST_MakePoint(47.498016, -18.951915), 4326))
+             RETURNING id')
+ 4 SYSTEMPATH\Database\BaseConnection.php(827): CodeIgniter\Database\BaseConnection->simpleQuery('INSERT INTO arret (nom, point)
+             VALUES (\'tttt\', ST_SetSRID(ST_MakePoint(47.498016, -18.951915), 4326))
+             RETURNING id')
+ 5 APPPATH\Models\ArretModel.php(55): CodeIgniter\Database\BaseConnection->query('INSERT INTO arret (nom, point)
+             VALUES (?, ST_SetSRID(ST_MakePoint(?, ?), 4326))
+             RETURNING id', [...])
+ 6 APPPATH\Controllers\Api\ArretController.php(26): App\Models\ArretModel->insertWithPoint('tttt', -18.951915, 47.498016)
+ 7 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\Api\ArretController->create()
+ 8 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Api\ArretController))
+ 9 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+10 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+11 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+12 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+13 SYSTEMPATH\rewrite.php(44): require_once('E:\\Dossier_Bryan\\ITU\\S4\\SIG\\PROJET\\Projet_TaxiBe\\public\\index.php')
+DEBUG - 2026-07-05 14:25:29 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-07-05 14:25:34 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-07-05 14:25:36 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-07-05 14:25:36 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-07-05 14:25:42 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-07-05 14:25:42 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-07-05 14:25:56 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-07-05 14:25:56 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-07-05 14:27:47 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-07-05 14:27:48 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-07-05 14:27:56 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-07-05 14:27:57 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.

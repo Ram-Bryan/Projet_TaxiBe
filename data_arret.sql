@@ -6,12 +6,14 @@
 --   psql -U postgres -f taxibe_final_complet.sql
 -- ============================================================================
 
--- \c taxibetest
+CREATE DATABASE taxibe;
+
+-- \c taxibe
 
 -- 1. Extension PostGIS
 CREATE EXTENSION IF NOT EXISTS postgis;
 
--- 2. Nettoyage (ordre inverse des FK)
+-- 2. Nettoyage (ordre inverse des FK4)
 DROP TABLE IF EXISTS historique_frais CASCADE;
 DROP TABLE IF EXISTS frais            CASCADE;
 DROP TABLE IF EXISTS trajet_arret     CASCADE;
@@ -311,6 +313,12 @@ INSERT INTO trajet_arret (id_trajet, id_arret, ordre) VALUES
 (8, 13, 7),
 (8, 14, 8),
 (8, 15, 9);
+
+SELECT setval('arret_id_seq',    (SELECT MAX(id) FROM arret));
+SELECT setval('bus_id_seq',      (SELECT MAX(id) FROM bus));
+SELECT setval('trajet_id_seq',   (SELECT MAX(id) FROM trajet));
+SELECT setval('frais_id_seq',    (SELECT MAX(id) FROM frais));
+SELECT setval('utilisateur_id_seq', (SELECT MAX(id) FROM utilisateur));
 
 -- ============================================================================
 -- Vérifications (optionnel)
